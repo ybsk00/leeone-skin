@@ -69,6 +69,11 @@ export default function ChatInterface() {
 
             const data = await response.json();
             setMessages(prev => [...prev, { role: "ai", content: data.content }]);
+
+            // Check for forced login trigger from AI response
+            if (data.content.includes("로그인이 필요합니다")) {
+                setShowLoginModal(true);
+            }
         } catch (error) {
             console.error("Error:", error);
             setMessages(prev => [...prev, { role: "ai", content: "죄송합니다. 잠시 문제가 발생했습니다. 다시 시도해주세요." }]);
