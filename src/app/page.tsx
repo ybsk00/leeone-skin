@@ -53,12 +53,18 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* Hero Image Background (Simulated with color for now, replace with actual image) */}
+        {/* Hero Video Background */}
         <div className="absolute inset-0 -z-10 bg-[#C8B6A6]">
-          {/* This div simulates the tea/herbs image background. 
-                In production, use: <Image src="/hero-bg.jpg" fill className="object-cover" /> 
-            */}
-          <div className="w-full h-full opacity-50 bg-[url('/images/hero-bg.png')] bg-cover bg-center" />
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover opacity-50"
+          >
+            <source src="/grok-video-d2ce9230-c0a9-4bed-9097-3443b0c49cfd.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
         </div>
       </header>
 
