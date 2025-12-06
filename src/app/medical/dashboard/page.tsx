@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Search, Calendar, Filter, Plus, Users, Activity } from "lucide-react";
+import TreatmentPlanEditor from "@/components/medical/TreatmentPlanEditor";
 
 export default function DoctorDashboard() {
     const [searchTerm, setSearchTerm] = useState("");
@@ -81,7 +82,7 @@ export default function DoctorDashboard() {
             </div>
 
             {/* Patient Table */}
-            <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+            <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden mb-8">
                 <table className="w-full text-left">
                     <thead className="bg-gray-50 border-b border-gray-200">
                         <tr>
@@ -144,6 +145,9 @@ export default function DoctorDashboard() {
                     </tbody>
                 </table>
             </div>
+
+            {/* Treatment Plan Editor (Demo) */}
+            <TreatmentPlanEditor />
         </div>
     );
 }
