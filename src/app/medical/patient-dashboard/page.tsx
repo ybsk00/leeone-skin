@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { Calendar, Clock, MoreHorizontal, Send } from "lucide-react";
 import ChatInterface from "@/components/chat/ChatInterface";
 
@@ -53,7 +53,9 @@ export default function PatientDashboard() {
                     </div>
 
                     <div className="flex-1 overflow-hidden">
-                        <ChatInterface />
+                        <Suspense fallback={<div className="flex items-center justify-center h-full">Loading...</div>}>
+                            <ChatInterface />
+                        </Suspense>
                     </div>
                 </div>
 

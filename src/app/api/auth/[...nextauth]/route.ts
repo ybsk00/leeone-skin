@@ -19,7 +19,10 @@ const handler = NextAuth({
             else if (new URL(url).origin === baseUrl) return url
             return baseUrl
         }
-    }
+    },
+    debug: true, // Enable debug logs for Vercel
+    secret: process.env.NEXTAUTH_SECRET,
+    trustHost: true, // Trust the host header (important for Vercel)
 })
 
 export { handler as GET, handler as POST }
