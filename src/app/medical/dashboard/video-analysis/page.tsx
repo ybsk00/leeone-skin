@@ -149,8 +149,8 @@ export default function VideoAnalysisPage() {
                         onClick={handleAnalyze}
                         disabled={!selectedFile || isAnalyzing}
                         className={`mt-6 w-full py-4 rounded-xl font-bold text-white flex items-center justify-center gap-2 transition-all ${!selectedFile || isAnalyzing
-                                ? "bg-gray-300 cursor-not-allowed"
-                                : "bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-200"
+                            ? "bg-gray-300 cursor-not-allowed"
+                            : "bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-200"
                             }`}
                     >
                         {isAnalyzing ? (
@@ -167,46 +167,36 @@ export default function VideoAnalysisPage() {
                     </button>
                 </div>
             </div>
-
-            {/* Right Panel: Results */}
-            <div className="w-1/2 bg-white rounded-2xl border border-gray-200 shadow-sm p-8 overflow-y-auto">
-                <div className="border-b border-gray-100 pb-4 mb-6">
-                    <h2 className="text-xl font-bold text-gray-900">판독결과 (임상/연구용)</h2>
-                    <p className="text-sm text-gray-500 mt-1">
-                        Gemini 1.5 Pro 멀티 모달을 이용하여 이상소견 진단<br />
-                        {bodyPart} 판독하고 근거 이유가 정확하게 나와야 함
-                    </p>
-                </div>
-
-                {error && (
-                    <div className="bg-red-50 border border-red-100 rounded-xl p-4 flex items-start gap-3 text-red-700 mb-6">
-                        <AlertCircle size={20} className="mt-0.5 flex-shrink-0" />
-                        <div>
-                            <h3 className="font-bold text-sm">분석 오류</h3>
-                            <p className="text-sm opacity-90">{error}</p>
-                        </div>
-                    </div>
-                )}
-
-                {result ? (
-                    <div className="prose prose-indigo max-w-none">
-                        <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">
-                            {result}
-                        </div>
-                    </div>
-                ) : (
-                    <div className="h-[400px] flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-gray-100 rounded-xl bg-gray-50/50">
-                        <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mb-4">
-                            <FileImage size={32} className="text-gray-300" />
-                        </div>
-                        <p className="font-medium">영상을 업로드하고 분석을 시작하세요</p>
-                        <p className="text-sm mt-2 text-center max-w-xs opacity-70">
-                            Gemini 1.5 Pro가 영상을 분석하여<br />
-                            주요 소견과 통증 원인을 찾아냅니다.
-                        </p>
-                    </div>
-                )}
+            <AlertCircle size={20} className="mt-0.5 flex-shrink-0" />
+            <div>
+                <h3 className="font-bold text-sm">분석 오류</h3>
+                <p className="text-sm opacity-90">{error}</p>
             </div>
         </div>
+    )
+}
+
+{
+    result ? (
+        <div className="prose prose-indigo max-w-none">
+            <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">
+                {result}
+            </div>
+        </div>
+    ) : (
+        <div className="h-[400px] flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-gray-100 rounded-xl bg-gray-50/50">
+            <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mb-4">
+                <FileImage size={32} className="text-gray-300" />
+            </div>
+            <p className="font-medium">영상을 업로드하고 분석을 시작하세요</p>
+            <p className="text-sm mt-2 text-center max-w-xs opacity-70">
+                Gemini 1.5 Pro가 영상을 분석하여<br />
+                주요 소견과 통증 원인을 찾아냅니다.
+            </p>
+        </div>
+    )
+}
+            </div >
+        </div >
     );
 }
