@@ -180,7 +180,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                         <div className="w-8 h-8 bg-traditional-primary rounded-lg flex items-center justify-center shadow-sm group-hover:bg-traditional-accent transition-colors duration-300">
                             <span className="text-white text-xs font-bold font-serif">JK</span>
                         </div>
-                        <span className="text-lg font-bold text-traditional-text tracking-tight group-hover:text-traditional-primary transition-colors">죽전한의원 <span className="text-traditional-accent font-light">AI</span></span>
+                        <span className="text-lg font-bold text-traditional-text tracking-tight group-hover:text-traditional-primary transition-colors">100년 한의학 AI 헬스케어</span>
                     </Link>
                     <div className="hidden md:flex items-center gap-6 text-sm font-medium text-traditional-subtext">
                         <Link href="/login" className="px-6 py-2 bg-traditional-primary text-white text-sm font-medium rounded-full hover:bg-traditional-accent hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">

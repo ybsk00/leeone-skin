@@ -30,27 +30,27 @@ export default function PatientHeader() {
     };
 
     return (
-        <header className="bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between sticky top-0 z-20">
-            <div className="flex items-center gap-2">
-                <div className="w-6 h-6 bg-green-600 rounded-sm flex items-center justify-center">
-                    <span className="text-white text-xs font-bold">L</span>
+        <header className="bg-white/80 backdrop-blur-md border-b border-traditional-muted/50 px-6 py-4 flex items-center justify-between sticky top-0 z-20 transition-all duration-300">
+            <Link href="/medical/dashboard" className="flex items-center gap-3 group">
+                <div className="w-8 h-8 bg-traditional-primary rounded-lg flex items-center justify-center shadow-sm group-hover:bg-traditional-accent transition-colors duration-300">
+                    <span className="text-white text-xs font-bold font-serif">JK</span>
                 </div>
-                <span className="text-lg font-bold text-gray-900">죽전한의원 AI</span>
-            </div>
+                <span className="text-lg font-bold text-traditional-text tracking-tight group-hover:text-traditional-primary transition-colors">죽전한의원 <span className="text-traditional-accent font-light">AI</span></span>
+            </Link>
 
             <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2 bg-green-50 px-3 py-1.5 rounded-full">
-                    <span className="text-sm font-bold text-green-700">{userName}님</span>
+                <div className="flex items-center gap-2 bg-traditional-primary/10 px-3 py-1.5 rounded-full border border-traditional-primary/20">
+                    <span className="text-sm font-bold text-traditional-primary">{userName}님</span>
                 </div>
                 <button
                     onClick={handleLogout}
-                    className="text-sm text-gray-500 hover:text-gray-900"
+                    className="text-sm text-traditional-subtext hover:text-traditional-text transition-colors"
                 >
                     로그아웃
                 </button>
-                <div className="w-8 h-8 rounded-full bg-orange-200 overflow-hidden border border-orange-300">
+                <div className="w-9 h-9 rounded-full bg-traditional-accent/20 overflow-hidden border border-traditional-accent/30 flex items-center justify-center">
                     {/* Profile Image Placeholder */}
-                    <User className="w-full h-full p-1 text-orange-500" />
+                    <User className="w-5 h-5 text-traditional-accent" />
                 </div>
             </div>
         </header>

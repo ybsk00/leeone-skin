@@ -255,9 +255,9 @@ export default function LandingPage() {
 
       {/* Floating Chat Button */}
       <div className="fixed bottom-8 right-8 z-50 animate-bounce-slow">
-        <button className="w-16 h-16 bg-traditional-primary rounded-full flex items-center justify-center text-white shadow-2xl hover:bg-traditional-accent transition-all duration-300 hover:scale-110 border-4 border-white/20 backdrop-blur-sm">
+        <Link href="/healthcare/chat" className="w-16 h-16 bg-traditional-primary rounded-full flex items-center justify-center text-white shadow-2xl hover:bg-traditional-accent transition-all duration-300 hover:scale-110 border-4 border-white/20 backdrop-blur-sm">
           <span className="text-3xl">💬</span>
-        </button>
+        </Link>
       </div>
     </div>
   );
