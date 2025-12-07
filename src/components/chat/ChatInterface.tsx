@@ -172,56 +172,55 @@ export default function ChatInterface(props: ChatInterfaceProps) {
     ];
 
     return (
-        <div className={`${props.isEmbedded ? "h-full" : "min-h-screen"} bg-traditional-bg font-sans flex flex-col`}>
+        <div className={`${props.isEmbedded ? "h-full" : "min-h-screen"} bg-traditional-bg font-sans flex flex-col selection:bg-traditional-accent selection:text-white`}>
             {/* Header - Hidden if embedded */}
             {!props.isEmbedded && (
-                <header className="bg-traditional-bg px-6 py-4 flex items-center justify-between sticky top-0 z-20">
-                    <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-                        <div className="w-6 h-6 bg-traditional-accent rounded-sm flex items-center justify-center">
-                            <span className="text-white text-xs font-bold">L</span>
+                <header className="bg-white/80 backdrop-blur-md border-b border-traditional-muted/50 px-6 py-4 flex items-center justify-between sticky top-0 z-50 transition-all duration-300">
+                    <Link href="/" className="flex items-center gap-3 group">
+                        <div className="w-8 h-8 bg-traditional-primary rounded-lg flex items-center justify-center shadow-sm group-hover:bg-traditional-accent transition-colors duration-300">
+                            <span className="text-white text-xs font-bold font-serif">JK</span>
                         </div>
-                        <span className="text-lg font-bold text-traditional-text">100년 한의학 AI 헬스케어</span>
+                        <span className="text-lg font-bold text-traditional-text tracking-tight group-hover:text-traditional-primary transition-colors">죽전한의원 <span className="text-traditional-accent font-light">AI</span></span>
                     </Link>
                     <div className="hidden md:flex items-center gap-6 text-sm font-medium text-traditional-subtext">
-                        <Link href="/login" className="px-5 py-2 bg-traditional-accent text-white rounded-full hover:bg-opacity-90 transition-colors shadow-md">
+                        <Link href="/login" className="px-6 py-2 bg-traditional-primary text-white text-sm font-medium rounded-full hover:bg-traditional-accent hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
                             로그인
                         </Link>
                     </div>
                 </header>
             )}
 
-            <main className={`flex-1 w-full mx-auto ${props.isEmbedded ? "flex flex-col overflow-hidden p-0" : "max-w-4xl px-4 pb-20"}`}>
+            <main className={`flex-1 w-full mx-auto ${props.isEmbedded ? "flex flex-col overflow-hidden p-0" : "max-w-5xl px-4 pb-20 pt-6"}`}>
                 {/* Hero Banner - Hidden if embedded */}
                 {!props.isEmbedded && (
-                    <div className="relative rounded-3xl overflow-hidden mb-6 h-[300px] md:h-[450px] shadow-lg group">
-                        <div className="absolute inset-0 bg-[url('/images/herbal-bg.png')] bg-cover bg-center transition-transform duration-700 group-hover:scale-105"></div>
-                        <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px]"></div>
+                    <div className="relative rounded-3xl overflow-hidden mb-8 h-[280px] md:h-[380px] shadow-2xl group">
+                        <div className="absolute inset-0 bg-[url('/images/herbal-bg.png')] bg-cover bg-center transition-transform duration-700 group-hover:scale-105 opacity-90 grayscale-[20%] sepia-[10%]"></div>
+                        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent"></div>
+                        <div className="absolute inset-0 bg-traditional-primary/20 mix-blend-multiply"></div>
 
-                        <div className="relative z-10 h-full flex flex-col justify-end p-6">
-                            <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 drop-shadow-md">
-                                AI 헬스케어로 알아보는 나의 건강
+                        <div className="relative z-10 h-full flex flex-col justify-center p-8 md:p-12">
+                            <div className="inline-block px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-white text-xs font-medium mb-4 w-fit">
+                                AI Health Analysis
+                            </div>
+                            <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 drop-shadow-lg font-serif leading-tight">
+                                AI 헬스케어로<br />알아보는 나의 건강
                             </h2>
-                            <p className="text-white/90 text-sm md:text-base font-medium mb-10">
-                                전통의 지혜와 현대 기술의 만남
+                            <p className="text-white/90 text-sm md:text-base font-light mb-8 max-w-lg leading-relaxed">
+                                100년 전통의 한의학 지혜와 최첨단 AI 기술이 만나<br />당신만의 건강 리듬을 찾아드립니다.
                             </p>
 
                             {/* Module List (Overlay on Hero) */}
-                            <div className="grid grid-cols-5 gap-2">
+                            <div className="flex gap-3 overflow-x-auto pb-2 no-scrollbar mask-linear-fade">
                                 {modules.map((mod) => (
                                     <Link
                                         key={mod.id}
                                         href={`/healthcare/chat?topic=${mod.id}`}
-                                        className={`flex flex-col items-center justify-center p-2.5 rounded-xl border backdrop-blur-md transition-all h-full text-center ${topic === mod.id
-                                            ? "bg-white/95 border-white shadow-lg scale-105 z-10"
-                                            : "bg-white/10 border-white/20 hover:bg-white/20 hover:border-white/40"
+                                        className={`flex-shrink-0 flex flex-col items-center justify-center px-5 py-3 rounded-xl border backdrop-blur-md transition-all duration-300 ${topic === mod.id
+                                            ? "bg-white text-traditional-primary border-white shadow-lg scale-105 font-bold"
+                                            : "bg-white/10 text-white border-white/20 hover:bg-white/20 hover:border-white/40"
                                             }`}
                                     >
-                                        <h3 className={`font-bold text-sm leading-tight mb-1 ${topic === mod.id ? "text-gray-900" : "text-white"}`}>
-                                            {mod.label}
-                                        </h3>
-                                        <p className={`text-xs leading-tight line-clamp-1 ${topic === mod.id ? "text-gray-600" : "text-white/80"}`}>
-                                            {mod.desc}
-                                        </p>
+                                        <span className="text-sm whitespace-nowrap">{mod.label}</span>
                                     </Link>
                                 ))}
                             </div>
@@ -230,17 +229,17 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                 )}
 
                 {/* Chat Area */}
-                <div className={`bg-indigo-50/50 border border-indigo-100 rounded-3xl p-6 space-y-6 shadow-inner ${props.isEmbedded ? "flex-1 overflow-y-auto rounded-none border-x-0 border-t-0" : "min-h-[400px]"}`}>
+                <div className={`bg-white/60 backdrop-blur-xl border border-white/50 rounded-3xl p-6 space-y-8 shadow-xl ${props.isEmbedded ? "flex-1 overflow-y-auto rounded-none border-x-0 border-t-0 bg-transparent shadow-none" : "min-h-[500px]"}`}>
                     {messages.map((msg, idx) => (
                         <div
                             key={idx}
-                            className={`flex items-start gap-3 ${msg.role === "user" ? "flex-row-reverse" : ""}`}
+                            className={`flex items-start gap-4 ${msg.role === "user" ? "flex-row-reverse" : ""}`}
                         >
                             {/* Avatar */}
                             <div
-                                className={`w-14 h-14 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm overflow-hidden border-2 ${msg.role === "ai"
-                                    ? "border-traditional-accent"
-                                    : "border-teal-200"
+                                className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow-md overflow-hidden border-2 ${msg.role === "ai"
+                                    ? "border-traditional-primary bg-traditional-bg"
+                                    : "border-traditional-accent bg-traditional-bg"
                                     }`}
                             >
                                 {msg.role === "ai" ? (
@@ -250,39 +249,42 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                                         className="w-full h-full object-cover"
                                     />
                                 ) : (
-                                    <img
-                                        src="/images/character-patient.jpg"
-                                        alt="Patient"
-                                        className="w-full h-full object-cover"
-                                    />
+                                    <div className="w-full h-full bg-traditional-accent flex items-center justify-center text-white">
+                                        <User size={20} />
+                                    </div>
                                 )}
                             </div>
 
                             {/* Bubble */}
-                            <div
-                                className={`max-w-[80%] px-5 py-3 rounded-2xl text-sm leading-relaxed shadow-sm ${msg.role === "ai"
-                                    ? "bg-white text-traditional-text border border-indigo-100 rounded-tl-none"
-                                    : "bg-[#E0F2F1] text-teal-900 rounded-tr-none border border-teal-100"
-                                    }`}
-                            >
-                                {msg.content}
+                            <div className="flex flex-col gap-1 max-w-[80%]">
+                                <span className={`text-xs font-medium ${msg.role === "user" ? "text-right text-traditional-subtext" : "text-left text-traditional-primary"}`}>
+                                    {msg.role === "ai" ? "AI 닥터" : "나"}
+                                </span>
+                                <div
+                                    className={`px-6 py-4 rounded-2xl text-sm leading-relaxed shadow-sm ${msg.role === "ai"
+                                        ? "bg-white text-traditional-text border border-traditional-muted rounded-tl-none"
+                                        : "bg-traditional-primary text-white rounded-tr-none shadow-md"
+                                        }`}
+                                >
+                                    {msg.content}
+                                </div>
                             </div>
                         </div>
                     ))}
                     {isLoading && (
-                        <div className="flex items-start gap-3">
-                            <div className="w-14 h-14 rounded-full border-2 border-traditional-accent flex items-center justify-center shadow-sm overflow-hidden flex-shrink-0">
+                        <div className="flex items-start gap-4">
+                            <div className="w-12 h-12 rounded-full border-2 border-traditional-primary bg-traditional-bg flex items-center justify-center shadow-md overflow-hidden flex-shrink-0">
                                 <img
                                     src="/images/character-doctor.jpg"
                                     alt="Doctor"
                                     className="w-full h-full object-cover"
                                 />
                             </div>
-                            <div className="bg-white px-5 py-3 rounded-2xl rounded-tl-none border border-indigo-100 shadow-sm">
-                                <div className="flex gap-1">
-                                    <span className="w-1.5 h-1.5 bg-traditional-subtext/40 rounded-full animate-bounce"></span>
-                                    <span className="w-1.5 h-1.5 bg-traditional-subtext/40 rounded-full animate-bounce delay-100"></span>
-                                    <span className="w-1.5 h-1.5 bg-traditional-subtext/40 rounded-full animate-bounce delay-200"></span>
+                            <div className="bg-white px-6 py-4 rounded-2xl rounded-tl-none border border-traditional-muted shadow-sm">
+                                <div className="flex gap-1.5">
+                                    <span className="w-2 h-2 bg-traditional-primary/40 rounded-full animate-bounce"></span>
+                                    <span className="w-2 h-2 bg-traditional-primary/40 rounded-full animate-bounce delay-100"></span>
+                                    <span className="w-2 h-2 bg-traditional-primary/40 rounded-full animate-bounce delay-200"></span>
                                 </div>
                             </div>
                         </div>
@@ -292,27 +294,27 @@ export default function ChatInterface(props: ChatInterfaceProps) {
             </main>
 
             {/* Input Area */}
-            <div className={`${props.isEmbedded ? "relative bg-white border-t border-gray-100" : "fixed bottom-0 left-0 right-0 bg-traditional-bg/80 backdrop-blur-md border-t border-traditional-muted/50"} p-4`}>
-                <div className={`${props.isEmbedded ? "w-full" : "max-w-3xl mx-auto"} relative`}>
-                    <form onSubmit={handleSubmit} className="relative bg-white rounded-full shadow-lg border border-traditional-muted flex items-center p-2 pl-6">
+            <div className={`${props.isEmbedded ? "relative bg-white border-t border-gray-100" : "fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-t border-traditional-muted/50"} p-4 z-40`}>
+                <div className={`${props.isEmbedded ? "w-full" : "max-w-4xl mx-auto"} relative`}>
+                    <form onSubmit={handleSubmit} className="relative bg-white rounded-full shadow-xl border border-traditional-muted/50 flex items-center p-2 pl-6 transition-shadow hover:shadow-2xl">
                         <input
                             type="text"
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
-                            placeholder="어떤 점이 궁금하신가요?"
-                            className="flex-1 bg-transparent border-none focus:ring-0 text-traditional-text placeholder:text-traditional-subtext/50"
+                            placeholder="증상이나 궁금한 점을 입력해주세요..."
+                            className="flex-1 bg-transparent border-none focus:ring-0 text-traditional-text placeholder:text-traditional-subtext/50 text-base"
                         />
                         <button
                             type="button"
                             onClick={handleImageClick}
-                            className="p-2 text-traditional-subtext hover:text-traditional-text transition-colors"
+                            className="p-3 text-traditional-subtext hover:text-traditional-primary transition-colors hover:bg-traditional-bg rounded-full"
                         >
                             <Paperclip size={20} />
                         </button>
                         <button
                             type="submit"
                             disabled={isLoading || !input.trim()}
-                            className="p-2 bg-traditional-accent text-white rounded-full hover:bg-opacity-90 transition-colors disabled:opacity-50 ml-2"
+                            className="p-3 bg-traditional-primary text-white rounded-full hover:bg-traditional-accent transition-all disabled:opacity-50 disabled:hover:bg-traditional-primary ml-2 shadow-md hover:shadow-lg hover:-translate-y-0.5"
                         >
                             <ArrowUp size={20} />
                         </button>
@@ -322,28 +324,28 @@ export default function ChatInterface(props: ChatInterfaceProps) {
 
             {/* Login Modal */}
             {showLoginModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 text-center transform transition-all scale-100">
-                        <div className="w-12 h-12 bg-traditional-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <User className="w-6 h-6 text-traditional-accent" />
+                <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-300">
+                    <div className="bg-white rounded-3xl shadow-2xl w-full max-w-sm p-8 text-center transform transition-all scale-100 border border-white/20">
+                        <div className="w-16 h-16 bg-traditional-bg rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
+                            <User className="w-8 h-8 text-traditional-primary" />
                         </div>
-                        <h3 className="text-lg font-bold text-gray-900 mb-2">
+                        <h3 className="text-xl font-bold text-traditional-text mb-3 font-serif">
                             {loginModalContent.title}
                         </h3>
                         <p
-                            className="text-gray-600 text-sm mb-6 leading-relaxed"
+                            className="text-traditional-subtext text-sm mb-8 leading-relaxed"
                             dangerouslySetInnerHTML={{ __html: loginModalContent.desc }}
                         />
                         <div className="flex flex-col gap-3">
                             <Link
                                 href="/login"
-                                className="w-full py-3 bg-traditional-accent text-white rounded-xl font-medium hover:bg-opacity-90 transition-colors"
+                                className="w-full py-3.5 bg-traditional-primary text-white rounded-xl font-bold hover:bg-traditional-accent transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
                             >
                                 로그인하고 계속하기
                             </Link>
                             <button
                                 onClick={() => setShowLoginModal(false)}
-                                className="w-full py-3 bg-gray-100 text-gray-600 rounded-xl font-medium hover:bg-gray-200 transition-colors"
+                                className="w-full py-3.5 bg-traditional-bg text-traditional-subtext rounded-xl font-medium hover:bg-traditional-muted transition-colors"
                             >
                                 나중에 하기
                             </button>

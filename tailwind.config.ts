@@ -11,26 +11,33 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        // Healthcare Theme (Traditional/Hanji)
+        // Healthcare Theme (Traditional/Hanji + AI)
         traditional: {
-          bg: "#FDFBF7", // Hanji-like off-white
-          text: "#2C2C2C", // Dark Gray (Ink)
-          subtext: "#5A5A5A",
-          primary: "#4A5D23", // Muted Green (Mugwort/Pine)
-          secondary: "#8B4513", // Jujube/Brown
-          accent: "#2F4F4F", // Dark Slate (Indigo-ish)
-          muted: "#E8E4D9",
+          bg: "#F9F7F2", // Warmer, deeper Hanji tone
+          text: "#1A1A1A", // Softer Black
+          subtext: "#4A4A4A", // Dark Gray
+          primary: "#2C3E2C", // Deep Forest Green (Traditional)
+          secondary: "#8C6A4A", // Deep Earthy Brown
+          accent: "#D4AF37", // Muted Gold (Sophistication)
+          muted: "#E5E0D5", // Warm Gray
+          ai: "#3B82F6", // AI Blue (Subtle accent)
         },
-        // Medical Theme (Modern/Clinic)
+        // Medical Theme (Modern/Clinic - Integrated with Traditional)
         medical: {
           bg: "#FFFFFF",
-          text: "#111827", // Cool Gray 900
-          subtext: "#4B5563", // Cool Gray 600
-          primary: "#0EA5E9", // Sky Blue
-          secondary: "#10B981", // Emerald Green
+          text: "#111827",
+          subtext: "#4B5563",
+          primary: "#2C3E2C", // Unified with Traditional Primary
+          secondary: "#10B981", // Emerald Green (kept for medical cues)
           accent: "#3B82F6", // Blue
-          muted: "#F3F4F6", // Cool Gray 100
+          muted: "#F3F4F6",
         },
+      },
+
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'glass': 'linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.4))',
+        'glass-dark': 'linear-gradient(135deg, rgba(20, 20, 20, 0.8), rgba(20, 20, 20, 0.4))',
       },
       fontFamily: {
         sans: ["var(--font-sans)", "sans-serif"],

@@ -11,7 +11,7 @@ export default function MedicalLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <div className="min-h-screen bg-medical-bg text-medical-text font-sans selection:bg-medical-primary/20">
+        <div className="min-h-screen bg-traditional-bg text-traditional-text font-sans selection:bg-traditional-accent selection:text-white">
             {children}
         </div>
     );
