@@ -19,7 +19,7 @@ type ChatInterfaceProps = {
 
 export default function ChatInterface(props: ChatInterfaceProps) {
     const searchParams = useSearchParams();
-    const topic = searchParams.get("topic") || "resilience";
+    const topic = searchParams.get("topic") || "recovery";
 
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState("");
@@ -32,10 +32,39 @@ export default function ChatInterface(props: ChatInterfaceProps) {
     });
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
+    // Map topic to serviceType and Initial Message
+    const serviceConfig: Record<string, { serviceType: string; initialMessage: string }> = {
+        recovery: {
+            serviceType: "recovery",
+            initialMessage: "반갑네! 자네의 기력 배터리를 점검해줄 '기력 장인'일세. \n\n오늘 하루, 가장 피곤했던 시간은 언제였나? (아침/오후/저녁/하루 종일)"
+        },
+        resilience: { // Handle legacy id if needed
+            serviceType: "recovery",
+            initialMessage: "반갑네! 자네의 기력 배터리를 점검해줄 '기력 장인'일세. \n\n오늘 하루, 가장 피곤했던 시간은 언제였나? (아침/오후/저녁/하루 종일)"
+        },
+        women: {
+            serviceType: "women",
+            initialMessage: "안녕하세요, 당신의 '달의 리듬'을 함께 읽어볼게요. \n\n평소 월경 주기는 규칙적인 편인가요? (대체로 규칙적/가끔 달라짐/자주 들쭉날쭉)"
+        },
+        pain: {
+            serviceType: "pain",
+            initialMessage: "안녕하세요! 오늘 당신의 몸 날씨를 알려드릴게요. \n\n가장 자주 불편하거나 뻐근한 부위는 어디인가요? (목·어깨/허리/무릎·다리/그 외)"
+        },
+        digestion: {
+            serviceType: "digestion",
+            initialMessage: "반갑습니다. 위장과 수면의 균형을 봐드릴게요. \n\n평소 식사 속도는 어떠신가요? (천천히/보통/빨리 먹는 편)"
+        },
+        pregnancy: {
+            serviceType: "pregnancy",
+            initialMessage: "안녕하세요, 건강한 임신 준비를 돕는 체력 코치입니다. \n\n하루 중 피로감은 어느 정도 느끼시나요? (대부분 괜찮음/오후에 피곤/하루 종일 피곤)"
+        }
+    };
+
     // Welcome message based on topic
     useEffect(() => {
-        let welcomeMsg = "안녕하세요, 100년 한의학 AI 헬스케어입니다. 궁금한 점을 체크해 보세요.";
-        setMessages([{ role: "ai", content: welcomeMsg }]);
+        const config = serviceConfig[topic] || serviceConfig["recovery"];
+        setMessages([{ role: "ai", content: config.initialMessage }]);
+        setTurnCount(0); // Reset turn count on topic change
     }, [topic]);
 
     const scrollToBottom = () => {
@@ -77,27 +106,18 @@ export default function ChatInterface(props: ChatInterfaceProps) {
             setShowLoginModal(true);
         }
 
-        // Force Reservation Modal at Turn 5 and 10 (Client-side backup)
-        if (props.isLoggedIn && [5, 10].includes(newTurnCount)) {
-            // We'll let the AI response trigger it naturally via [RESERVATION_TRIGGER] if possible,
-            // but we can also set a flag or just rely on the AI.
-            // The user request says "5턴 그리고 10턴에서 활성화시켜주세요".
-            // Let's rely on AI for the message content, but if we want to force it without AI tag:
-            // setShowReservationModal(true); 
-            // But showing it immediately before AI replies might be weird.
-            // Let's wait for AI response. The AI prompt will be updated to include the trigger at turn 5 and 10.
-        }
-
         setIsLoading(true);
 
         try {
-            const response = await fetch("/api/chat", {
+            const config = serviceConfig[topic] || serviceConfig["recovery"];
+
+            const response = await fetch("/api/healthcare/chat", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     message: userMessage,
                     history: messages,
-                    topic
+                    serviceType: config.serviceType, // Use the mapped serviceType
                 }),
             });
 
@@ -140,7 +160,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
 
     const modules = [
         {
-            id: "resilience",
+            id: "recovery", // Changed from resilience to match serviceType
             label: "회복력·면역",
             desc: "만성 피로, 잦은 감기",
             theme: "from-amber-500/20 to-orange-600/20"
