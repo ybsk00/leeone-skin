@@ -3,8 +3,8 @@ import { Noto_Sans_KR, Noto_Serif_KR } from "next/font/google";
 import "./globals.css";
 import "@mantine/core/styles.css";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
-import { MantineProvider, ColorSchemeScript } from "@mantine/core";
-import { theme } from "@/theme";
+import { ColorSchemeScript } from "@mantine/core";
+import MantineWrapper from "@/components/MantineWrapper";
 
 const notoSansKr = Noto_Sans_KR({
   subsets: ["latin"],
@@ -34,12 +34,12 @@ export default function RootLayout({
         <ColorSchemeScript />
       </head>
       <body className={`${notoSansKr.variable} ${notoSerifKr.variable} font-sans antialiased`}>
-        <MantineProvider theme={theme}>
+        <MantineWrapper>
           {process.env.NEXT_PUBLIC_GA_ID && (
             <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
           )}
           {children}
-        </MantineProvider>
+        </MantineWrapper>
       </body>
     </html>
   );
