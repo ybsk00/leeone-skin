@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import { Bell, Mic, ChevronRight, Calendar, FileText, Pill, MessageSquare } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 
@@ -6,34 +7,38 @@ export default async function PatientHome() {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
+    // Redirect to login if not authenticated
+    if (!user) {
+        redirect('/patient/login')
+    }
+
     let patientName = '환자'
     let upcomingAppointment = null
 
-    if (user) {
-        // Fetch patient profile using user_id
-        const { data: profile } = await supabase
-            .from('patient_profiles')
-            .select('full_name')
-            .eq('user_id', user.id)
-            .single()
+    // Fetch patient profile using user_id (user is now guaranteed to exist)
+    // Fetch patient profile using user_id
+    const { data: profile } = await supabase
+        .from('patient_profiles')
+        .select('full_name')
+        .eq('user_id', user.id)
+        .single()
 
-        if (profile) {
-            patientName = profile.full_name || '환자'
-        }
+    if (profile) {
+        patientName = profile.full_name || '환자'
+    }
 
-        // Fetch upcoming appointment
-        const { data: appointment } = await supabase
-            .from('appointments')
-            .select('*')
-            .eq('user_id', user.id)
-            .gte('scheduled_at', new Date().toISOString())
-            .order('scheduled_at', { ascending: true })
-            .limit(1)
-            .single()
+    // Fetch upcoming appointment
+    const { data: appointment } = await supabase
+        .from('appointments')
+        .select('*')
+        .eq('user_id', user.id)
+        .gte('scheduled_at', new Date().toISOString())
+        .order('scheduled_at', { ascending: true })
+        .limit(1)
+        .single()
 
-        if (appointment) {
-            upcomingAppointment = appointment
-        }
+    if (appointment) {
+        upcomingAppointment = appointment
     }
 
     return (
