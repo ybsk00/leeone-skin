@@ -245,8 +245,8 @@ export default function AppointmentsPage() {
                 </Button>
             </Group>
 
-            <Paper shadow="sm" radius="md" withBorder bg="dark.6">
-                <Table striped highlightOnHover>
+            <Paper shadow="sm" radius="md" bg="dark.7" withBorder style={{ borderColor: 'var(--mantine-color-dark-5)', overflow: 'hidden' }}>
+                <Table highlightOnHover highlightOnHoverColor="dark.6">
                     <Table.Thead>
                         <Table.Tr>
                             <Table.Th>예약 일시</Table.Th>
@@ -296,8 +296,8 @@ export default function AppointmentsPage() {
                         ))}
                         {!appointments.length && (
                             <Table.Tr>
-                                <Table.Td colSpan={6}>
-                                    <Text ta="center" c="dimmed" py="lg">예약 내역이 없습니다.</Text>
+                                <Table.Td colSpan={6} bg="dark.8">
+                                    <Text ta="center" c="dimmed" py="xl">예약 내역이 없습니다.</Text>
                                 </Table.Td>
                             </Table.Tr>
                         )}
