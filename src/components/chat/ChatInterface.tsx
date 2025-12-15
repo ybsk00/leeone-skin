@@ -117,7 +117,8 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                 body: JSON.stringify({
                     message: userMessage,
                     history: messages,
-                    serviceType: config.serviceType, // Use the mapped serviceType
+                    serviceType: config.serviceType,
+                    turnCount: newTurnCount, // Pass turn count for 5-turn diagnosis
                 }),
             });
 
