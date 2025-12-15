@@ -228,25 +228,25 @@ export default function PatientsPage() {
                 </Button>
             </Group>
 
-            <Paper shadow="sm" radius="md" withBorder bg="dark.6">
-                <Table striped highlightOnHover>
-                    <Table.Thead>
+            <Paper shadow="sm" radius="md" bg="dark.7" withBorder style={{ borderColor: 'var(--mantine-color-dark-5)', overflow: 'hidden' }}>
+                <Table highlightOnHover highlightOnHoverColor="dark.6">
+                    <Table.Thead bg="dark.8">
                         <Table.Tr>
-                            <Table.Th>이름</Table.Th>
-                            <Table.Th>연락처</Table.Th>
-                            <Table.Th>상태</Table.Th>
-                            <Table.Th>등록일</Table.Th>
-                            <Table.Th>관리</Table.Th>
+                            <Table.Th c="dimmed">이름</Table.Th>
+                            <Table.Th c="dimmed">연락처</Table.Th>
+                            <Table.Th c="dimmed">상태</Table.Th>
+                            <Table.Th c="dimmed">등록일</Table.Th>
+                            <Table.Th c="dimmed">관리</Table.Th>
                         </Table.Tr>
                     </Table.Thead>
                     <Table.Tbody>
                         {patients.map((patient) => (
                             <Table.Tr key={patient.id}>
                                 <Table.Td>
-                                    <Text size="sm" fw={500}>{patient.name}</Text>
+                                    <Text size="sm" fw={500} c="white">{patient.name}</Text>
                                 </Table.Td>
                                 <Table.Td>
-                                    <Text size="sm" c="dimmed">{patient.phone || '-'}</Text>
+                                    <Text size="sm" c="gray.4">{patient.phone || '-'}</Text>
                                 </Table.Td>
                                 <Table.Td>
                                     <Badge color={lifecycleColors[patient.lifecycle_stage] || 'gray'}>
@@ -254,7 +254,7 @@ export default function PatientsPage() {
                                     </Badge>
                                 </Table.Td>
                                 <Table.Td>
-                                    <Text size="sm" c="dimmed">
+                                    <Text size="sm" c="gray.5">
                                         {new Date(patient.created_at).toLocaleDateString('ko-KR')}
                                     </Text>
                                 </Table.Td>
@@ -286,6 +286,11 @@ export default function PatientsPage() {
                 title="환자 등록"
                 centered
                 size="lg"
+                styles={{
+                    header: { backgroundColor: 'var(--mantine-color-dark-7)' },
+                    content: { backgroundColor: 'var(--mantine-color-dark-7)' },
+                    title: { color: 'white' }
+                }}
             >
                 <Stack gap="md">
                     {error && (
@@ -295,7 +300,7 @@ export default function PatientsPage() {
                     )}
 
                     {/* 기본 정보 섹션 */}
-                    <Text fw={500}>기본 정보</Text>
+                    <Text fw={500} c="white">기본 정보</Text>
                     <Group grow>
                         <TextInput
                             label="이름"
@@ -344,10 +349,10 @@ export default function PatientsPage() {
                     <Divider my="sm" />
 
                     {/* 메세지 규칙 섹션 */}
-                    <Text fw={500}>메세지 규칙 설정</Text>
-                    <Text size="sm" c="dimmed">이 환자에게 적용할 자동 메세지 규칙을 선택하세요.</Text>
+                    <Text fw={500} c="white">메세지 규칙 설정</Text>
+                    <Text size="sm" c="gray.5">이 환자에게 적용할 자동 메세지 규칙을 선택하세요.</Text>
 
-                    <Card withBorder radius="md" p="md" bg="dark.7">
+                    <Card withBorder radius="md" p="md" bg="dark.8" style={{ borderColor: 'var(--mantine-color-dark-5)' }}>
                         <Stack gap="sm">
                             {MESSAGE_TEMPLATES.map((template) => {
                                 const rule = messageRules.find(r => r.type === template.type);
@@ -365,8 +370,8 @@ export default function PatientsPage() {
                                                 {getRuleIcon(template.type)}
                                             </ThemeIcon>
                                             <div>
-                                                <Text size="sm">{template.name}</Text>
-                                                <Text size="xs" c="dimmed">{template.description}</Text>
+                                                <Text size="sm" c="white">{template.name}</Text>
+                                                <Text size="xs" c="gray.5">{template.description}</Text>
                                             </div>
                                         </Group>
                                         <Checkbox
@@ -398,7 +403,7 @@ export default function PatientsPage() {
                     </Group>
                 </Stack>
             </Modal>
-        </Container>
+        </Container >
     );
 }
 

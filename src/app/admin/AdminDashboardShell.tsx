@@ -45,7 +45,7 @@ export function AdminDashboardShell({ children }: { children: React.ReactNode })
                         <ThemeIcon variant="gradient" gradient={{ from: 'orange', to: 'yellow' }} size="lg" radius="md">
                             <Stethoscope size={20} />
                         </ThemeIcon>
-                        <Text fw={700} size="xl" c="white">죽전한의원 관리</Text>
+                        <Text fw={700} size="xl" c="white">한의원 CRM</Text>
                     </Group>
                     <Badge variant="light" color="green" size="lg">
                         실시간 연동 중

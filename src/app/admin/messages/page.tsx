@@ -396,14 +396,14 @@ export default function MessagesPage() {
 
             {/* 발송 기록 */}
             <Title order={3} mt="xl" mb="md" c="white">발송 기록</Title>
-            <Paper shadow="sm" radius="md" withBorder bg="dark.6">
-                <Table striped highlightOnHover>
-                    <Table.Thead>
+            <Paper shadow="sm" radius="md" bg="dark.7" withBorder style={{ borderColor: 'var(--mantine-color-dark-5)', overflow: 'hidden' }}>
+                <Table highlightOnHover highlightOnHoverColor="dark.6">
+                    <Table.Thead bg="dark.8">
                         <Table.Tr>
-                            <Table.Th>발송 시간</Table.Th>
-                            <Table.Th>채널</Table.Th>
-                            <Table.Th>내용</Table.Th>
-                            <Table.Th>상태</Table.Th>
+                            <Table.Th c="dimmed">발송 시간</Table.Th>
+                            <Table.Th c="dimmed">채널</Table.Th>
+                            <Table.Th c="dimmed">내용</Table.Th>
+                            <Table.Th c="dimmed">상태</Table.Th>
                         </Table.Tr>
                     </Table.Thead>
                     <Table.Tbody>
@@ -417,13 +417,15 @@ export default function MessagesPage() {
                             messageHistory.map((job) => (
                                 <Table.Tr key={job.id}>
                                     <Table.Td>
-                                        {new Date(job.created_at).toLocaleString('ko-KR')}
+                                        <Text c="white" size="sm">{new Date(job.created_at).toLocaleString('ko-KR')}</Text>
                                     </Table.Td>
                                     <Table.Td>{getChannelBadge(job.channel)}</Table.Td>
                                     <Table.Td>
-                                        {job.channel === 'push'
-                                            ? job.payload?.title
-                                            : job.template_code}
+                                        <Text c="gray.4" size="sm">
+                                            {job.channel === 'push'
+                                                ? job.payload?.title
+                                                : job.template_code}
+                                        </Text>
                                     </Table.Td>
                                     <Table.Td>{getStatusBadge(job.status)}</Table.Td>
                                 </Table.Tr>
@@ -432,6 +434,6 @@ export default function MessagesPage() {
                     </Table.Tbody>
                 </Table>
             </Paper>
-        </Container>
+        </Container >
     );
 }

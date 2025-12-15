@@ -111,7 +111,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
         try {
             const config = serviceConfig[topic] || serviceConfig["recovery"];
 
-            const response = await fetch("/api/healthcare/chat", {
+            const response = await fetch(props.isLoggedIn ? "/api/medical/chat" : "/api/healthcare/chat", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -278,7 +278,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                             {/* Bubble */}
                             <div className="flex flex-col gap-1 max-w-[80%]">
                                 <span className={`text-xs font-medium ${msg.role === "user" ? "text-right text-traditional-subtext" : "text-left text-traditional-primary"}`}>
-                                    {msg.role === "ai" ? "AI 헬스체크" : "나"}
+                                    {msg.role === "ai" ? (props.isLoggedIn ? "AI 한의사" : "AI 헬스체크") : "나"}
                                 </span>
                                 <div
                                     className={`px-6 py-4 rounded-2xl text-sm leading-relaxed shadow-sm ${msg.role === "ai"
