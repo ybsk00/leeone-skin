@@ -43,7 +43,18 @@ export default function LoginPage() {
                 alert("로그인 실패: " + error.message);
                 setLoading(false);
             } else {
-                router.push("/medical/dashboard");
+                // Check if user is admin
+                const { data: profile } = await supabase
+                    .from('patient_profiles')
+                    .select('role')
+                    .eq('user_id', (await supabase.auth.getUser()).data.user?.id)
+                    .single();
+
+                if (profile?.role === 'admin' || profile?.role === 'doctor' || profile?.role === 'staff') {
+                    router.push("/admin");
+                } else {
+                    router.push("/medical/dashboard");
+                }
             }
         } catch (error) {
             console.error(error);
