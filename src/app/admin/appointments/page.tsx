@@ -455,6 +455,10 @@ export default function AppointmentsPage() {
                         onChange={(date) => setNewAppointment(prev => ({ ...prev, scheduledDate: date as Date | null }))}
                         required
                         minDate={new Date()}
+                        locale="ko"
+                        valueFormat="YYYY년 MM월 DD일"
+                        clearable
+                        popoverProps={{ withinPortal: true, zIndex: 1000 }}
                     />
 
                     <Select
