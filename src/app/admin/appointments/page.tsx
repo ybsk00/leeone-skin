@@ -444,9 +444,22 @@ export default function AppointmentsPage() {
                         label="예약 일시"
                         placeholder="날짜와 시간을 선택하세요"
                         value={newAppointment.scheduledAt ? new Date(newAppointment.scheduledAt) : null}
-                        onChange={(date) => setNewAppointment(prev => ({ ...prev, scheduledAt: date ? date.toISOString() : '' }))}
+                        onChange={(val) => {
+                            if (val) {
+                                // Date 객체로 변환 (타입 안전)
+                                const date = new Date(val as Date | string)
+                                // 30분 단위로 맞추기
+                                const minutes = date.getMinutes()
+                                const roundedMinutes = Math.round(minutes / 30) * 30
+                                date.setMinutes(roundedMinutes, 0, 0)
+                                setNewAppointment(prev => ({ ...prev, scheduledAt: date.toISOString() }))
+                            } else {
+                                setNewAppointment(prev => ({ ...prev, scheduledAt: '' }))
+                            }
+                        }}
                         required
                         valueFormat="YYYY-MM-DD HH:mm"
+                        minDate={new Date()}
                     />
 
                     <Select
