@@ -11,22 +11,20 @@ export async function POST(request: NextRequest) {
 
     try {
         const body = await request.json()
-        const { scheduled_at, doctor_name, notes, type } = body
+        const { scheduled_at, notes } = body
 
         if (!scheduled_at) {
             return NextResponse.json({ error: '예약 날짜/시간이 필요합니다.' }, { status: 400 })
         }
 
-        // Create appointment
+        // Create appointment with correct schema columns
         const { data, error } = await supabase
             .from('appointments')
             .insert({
                 user_id: user.id,
                 scheduled_at,
-                doctor_name: doctor_name || null,
                 notes: notes || 'AI한의원 진료',
-                type: type || '일반 진료',
-                status: 'pending',
+                status: 'scheduled',
             })
             .select()
             .single()
@@ -42,3 +40,4 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: '서버 오류가 발생했습니다.' }, { status: 500 })
     }
 }
+
