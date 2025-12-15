@@ -12,8 +12,8 @@ export async function GET(request: Request) {
 
         if (!error && data.user) {
             // Check user role for redirect
-            const { data: profile } = await supabase
-                .from('patient_profiles')
+            const { data: staffUser } = await supabase
+                .from('staff_users')
                 .select('role')
                 .eq('user_id', data.user.id)
                 .single()
@@ -24,15 +24,16 @@ export async function GET(request: Request) {
             }
 
             // Admin/doctor/staff goes to admin dashboard
-            if (profile?.role === 'admin' || profile?.role === 'doctor' || profile?.role === 'staff') {
+            if (staffUser?.role === 'admin' || staffUser?.role === 'doctor' || staffUser?.role === 'staff') {
                 return NextResponse.redirect(`${origin}/admin`)
             }
 
-            // Regular patients go to medical dashboard
-            return NextResponse.redirect(`${origin}/medical/dashboard`)
+            // Regular patients go to patient portal
+            return NextResponse.redirect(`${origin}/patient`)
         }
     }
 
     // return the user to an error page with instructions
     return NextResponse.redirect(`${origin}/auth/auth-code-error`)
 }
+
