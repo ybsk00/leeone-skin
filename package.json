@@ -9,12 +9,17 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@capacitor/cli": "^8.0.0",
+    "@capacitor/core": "^8.0.0",
     "@google/generative-ai": "^0.24.1",
     "@mantine/core": "^8.3.10",
+    "@mantine/dates": "^8.3.10",
     "@mantine/hooks": "^8.3.10",
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.86.2",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
+    "dayjs": "^1.11.19",
     "framer-motion": "^12.23.25",
     "lucide-react": "^0.556.0",
     "next": "^16.0.7",
