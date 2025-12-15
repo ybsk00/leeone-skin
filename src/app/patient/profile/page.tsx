@@ -102,7 +102,7 @@ export default async function ProfilePage() {
                 </div>
 
                 {/* Logout */}
-                <form action="/auth/signout" method="post" className="mt-6">
+                <form action="/patient/logout" method="post" className="mt-6">
                     <button
                         type="submit"
                         className="w-full flex items-center justify-center gap-2 p-4 rounded-xl text-red-400 hover:bg-red-500/10 transition-colors"
