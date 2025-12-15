@@ -95,7 +95,7 @@ export async function signInWithGoogle() {
     const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-            redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/auth/callback?next=/patient`,
+            redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://jukjeon-haniwon-ai-healthcare.vercel.app'}/auth/callback?next=/patient`,
         },
     })
 
@@ -112,7 +112,7 @@ export async function signInWithKakao() {
     const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'kakao',
         options: {
-            redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/auth/callback?next=/patient`,
+            redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://jukjeon-haniwon-ai-healthcare.vercel.app'}/auth/callback?next=/patient`,
         },
     })
 
