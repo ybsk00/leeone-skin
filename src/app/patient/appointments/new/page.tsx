@@ -17,6 +17,7 @@ export default function NewAppointmentPage() {
         return new Date(today.setDate(diff))
     })
     const [showConfirmModal, setShowConfirmModal] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
     // Time slots
     const morningSlots = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30']
@@ -46,8 +47,38 @@ export default function NewAppointmentPage() {
     }
 
     const handleConfirm = async () => {
-        if (!selectedTime) return
-        setShowConfirmModal(true)
+        if (!selectedTime || isLoading) return
+        setIsLoading(true)
+
+        try {
+            // Combine date and time
+            const [hours, minutes] = selectedTime.split(':').map(Number)
+            const scheduledAt = new Date(selectedDate)
+            scheduledAt.setHours(hours, minutes, 0, 0)
+
+            const response = await fetch('/api/patient/appointments', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    scheduled_at: scheduledAt.toISOString(),
+                    doctor_name: selectedDoctor === '전체' ? null : selectedDoctor,
+                    notes: 'AI한의원 진료',
+                    type: '일반 진료'
+                })
+            })
+
+            const data = await response.json()
+            if (data.success) {
+                setShowConfirmModal(true)
+            } else {
+                alert(data.error || '예약에 실패했습니다.')
+            }
+        } catch (error) {
+            console.error('Appointment error:', error)
+            alert('예약 중 오류가 발생했습니다.')
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     const handleModalClose = () => {

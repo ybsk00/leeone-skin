@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { Send, ArrowLeft, Plus, Mic, ChevronUp, X, Calendar, Clock, Stethoscope, Camera, Image as ImageIcon } from 'lucide-react'
+import { ArrowLeft, Mic, ChevronUp, X, Calendar, Stethoscope, Camera, Image as ImageIcon, AlertTriangle } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
@@ -12,7 +12,85 @@ type Message = {
     timestamp?: Date
 }
 
-const quickReplies = ['체온 측정 안 함', '37.5도 이상', '오한 있음', '기침/가래']
+type SymptomAnalysis = {
+    symptoms: string[]
+    hypotheses: string[]
+    questions: string[]
+}
+
+const quickReplies = ['두통이 있어요', '소화가 안돼요', '잠을 못 자요', '피로해요']
+
+// AI 한의사 프롬프트 생성
+const generateAIResponse = (userMessage: string, turnCount: number, analysis: SymptomAnalysis): { message: string, analysis: SymptomAnalysis, showBooking: boolean } => {
+    const lowerMessage = userMessage.toLowerCase()
+    let showBooking = false
+
+    // 예약 동의 확인
+    if ((lowerMessage.includes('네') || lowerMessage.includes('예') || lowerMessage.includes('좋아') || lowerMessage.includes('예약')) && turnCount >= 4) {
+        return {
+            message: '알겠습니다. 지금 바로 편하신 시간에 예약을 도와드리겠습니다. 😊',
+            analysis,
+            showBooking: true
+        }
+    }
+
+    // 증상 키워드 분석
+    const symptomKeywords: { [key: string]: string[] } = {
+        '두통': ['긴장성 두통', '편두통', '혈압성 두통'],
+        '머리': ['긴장성 두통', '편두통', '혈압성 두통'],
+        '소화': ['소화불량', '위염', '기능성 위장장애'],
+        '위': ['소화불량', '위염', '역류성 식도염'],
+        '배': ['소화불량', '장염', '과민성 대장증후군'],
+        '잠': ['불면증', '수면장애', '스트레스성 수면문제'],
+        '피로': ['만성피로증후군', '기력저하', '영양불균형'],
+        '목': ['경추 문제', '근막통증', '기혈순환 장애'],
+        '어깨': ['견비통', '근막통증', '기혈순환 장애'],
+        '허리': ['요통', '좌골신경통', '신장기능 저하'],
+        '감기': ['풍한감기', '풍열감기', '면역력 저하'],
+        '기침': ['기관지염', '폐기허증', '담음증'],
+        '스트레스': ['간기울결', '심화항성', '신경쇠약'],
+        '불안': ['심담허겁', '간기울결', '심신불교'],
+    }
+
+    // 새 증상 추가
+    for (const [keyword, hypo] of Object.entries(symptomKeywords)) {
+        if (userMessage.includes(keyword)) {
+            if (!analysis.symptoms.includes(keyword)) {
+                analysis.symptoms.push(keyword)
+            }
+            hypo.forEach(h => {
+                if (!analysis.hypotheses.includes(h)) {
+                    analysis.hypotheses.push(h)
+                }
+            })
+        }
+    }
+
+    // 턴별 응답 생성
+    let response = ''
+
+    if (turnCount === 1) {
+        // 첫 번째 턴: 공감 + 기본 질문
+        if (analysis.symptoms.length > 0) {
+            response = `${analysis.symptoms.join(', ')} 증상으로 많이 힘드시겠네요. 😣 한방적으로 여러 원인이 있을 수 있어요. 증상이 언제부터 시작되었는지, 그리고 특별히 악화되는 상황이 있으신지 알려주시겠어요?`
+        } else {
+            response = '말씀해주신 증상에 대해 더 자세히 알고 싶어요. 😊 구체적으로 어떤 불편함이 있으신지, 언제부터 시작되었는지 알려주시겠어요?'
+        }
+    } else if (turnCount === 2) {
+        response = `네, 이해했어요. 증상의 원인을 파악하기 위해 조금 더 여쭤볼게요. 해당 증상과 함께 다른 불편한 곳은 없으신가요? 예를 들어 식욕, 수면, 대소변 상태는 어떠세요?`
+    } else if (turnCount === 3) {
+        response = `소중한 정보 감사해요. 😊 마지막으로, 평소 스트레스를 많이 받으시는 편인가요? 그리고 차가운 것과 따뜻한 것 중 어느 쪽을 더 좋아하시나요?`
+    } else if (turnCount === 4) {
+        // 4턴: 가설 제시 + 경고문
+        const topHypo = analysis.hypotheses.slice(0, 2)
+        response = `지금까지 말씀해주신 내용을 종합해보면, **${topHypo.length > 0 ? topHypo.join(', ') : '기능성 문제'}** 가능성이 있어 보여요.\n\n⚠️ **주의**: AI 상담은 참고용이며, 정확한 진단을 위해서는 반드시 전문 한의사의 진료가 필요합니다.\n\n한의원에서 정확한 진맥과 상담을 받아보시는 것이 좋겠어요. 예약을 도와드릴까요? 🏥`
+    } else {
+        // 5턴 이후
+        response = '증상에 대해 더 궁금한 점이 있으시면 말씀해주세요. 예약을 원하시면 "예"라고 답해주세요. 😊'
+    }
+
+    return { message: response, analysis, showBooking }
+}
 
 export default function ChatPage() {
     const router = useRouter()
@@ -20,7 +98,7 @@ export default function ChatPage() {
         {
             id: 'init',
             role: 'assistant',
-            content: '안녕하세요. 오늘 어디가 불편하신가요? 자세히 말씀해 주시면 진료에 도움이 됩니다.',
+            content: '안녕하세요, AI 한의사입니다. 🌿 오늘 어디가 불편하신가요? 증상을 자세히 말씀해주시면 도움을 드릴게요.',
             timestamp: new Date()
         }
     ])
@@ -28,7 +106,7 @@ export default function ChatPage() {
     const [isLoading, setIsLoading] = useState(false)
     const [turnCount, setTurnCount] = useState(0)
     const [showAppointmentModal, setShowAppointmentModal] = useState(false)
-    const [suggestedConditions, setSuggestedConditions] = useState<string[]>([])
+    const [symptomAnalysis, setSymptomAnalysis] = useState<SymptomAnalysis>({ symptoms: [], hypotheses: [], questions: [] })
     const [selectedImage, setSelectedImage] = useState<File | null>(null)
     const [imagePreview, setImagePreview] = useState<string | null>(null)
     const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -81,30 +159,24 @@ export default function ChatPage() {
         const newTurnCount = turnCount + 1
         setTurnCount(newTurnCount)
 
-        // Simulate AI response
+        // Generate AI response
         setTimeout(() => {
-            let aiContent = ''
-            if (newTurnCount === 1) {
-                aiContent = '증상에 대해 더 자세히 알려주세요. 언제부터 증상이 시작되었나요?'
-            } else if (newTurnCount === 2) {
-                aiContent = '증상의 정도는 어떠신가요? 일상생활에 지장이 있으신가요?'
-            } else if (newTurnCount === 3) {
-                aiContent = '다른 동반 증상이 있으신가요? 예를 들어 두통, 발열, 피로감 등이요.'
-            } else if (newTurnCount >= 4) {
-                aiContent = '지금까지 말씀해주신 증상을 종합하면, 전문의 상담이 필요해 보입니다. 예약을 도와드릴까요?'
-                setSuggestedConditions(['일반 진료', '정밀 검사'])
-                setTimeout(() => setShowAppointmentModal(true), 1000)
-            }
+            const { message, analysis, showBooking } = generateAIResponse(userMessage.content, newTurnCount, symptomAnalysis)
+            setSymptomAnalysis(analysis)
 
             const aiMessage: Message = {
                 id: (Date.now() + 1).toString(),
                 role: 'assistant',
-                content: aiContent,
+                content: message,
                 timestamp: new Date()
             }
             setMessages(prev => [...prev, aiMessage])
             setIsLoading(false)
-        }, 1500)
+
+            if (showBooking) {
+                setTimeout(() => setShowAppointmentModal(true), 800)
+            }
+        }, 1000)
     }
 
     const handleQuickReply = (text: string) => {
@@ -112,9 +184,8 @@ export default function ChatPage() {
     }
 
     const handleFinish = async () => {
-        if (!confirm('문진을 종료하고 제출하시겠습니까?')) return
-        alert('문진이 완료되었습니다. 예약 페이지로 이동합니다.')
-        router.push('/patient/appointments')
+        if (!confirm('상담을 종료하시겠습니까?')) return
+        router.push('/patient')
     }
 
     const handleBookAppointment = () => {
@@ -125,6 +196,17 @@ export default function ChatPage() {
     const formatTime = (date?: Date) => {
         if (!date) return ''
         return date.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })
+    }
+
+    // 메시지 렌더링 (마크다운 볼드 처리)
+    const renderMessage = (content: string) => {
+        const parts = content.split(/(\*\*[^*]+\*\*)/g)
+        return parts.map((part, i) => {
+            if (part.startsWith('**') && part.endsWith('**')) {
+                return <strong key={i} className="text-blue-400">{part.slice(2, -2)}</strong>
+            }
+            return part
+        })
     }
 
     return (
@@ -138,10 +220,10 @@ export default function ChatPage() {
                         </button>
                     </Link>
                     <div className="text-center">
-                        <h1 className="text-lg font-bold text-white">AI 문진</h1>
+                        <h1 className="text-lg font-bold text-white">AI 한의사 상담</h1>
                         <div className="flex items-center justify-center gap-1.5 mt-0.5">
                             <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                            <span className="text-xs text-gray-400">진행 중 ({turnCount}/10턴)</span>
+                            <span className="text-xs text-gray-400">상담 중 ({turnCount}턴)</span>
                         </div>
                     </div>
                     <button
@@ -159,7 +241,7 @@ export default function ChatPage() {
                     {/* Date Badge */}
                     <div className="flex justify-center">
                         <span className="px-4 py-1.5 text-xs text-gray-400 rounded-full" style={{ backgroundColor: '#1f2937' }}>
-                            오늘 오전 {formatTime(new Date())}
+                            오늘 {formatTime(new Date())}
                         </span>
                     </div>
 
@@ -167,19 +249,19 @@ export default function ChatPage() {
                         <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                             {msg.role === 'assistant' && (
                                 <div className="flex gap-3">
-                                    <div className="flex-shrink-0 w-10 h-10 rounded-full overflow-hidden bg-blue-500 flex items-center justify-center">
-                                        <span className="text-white font-bold">AI</span>
+                                    <div className="flex-shrink-0 w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center">
+                                        <span className="text-white text-lg">🌿</span>
                                     </div>
                                     <div className="flex flex-col gap-1 max-w-[75%]">
-                                        <span className="text-xs text-gray-500">AI 어시스턴트</span>
+                                        <span className="text-xs text-gray-500">AI 한의사</span>
                                         <div
-                                            className="px-4 py-3 text-sm text-white leading-relaxed"
+                                            className="px-4 py-3 text-sm text-white leading-relaxed whitespace-pre-line"
                                             style={{
                                                 backgroundColor: '#374151',
                                                 borderRadius: '16px 16px 16px 4px'
                                             }}
                                         >
-                                            {msg.content}
+                                            {renderMessage(msg.content)}
                                         </div>
                                     </div>
                                 </div>
@@ -210,8 +292,8 @@ export default function ChatPage() {
                     {/* Typing Indicator */}
                     {isLoading && (
                         <div className="flex gap-3">
-                            <div className="flex-shrink-0 w-10 h-10 rounded-full overflow-hidden bg-blue-500 flex items-center justify-center">
-                                <span className="text-white font-bold">AI</span>
+                            <div className="flex-shrink-0 w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center">
+                                <span className="text-white text-lg">🌿</span>
                             </div>
                             <div
                                 className="px-4 py-3 flex gap-1.5"
@@ -333,7 +415,7 @@ export default function ChatPage() {
                             onClick={() => handleSubmit()}
                             disabled={isLoading || (!input.trim() && !selectedImage)}
                             className="p-3 rounded-full transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                            style={{ backgroundColor: '#3b82f6' }}
+                            style={{ backgroundColor: '#10b981' }}
                         >
                             <ChevronUp size={20} className="text-white" />
                         </button>
@@ -355,7 +437,7 @@ export default function ChatPage() {
                         {/* Modal Header */}
                         <div
                             className="p-5"
-                            style={{ background: 'linear-gradient(135deg, #1e40af, #3b82f6)' }}
+                            style={{ background: 'linear-gradient(135deg, #059669, #10b981)' }}
                         >
                             <button
                                 onClick={() => setShowAppointmentModal(false)}
@@ -368,32 +450,40 @@ export default function ChatPage() {
                                     <Stethoscope size={24} className="text-white" />
                                 </div>
                                 <div>
-                                    <h3 className="text-lg font-bold text-white">진료 예약 안내</h3>
-                                    <p className="text-sm text-blue-100">증상 분석 완료</p>
+                                    <h3 className="text-lg font-bold text-white">AI한의원 예약</h3>
+                                    <p className="text-sm text-green-100">상담 분석 완료</p>
                                 </div>
                             </div>
                         </div>
 
                         {/* Modal Body */}
                         <div className="p-5">
-                            {suggestedConditions.length > 0 && (
+                            {symptomAnalysis.hypotheses.length > 0 && (
                                 <div className="mb-4 p-4 rounded-xl" style={{ backgroundColor: '#111827' }}>
-                                    <p className="text-sm text-gray-400 mb-2">추천 진료</p>
+                                    <p className="text-sm text-gray-400 mb-2">추정 증상</p>
                                     <div className="space-y-2">
-                                        {suggestedConditions.map((condition, i) => (
+                                        {symptomAnalysis.hypotheses.slice(0, 2).map((hypo, i) => (
                                             <div key={i} className="flex items-center gap-2">
-                                                <span className="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center text-xs text-blue-400">
+                                                <span className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center text-xs text-green-400">
                                                     {i + 1}
                                                 </span>
-                                                <span className="text-sm text-white">{condition}</span>
+                                                <span className="text-sm text-white">{hypo}</span>
                                             </div>
                                         ))}
                                     </div>
                                 </div>
                             )}
 
+                            {/* Warning */}
+                            <div className="mb-4 p-3 rounded-xl flex items-start gap-2" style={{ backgroundColor: '#fef3c7' }}>
+                                <AlertTriangle size={16} className="text-yellow-600 flex-shrink-0 mt-0.5" />
+                                <p className="text-xs text-yellow-800">
+                                    AI 상담은 참고용입니다. 정확한 진단을 위해 반드시 전문 한의사의 진료를 받으세요.
+                                </p>
+                            </div>
+
                             <p className="text-sm text-gray-300 mb-5 leading-relaxed">
-                                정확한 진단을 위해 의사 선생님과 상담하시는 것이 좋겠습니다. 지금 바로 예약하시겠습니까?
+                                전문 한의사 선생님의 상담을 받아보시겠어요? 지금 바로 예약하시면 빠른 시일 내에 진료받으실 수 있습니다.
                             </p>
 
                             <div className="flex gap-3">
@@ -407,7 +497,7 @@ export default function ChatPage() {
                                 <button
                                     onClick={handleBookAppointment}
                                     className="flex-1 py-3 rounded-xl text-white font-bold flex items-center justify-center gap-2"
-                                    style={{ backgroundColor: '#3b82f6' }}
+                                    style={{ backgroundColor: '#10b981' }}
                                 >
                                     <Calendar size={18} />
                                     예약하기
