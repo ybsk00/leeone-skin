@@ -9,9 +9,9 @@ if (!apiKey) {
 const genAI = new GoogleGenerativeAI(apiKey || "");
 
 // Model configurations
-const HEALTHCARE_MODEL = "gemini-2.5-flash"; // Fast, efficient for general healthcare chat
-const MEDICAL_MODEL = "gemini-3.0-pro"; // High reasoning for medical analysis (Assuming 3.0-pro or similar available, fallback to 1.5-pro if not)
-const VISION_MODEL = "gemini-2.5-flash"; // For multimodal analysis
+const HEALTHCARE_MODEL = "gemini-2.0-flash"; // Fast, efficient for general healthcare chat
+const MEDICAL_MODEL = "gemini-2.0-flash"; // For medical analysis
+const VISION_MODEL = "gemini-2.0-flash"; // For multimodal analysis
 
 export type AIModelMode = "healthcare" | "medical" | "vision";
 

@@ -36,27 +36,27 @@ export default function ChatInterface(props: ChatInterfaceProps) {
     const serviceConfig: Record<string, { serviceType: string; initialMessage: string }> = {
         recovery: {
             serviceType: "recovery",
-            initialMessage: "반갑네! 자네의 기력 배터리를 점검해줄 '기력 장인'일세. \n\n오늘 하루, 가장 피곤했던 시간은 언제였나? (아침/오후/저녁/하루 종일)"
+            initialMessage: "안녕하세요, 건강 상담을 도와드릴 AI 한의사입니다. \n\n오늘 하루 피로감은 어떠셨나요? 가장 피곤했던 시간대를 알려주세요. (아침/오후/저녁/하루 종일)"
         },
         resilience: { // Handle legacy id if needed
             serviceType: "recovery",
-            initialMessage: "반갑네! 자네의 기력 배터리를 점검해줄 '기력 장인'일세. \n\n오늘 하루, 가장 피곤했던 시간은 언제였나? (아침/오후/저녁/하루 종일)"
+            initialMessage: "안녕하세요, 건강 상담을 도와드릴 AI 한의사입니다. \n\n오늘 하루 피로감은 어떠셨나요? 가장 피곤했던 시간대를 알려주세요. (아침/오후/저녁/하루 종일)"
         },
         women: {
             serviceType: "women",
-            initialMessage: "안녕하세요, 당신의 '달의 리듬'을 함께 읽어볼게요. \n\n평소 월경 주기는 규칙적인 편인가요? (대체로 규칙적/가끔 달라짐/자주 들쭉날쭉)"
+            initialMessage: "안녕하세요, 여성 건강 상담을 도와드릴 AI 한의사입니다. \n\n평소 월경 주기는 어떠신가요? (대체로 규칙적/가끔 불규칙/자주 불규칙)"
         },
         pain: {
             serviceType: "pain",
-            initialMessage: "안녕하세요! 오늘 당신의 몸 날씨를 알려드릴게요. \n\n가장 자주 불편하거나 뻐근한 부위는 어디인가요? (목·어깨/허리/무릎·다리/그 외)"
+            initialMessage: "안녕하세요, 통증 상담을 도와드릴 AI 한의사입니다. \n\n현재 가장 불편하신 부위가 어디신가요? (목·어깨/허리/무릎·다리/그 외)"
         },
         digestion: {
             serviceType: "digestion",
-            initialMessage: "반갑습니다. 위장과 수면의 균형을 봐드릴게요. \n\n평소 식사 속도는 어떠신가요? (천천히/보통/빨리 먹는 편)"
+            initialMessage: "안녕하세요, 소화기 건강 상담을 도와드릴 AI 한의사입니다. \n\n평소 식사 속도는 어떠신가요? (천천히/보통/빠른 편)"
         },
         pregnancy: {
             serviceType: "pregnancy",
-            initialMessage: "안녕하세요, 건강한 임신 준비를 돕는 체력 코치입니다. \n\n하루 중 피로감은 어느 정도 느끼시나요? (대부분 괜찮음/오후에 피곤/하루 종일 피곤)"
+            initialMessage: "안녕하세요, 임신 준비 상담을 도와드릴 AI 한의사입니다. \n\n하루 중 피로감은 어느 정도 느끼시나요? (대부분 괜찮음/오후에 피곤함/하루 종일 피곤함)"
         }
     };
 
