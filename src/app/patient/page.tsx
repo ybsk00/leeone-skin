@@ -57,10 +57,13 @@ export default async function PatientHome() {
                             <h1 className="text-xl font-bold text-white">{patientName}님</h1>
                         </div>
                     </div>
-                    <button className="relative p-2 rounded-full hover:bg-white/10 transition-colors">
-                        <Bell size={24} className="text-gray-400" />
-                        <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full"></span>
-                    </button>
+                    <div className="flex items-center gap-3">
+                        <img src="/logo_header.png" alt="위담한방병원" className="h-8 w-auto object-contain" />
+                        <button className="relative p-2 rounded-full hover:bg-white/10 transition-colors">
+                            <Bell size={24} className="text-gray-400" />
+                            <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full"></span>
+                        </button>
+                    </div>
                 </div>
 
                 {/* Condition Check */}

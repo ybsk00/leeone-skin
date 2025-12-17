@@ -23,7 +23,7 @@ export default function NewAppointmentPage() {
     const morningSlots = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30']
     const afternoonSlots = ['14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00']
 
-    const doctors = ['전체', '김태희', '이진수', '박지민']
+    const doctors = ['전체', '최서형 이사장', '노기환 원장', '나병조 원장', '최규호 원장']
 
     // Generate week days
     const weekDays = Array.from({ length: 7 }, (_, i) => {
