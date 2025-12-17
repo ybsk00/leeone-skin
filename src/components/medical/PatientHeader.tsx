@@ -35,7 +35,7 @@ export default function PatientHeader() {
                 <div className="w-8 h-8 bg-traditional-primary rounded-lg flex items-center justify-center shadow-sm group-hover:bg-traditional-accent transition-colors duration-300">
                     <span className="text-white text-xs font-bold font-serif">JK</span>
                 </div>
-                <span className="text-lg font-bold text-traditional-text tracking-tight group-hover:text-traditional-primary transition-colors">한의원 <span className="text-traditional-accent font-light">AI</span></span>
+                <span className="text-lg font-bold text-traditional-text tracking-tight group-hover:text-traditional-primary transition-colors">위담한방병원</span>
             </Link>
 
             <div className="flex items-center gap-4">
