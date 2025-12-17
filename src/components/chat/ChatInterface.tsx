@@ -248,34 +248,34 @@ export default function ChatInterface(props: ChatInterfaceProps) {
 
     const modules = [
         {
-            id: "recovery", // Changed from resilience to match serviceType
-            label: "회복력·면역",
-            desc: "만성 피로, 잦은 감기",
+            id: "digestion",
+            label: "소화 리듬",
+            desc: "소화불량, 배변 체크",
+            theme: "from-emerald-400/20 to-teal-600/20"
+        },
+        {
+            id: "cognitive",
+            label: "인지 건강",
+            desc: "기억력, 주의력 테스트",
+            theme: "from-purple-400/20 to-violet-600/20"
+        },
+        {
+            id: "stress-sleep",
+            label: "스트레스·수면",
+            desc: "수면, 피로 패턴 체크",
+            theme: "from-blue-400/20 to-slate-600/20"
+        },
+        {
+            id: "vascular",
+            label: "혈관·생활습관",
+            desc: "운동, 식습관 체크",
             theme: "from-amber-500/20 to-orange-600/20"
         },
         {
             id: "women",
-            label: "여성 밸런스",
-            desc: "생리불순, 갱년기 케어",
+            label: "여성 컨디션",
+            desc: "주기, PMS 체크",
             theme: "from-rose-400/20 to-pink-600/20"
-        },
-        {
-            id: "pain",
-            label: "통증 패턴",
-            desc: "만성 두통, 어깨 통증",
-            theme: "from-blue-400/20 to-slate-600/20"
-        },
-        {
-            id: "digestion",
-            label: "소화·수면 리듬",
-            desc: "소화불량, 수면장애",
-            theme: "from-emerald-400/20 to-teal-600/20"
-        },
-        {
-            id: "pregnancy",
-            label: "임신 준비",
-            desc: "난임, 건강한 임신",
-            theme: "from-violet-400/20 to-purple-600/20"
         },
     ];
 
