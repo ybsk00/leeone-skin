@@ -45,29 +45,29 @@ export default function LandingPage() {
 
         <div className="relative z-10 max-w-5xl mx-auto space-y-8 animate-fade-in">
           <div className="inline-block px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-sm font-semibold mb-4 shadow-sm animate-slide-up">
-            AI 기반 맞춤형 한방 헬스케어
+            위담 건강가이드 챗(참고용)
           </div>
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-white drop-shadow-lg leading-tight font-serif">
             <span className="block text-2xl md:text-3xl mb-6 font-sans font-light text-white/80 tracking-widest uppercase">
-              Tradition Meets Intelligence
+              Check Your Rhythm
             </span>
+            더부룩함·속 불편,<br />
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-traditional-primary via-traditional-secondary to-traditional-accent">
-              100년의 지혜
-            </span>와<br />
-            <span className="text-white">AI의 만남</span>
+              생활 리듬부터
+            </span> 점검해보세요
           </h1>
           <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto leading-relaxed font-light drop-shadow-md">
-            당신의 맥박, 체질, 생활 습관을 AI가 분석하여<br className="hidden md:block" />
-            가장 현대적인 한방 솔루션을 제안합니다.
+            짧은 채팅 체크로 식사·수면·스트레스 패턴을 정리하고,<br className="hidden md:block" />
+            상담 준비용 요약을 제공합니다. (진단/치료 아님)
           </p>
           <div className="pt-8 flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link
-              href="/healthcare/chat?topic=resilience"
+              href="/healthcare/chat?topic=digestion"
               className="group relative inline-flex items-center px-8 py-4 bg-traditional-primary text-white text-lg font-medium rounded-full overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
             >
               <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"></span>
               <span className="relative flex items-center gap-2">
-                AI 건강 분석 시작하기 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                소화 리듬 체크 시작 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </span>
             </Link>
             <Link
@@ -77,6 +77,9 @@ export default function LandingPage() {
               로그인
             </Link>
           </div>
+          <p className="text-xs text-white/60 font-light mt-4">
+            본 서비스는 건강 정보 제공 및 생활 습관 점검을 위한 참고용입니다. 증상이 지속되면 의료진 상담이 필요합니다.
+          </p>
         </div>
       </header>
 
@@ -87,11 +90,11 @@ export default function LandingPage() {
         <div className="relative z-10 max-w-7xl mx-auto">
           <div className="text-center mb-20 space-y-6">
             <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 font-sans tracking-tight">
-              AI 헬스케어 솔루션
+              AI 건강가이드(참고용)
             </h2>
             <p className="text-gray-700 max-w-2xl mx-auto text-lg font-medium leading-relaxed">
-              전통 한의학의 정밀함과 인공지능의 분석력이 만나<br />
-              당신만을 위한 최적의 건강 리듬을 찾아드립니다.
+              간단한 질문으로 생활 습관을 점검하고,<br />
+              상담에 도움이 되는 요약을 제공합니다. (진단/처방 아님)
             </p>
           </div>
 
@@ -99,20 +102,20 @@ export default function LandingPage() {
             {[
               {
                 icon: <BarChart2 className="w-8 h-8 text-traditional-accent" />,
-                title: "실시간 데이터 분석",
-                desc: "사용자의 건강 데이터를 실시간으로 수집하고 분석하여 현재 상태를 정확하게 진단합니다.",
+                title: "생활 패턴 체크",
+                desc: "식사·수면·활동 리듬을 간단히 점검해 현재 습관을 정리합니다. (참고용)",
                 bg: "bg-orange-50/50"
               },
               {
                 icon: <Activity className="w-8 h-8 text-traditional-primary" />,
-                title: "체질 맞춤 처방",
-                desc: "사상체질과 유전적 요인을 고려하여 개인에게 최적화된 한방 처방과 생활 가이드를 제공합니다.",
+                title: "관리 팁 안내",
+                desc: "답변을 바탕으로 일상에서 실천 가능한 관리 포인트를 안내합니다. (참고용)",
                 bg: "bg-green-50/50"
               },
               {
                 icon: <Calendar className="w-8 h-8 text-traditional-secondary" />,
-                title: "지속적 건강 관리",
-                desc: "일회성 진료가 아닌, 지속적인 모니터링과 피드백을 통해 건강한 생활 습관을 형성합니다.",
+                title: "요약 저장(로그인)",
+                desc: "결과를 저장해 상담 시 참고 자료로 활용할 수 있습니다. (로그인 후)",
                 bg: "bg-brown-50/50"
               }
             ].map((feature, idx) => (
@@ -152,8 +155,12 @@ export default function LandingPage() {
           <div className="text-center mb-16">
             <span className="text-traditional-accent font-bold tracking-widest uppercase text-sm mb-2 block">My Health Rhythm</span>
             <h2 className="text-4xl md:text-5xl font-bold text-white drop-shadow-lg font-serif">
-              AI 헬스케어로 알아보는 나의 건강
+              내 컨디션 리듬 체크(참고용)
             </h2>
+            <p className="text-white/80 mt-4 max-w-2xl mx-auto">
+              모듈을 선택해 2~3분 문답으로 패턴을 정리해보세요.<br />
+              결과는 요약으로 저장할 수 있습니다.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
@@ -165,25 +172,25 @@ export default function LandingPage() {
                 </div>
                 <h3 className="text-lg font-bold text-white mb-2 tracking-wide">소화 리듬</h3>
                 <p className="text-xs text-white/70 leading-relaxed font-light">
-                  소화불량, 배변 리듬<br />체크 (5문항)
+                  식후 불편·더부룩함<br />생활 패턴 점검 (참고용)
                 </p>
               </div>
             </Link>
 
-            {/* Module 2: 인지 건강 */}
+            {/* Module 2: 인지 리듬 */}
             <Link href="/healthcare/chat?topic=cognitive" className="group">
               <div className="h-full bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] flex flex-col items-center text-center group-hover:backdrop-blur-lg">
                 <div className="w-14 h-14 bg-gradient-to-br from-purple-100 to-purple-200 rounded-full flex items-center justify-center mb-6 shadow-lg group-hover:shadow-purple-500/30 transition-all duration-300">
                   <Activity className="w-7 h-7 text-purple-600 group-hover:scale-110 transition-transform" />
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2 tracking-wide">인지 건강</h3>
+                <h3 className="text-lg font-bold text-white mb-2 tracking-wide">인지 리듬</h3>
                 <p className="text-xs text-white/70 leading-relaxed font-light">
-                  기억력, 주의력<br />미니게임 (5문항)
+                  집중·기억 관련<br />습관 점검 (참고용)
                 </p>
               </div>
             </Link>
 
-            {/* Module 3: 스트레스-수면 */}
+            {/* Module 3: 스트레스·수면 */}
             <Link href="/healthcare/chat?topic=stress-sleep" className="group">
               <div className="h-full bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] flex flex-col items-center text-center group-hover:backdrop-blur-lg">
                 <div className="w-14 h-14 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center mb-6 shadow-lg group-hover:shadow-blue-500/30 transition-all duration-300">
@@ -191,7 +198,7 @@ export default function LandingPage() {
                 </div>
                 <h3 className="text-lg font-bold text-white mb-2 tracking-wide">스트레스·수면</h3>
                 <p className="text-xs text-white/70 leading-relaxed font-light">
-                  수면, 피로 패턴<br />체크 (5문항)
+                  수면·피로 패턴<br />관리 포인트 (참고용)
                 </p>
               </div>
             </Link>
@@ -204,7 +211,7 @@ export default function LandingPage() {
                 </div>
                 <h3 className="text-lg font-bold text-white mb-2 tracking-wide">혈관·생활습관</h3>
                 <p className="text-xs text-white/70 leading-relaxed font-light">
-                  운동, 식습관<br />리스크 체크 (5문항)
+                  운동·식사·수면<br />생활 리듬 정리 (참고용)
                 </p>
               </div>
             </Link>
@@ -217,7 +224,7 @@ export default function LandingPage() {
                 </div>
                 <h3 className="text-lg font-bold text-white mb-2 tracking-wide">여성 컨디션</h3>
                 <p className="text-xs text-white/70 leading-relaxed font-light">
-                  주기, PMS<br />리듬 체크 (5문항)
+                  주기·컨디션 변화<br />패턴 요약 (참고용)
                 </p>
               </div>
             </Link>
