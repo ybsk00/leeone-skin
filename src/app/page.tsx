@@ -11,7 +11,7 @@ export default function LandingPage() {
             <div className="w-8 h-8 bg-traditional-primary rounded-lg flex items-center justify-center shadow-md group-hover:bg-traditional-accent transition-colors duration-300">
               <span className="text-white text-sm font-bold font-serif">JK</span>
             </div>
-            <span className="text-xl font-bold text-traditional-text tracking-tight group-hover:text-traditional-primary transition-colors">100년 한의학 AI 헬스케어</span>
+            <span className="text-xl font-bold text-traditional-text tracking-tight group-hover:text-traditional-primary transition-colors">위담 건강가이드 챗</span>
           </div>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-traditional-subtext">
             {/* Navigation links removed as per request */}
@@ -228,7 +228,7 @@ export default function LandingPage() {
               <div className="w-8 h-8 bg-traditional-primary rounded-lg flex items-center justify-center">
                 <span className="text-white text-xs font-bold font-serif">JK</span>
               </div>
-              <span className="text-xl font-bold text-traditional-text font-serif">한의원</span>
+              <span className="text-xl font-bold text-traditional-text font-serif">위담한방병원</span>
             </div>
             <div className="text-sm text-traditional-subtext space-y-2 font-light">
               <p className="flex items-center gap-2"><span className="w-16 font-medium text-traditional-text/80">주소</span> 경기도 하남시 미사강변서로 22, 에코큐브지식산업센터 1005호</p>
@@ -249,7 +249,7 @@ export default function LandingPage() {
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-6 mt-12 pt-8 border-t border-traditional-muted/50 text-center text-xs text-traditional-subtext/60 font-light">
-          <p>© 2025 한의원. All rights reserved. 본 사이트의 콘텐츠는 저작권법의 보호를 받습니다.</p>
+          <p>© 2025 위담한방병원. All rights reserved. 본 사이트의 콘텐츠는 저작권법의 보호를 받습니다.</p>
         </div>
       </footer>
 
