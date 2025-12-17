@@ -31,7 +31,7 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
                 time: timeString,
                 type: '초진',
                 status: 'pending',
-                complaint: doctor === '전체' ? '일반 진료 예약' : `일반 진료 예약 (${doctor})`,
+                complaint: doctor === '전체' ? '위담한방병원 진료' : `위담한방병원 진료 (${doctor})`,
                 keywords: ['예약']
             }
         ]);
