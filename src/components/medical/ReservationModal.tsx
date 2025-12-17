@@ -20,39 +20,7 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
 
     const doctors = ['전체', '최서형 이사장', '노기환 원장', '나병조 원장', '최규호 원장'];
 
-    // ... inside handleConfirm ...
-    // Create new
-    const { error } = await supabase
-        .from('patients')
-        .insert([
-            {
-                user_id: userId, // Link to user
-                name: name,
-                time: timeString,
-                type: '초진',
-                status: 'pending',
-                complaint: doctor === '전체' ? '위담한방병원 진료' : `위담한방병원 진료 (${doctor})`,
-                keywords: ['예약']
-            }
-        ]);
 
-    // ... inside return JSX ...
-    // Inside activeTab === "book"
-    <div className="space-y-1">
-        <label className="text-xs font-medium text-gray-500">담당 의료진</label>
-        <div className="relative">
-            <select
-                value={doctor}
-                onChange={(e) => setDoctor(e.target.value)}
-                className="w-full p-3 border rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-traditional-accent focus:border-transparent outline-none transition-all appearance-none"
-            >
-                {doctors.map(d => (
-                    <option key={d} value={d}>{d}</option>
-                ))}
-            </select>
-            <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
-        </div>
-    </div>
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [userId, setUserId] = useState<string | null>(null);
     const [existingReservation, setExistingReservation] = useState<any>(null);
@@ -180,7 +148,7 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
                                 time: timeString,
                                 type: '초진',
                                 status: 'pending',
-                                complaint: '일반 진료 예약',
+                                complaint: doctor === '전체' ? '위담한방병원 진료' : `위담한방병원 진료 (${doctor})`,
                                 keywords: ['예약']
                             }
                         ]);
@@ -305,6 +273,22 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
                                                             placeholder="성함을 입력해주세요"
                                                             className="w-full pl-10 p-3 border rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-traditional-accent focus:border-transparent outline-none transition-all"
                                                         />
+                                                    </div>
+                                                </div>
+
+                                                <div className="space-y-1">
+                                                    <label className="text-xs font-medium text-gray-500">담당 의료진</label>
+                                                    <div className="relative">
+                                                        <select
+                                                            value={doctor}
+                                                            onChange={(e) => setDoctor(e.target.value)}
+                                                            className="w-full p-3 border rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-traditional-accent focus:border-transparent outline-none transition-all appearance-none"
+                                                        >
+                                                            {doctors.map(d => (
+                                                                <option key={d} value={d}>{d}</option>
+                                                            ))}
+                                                        </select>
+                                                        <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
                                                     </div>
                                                 </div>
 
