@@ -142,12 +142,12 @@ export default function ChatInterface(props: ChatInterfaceProps) {
 
             setMessages(prev => [...prev, { role: "ai", content: aiContent }]);
 
-            // 로그인 필요 응답 확인 (API에서 requireLogin: true 반환 시)
-            if (!props.isLoggedIn && data.requireLogin) {
+            // 로그인 필요 응답 확인 (API에서 requireLogin: true 반환 시 또는 5턴 도달 시)
+            if (!props.isLoggedIn && (data.requireLogin || newTurnCount >= 5)) {
                 setTimeout(() => {
                     setLoginModalContent({
                         title: "더 자세한 상담을 받아보세요! 🌿",
-                        desc: "로그인하시면 맞춤형 건강 분석과<br />상세 상담을 받으실 수 있습니다."
+                        desc: "정확한 건강 분석과 맞춤형 조언을 위해<br />로그인이 필요합니다."
                     });
                     setShowLoginModal(true);
                 }, 1000);
@@ -319,9 +319,14 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                         </button>
                     </form>
                     {!props.isLoggedIn && turnCount >= 5 && (
-                        <p className="text-center text-sm text-traditional-subtext mt-2">
-                            5턴 상담이 완료되었습니다. <Link href="/login" className="text-traditional-primary font-medium hover:underline">로그인</Link>하시면 계속 상담하실 수 있습니다.
-                        </p>
+                        <div className="mt-2 text-center">
+                            <button
+                                onClick={() => setShowLoginModal(true)}
+                                className="text-sm text-traditional-primary font-medium hover:underline"
+                            >
+                                상담을 계속하시려면 로그인이 필요합니다
+                            </button>
+                        </div>
                     )}
                 </div>
             </div>

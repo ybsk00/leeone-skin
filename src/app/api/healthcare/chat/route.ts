@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
     try {
         const { message, history, turnCount } = await req.json();
 
-        // 의료 키워드 감지 - 로그인 유도
+        // 의료 키워드 감지 - 로그인 유도 (AI 답변 생성 없이 즉시 리턴)
         const hasMedicalQuestion = medicalKeywords.some(keyword =>
             message.toLowerCase().includes(keyword.toLowerCase())
         );
@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
         if (hasMedicalQuestion) {
             return NextResponse.json({
                 role: "ai",
-                content: "말씀하신 내용은 개인의 건강 상태에 따라 답변이 달라질 수 있는 부분입니다.\n\n**정확한 정보 제공을 위해 로그인이 필요합니다.**\n\n로그인하시면 맞춤형 건강 정보와 상세 상담을 받으실 수 있습니다.",
+                content: "말씀하신 내용은 **전문적인 의료 상담**이 필요한 부분입니다.\n\n현행 의료법상 구체적인 증상, 질환, 치료에 대한 상담은 **로그인 후 의료진의 검토를 거친 AI 상담**을 통해서만 제공 가능합니다.\n\n로그인하시겠습니까?",
                 requireLogin: true
             });
         }
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
         if (turnCount >= 5) {
             return NextResponse.json({
                 role: "ai",
-                content: "지금까지 대화를 통해 건강 패턴이 파악되었습니다! 🎉\n\n**더 자세한 분석과 맞춤 건강 조언**을 받으시려면 로그인이 필요합니다.\n\n로그인하시면:\n• 상세 건강 분석 리포트\n• 의심 증상 심층 상담\n• 맞춤 생활 가이드\n\n를 제공해 드립니다.",
+                content: "지금까지의 대화로 생활 패턴이 파악되었습니다! 🎉\n\n**더 자세한 건강 분석과 맞춤 조언**은 로그인이 필요합니다.\n\n로그인하시면:\n• 상세 건강 분석 리포트\n• 의심 증상 심층 상담\n• 맞춤 생활 가이드\n\n를 제공해 드립니다.",
                 requireLogin: true
             });
         }
@@ -47,14 +47,14 @@ export async function POST(req: NextRequest) {
 3. 자연스럽게 공감하고, 원인을 분석한 뒤, 추가 질문을 던지는 흐름으로 작성하세요.
 4. 말투: 정중하고 따뜻한 상담사 (~입니다, ~하시군요, ~해 보입니다)
 
+[절대 금지 사항 - 의료법 위반 방지]
+- **병명, 질환명, 약 이름, 치료법, 시술, 수술 등을 절대 언급하지 마세요.**
+- "진단", "처방", "치료"라는 단어를 사용하지 마세요.
+- 증상에 대해 의학적인 원인을 단정 짓지 마세요. (예: "위염입니다" -> "속이 불편하실 수 있겠네요")
+- **의료적인 상담이 필요해 보이면 즉시 답변을 멈추고 로그인을 유도하는 멘트로 끝내세요.**
+
 [응답 예시]
 "그런 증상 때문에 많이 불편하셨겠습니다. 말씀하신 증상은 불규칙한 식사 습관이 위장에 부담을 주어 나타나는 것으로 보입니다. 혹시 최근에 야식을 드시거나 식사 시간이 불규칙해지진 않으셨나요?"
-
-[금지사항]
-- 진단, 처방, 치료 권유 절대 금지
-- 200자 초과 금지
-- 버튼이나 선택지 제시 금지
-- **[공감], [분석], [질문] 등 섹션 구분 표시 금지**
 
 [현재 턴: ${turnCount + 1}/5]
 `;
