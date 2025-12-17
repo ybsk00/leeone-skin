@@ -188,10 +188,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
             {!props.isEmbedded && (
                 <header className="bg-white/80 backdrop-blur-md border-b border-traditional-muted/50 px-6 py-4 flex items-center justify-between sticky top-0 z-50 transition-all duration-300">
                     <Link href="/" className="flex items-center gap-3 group">
-                        <div className="w-8 h-8 bg-traditional-primary rounded-lg flex items-center justify-center shadow-sm group-hover:bg-traditional-accent transition-colors duration-300">
-                            <span className="text-white text-xs font-bold font-serif">JK</span>
-                        </div>
-                        <span className="text-lg font-bold text-traditional-text tracking-tight group-hover:text-traditional-primary transition-colors">{props.isLoggedIn ? "위담한방병원" : "위담 건강가이드 챗"}</span>
+                        <img src="/images/logo_weedahm.png" alt="위담 건강가이드 챗" className="h-10 w-auto object-contain" />
                     </Link>
                     <div className="hidden md:flex items-center gap-6 text-sm font-medium text-traditional-subtext">
                         <Link href="/login" className="px-6 py-2 bg-traditional-primary text-white text-sm font-medium rounded-full hover:bg-traditional-accent hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">

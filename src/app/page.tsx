@@ -7,12 +7,9 @@ export default function LandingPage() {
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-traditional-muted/50 transition-all duration-300">
         <div className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
-          <div className="flex items-center gap-3 group cursor-pointer">
-            <div className="w-8 h-8 bg-traditional-primary rounded-lg flex items-center justify-center shadow-md group-hover:bg-traditional-accent transition-colors duration-300">
-              <span className="text-white text-sm font-bold font-serif">JK</span>
-            </div>
-            <span className="text-xl font-bold text-traditional-text tracking-tight group-hover:text-traditional-primary transition-colors">위담 건강가이드 챗</span>
-          </div>
+          <Link href="/" className="flex items-center gap-3 group cursor-pointer">
+            <img src="/images/logo_weedahm.png" alt="위담 건강가이드 챗" className="h-12 w-auto object-contain" />
+          </Link>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-traditional-subtext">
             {/* Navigation links removed as per request */}
           </div>
@@ -39,7 +36,7 @@ export default function LandingPage() {
               playsInline
               className="w-full h-full object-cover"
             >
-              <source src="/2.mp4" type="video/mp4" />
+              <source src="/3.mp4" type="video/mp4" />
             </video>
           </div>
           {/* Texture Overlay */}
@@ -138,7 +135,15 @@ export default function LandingPage() {
       <section className="relative py-32 overflow-hidden">
         {/* Background Image & Overlay */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-[url('/images/herbal-bg.png')] bg-cover bg-center opacity-90 grayscale-[20%] sepia-[10%]"></div>
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover opacity-90 grayscale-[20%] sepia-[10%]"
+          >
+            <source src="/4.mp4" type="video/mp4" />
+          </video>
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
           <div className="absolute inset-0 bg-traditional-primary/30 mix-blend-multiply"></div>
         </div>
