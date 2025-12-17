@@ -19,7 +19,7 @@ type ChatInterfaceProps = {
 
 export default function ChatInterface(props: ChatInterfaceProps) {
     const searchParams = useSearchParams();
-    const topic = searchParams.get("topic") || "general";
+    const topic = searchParams.get("topic") || "recovery";
 
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState("");
@@ -33,7 +33,41 @@ export default function ChatInterface(props: ChatInterfaceProps) {
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const [showReservationModal, setShowReservationModal] = useState(false);
 
-    // 초기 메시지
+    // Modules Definition (Rich UI용)
+    const modules = [
+        {
+            id: "digestion",
+            label: "소화 리듬",
+            desc: "소화불량, 배변 체크",
+            theme: "from-emerald-400/20 to-teal-600/20"
+        },
+        {
+            id: "cognitive",
+            label: "인지 건강",
+            desc: "기억력, 주의력 테스트",
+            theme: "from-purple-400/20 to-violet-600/20"
+        },
+        {
+            id: "stress-sleep",
+            label: "스트레스·수면",
+            desc: "수면, 피로 패턴 체크",
+            theme: "from-blue-400/20 to-slate-600/20"
+        },
+        {
+            id: "vascular",
+            label: "혈관·생활습관",
+            desc: "운동, 식습관 체크",
+            theme: "from-amber-500/20 to-orange-600/20"
+        },
+        {
+            id: "women",
+            label: "여성 컨디션",
+            desc: "주기, PMS 체크",
+            theme: "from-rose-400/20 to-pink-600/20"
+        },
+    ];
+
+    // 초기 메시지 설정 (자유 텍스트 입력용)
     useEffect(() => {
         if (props.mode === 'medical') {
             // 로그인 후 - 메디컬 채팅
@@ -42,10 +76,13 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                 content: "안녕하세요, 위담한방병원 AI 상담입니다.\n\n이 채팅은 **진단이나 처방이 아닌 생활 습관·웰니스 점검(참고용)** 입니다.\n\n지금 겪고 계신 불편한 증상을 말씀해 주세요. 언제부터 시작되었는지, 어디가 가장 불편하신지 편하게 이야기해 주세요."
             }]);
         } else {
-            // 로그인 전 - 헬스케어 채팅 (자유 입력)
+            // 로그인 전 - 헬스케어 채팅 (모듈별 인사말)
+            const currentModule = modules.find(m => m.id === topic);
+            const moduleName = currentModule ? currentModule.label : "건강 가이드";
+
             setMessages([{
                 role: "ai",
-                content: "안녕하세요, 위담 건강가이드입니다. 🌿\n\n이 채팅은 **진단이 아닌 생활 리듬 점검(참고용)** 입니다.\n\n요즘 어떤 건강 고민이 있으신가요? 편하게 말씀해 주세요."
+                content: `안녕하세요! **${moduleName}** 체크를 도와드릴 위담 건강가이드입니다. 🌿\n\n이 대화는 **진단이 아닌 생활 리듬 점검(참고용)** 입니다.\n\n요즘 관련해서 어떤 고민이 있으신가요? 편하게 말씀해 주세요.`
             }]);
         }
         setTurnCount(0);
@@ -58,6 +95,15 @@ export default function ChatInterface(props: ChatInterfaceProps) {
     useEffect(() => {
         scrollToBottom();
     }, [messages]);
+
+    const handleImageClick = () => {
+        if (props.isLoggedIn) return;
+        setLoginModalContent({
+            title: "이미지 분석 기능",
+            desc: "이미지 분석을 통한 건강 상담은<br />로그인 후 이용 가능합니다."
+        });
+        setShowLoginModal(true);
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -114,17 +160,9 @@ export default function ChatInterface(props: ChatInterfaceProps) {
         }
     };
 
-    const modules = [
-        { id: "digestion", label: "소화 리듬", desc: "소화불량, 배변 체크" },
-        { id: "cognitive", label: "인지 건강", desc: "기억력, 주의력 테스트" },
-        { id: "stress-sleep", label: "스트레스·수면", desc: "수면, 피로 패턴 체크" },
-        { id: "vascular", label: "혈관·생활습관", desc: "운동, 식습관 체크" },
-        { id: "women", label: "여성 컨디션", desc: "주기, PMS 체크" },
-    ];
-
     return (
         <div className={`${props.isEmbedded ? "h-full" : "min-h-screen"} bg-traditional-bg font-sans flex flex-col selection:bg-traditional-accent selection:text-white`}>
-            {/* Header */}
+            {/* Header - Hidden if embedded */}
             {!props.isEmbedded && (
                 <header className="bg-white/80 backdrop-blur-md border-b border-traditional-muted/50 px-6 py-4 flex items-center justify-between sticky top-0 z-50 transition-all duration-300">
                     <Link href="/" className="flex items-center gap-3 group">
@@ -141,45 +179,46 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                 </header>
             )}
 
-            {/* Hero Section */}
-            {!props.isEmbedded && (
-                <div className="relative bg-traditional-primary pb-12 pt-8 px-6 text-center overflow-hidden transition-all duration-500">
-                    {/* Background Pattern */}
-                    <div className="absolute inset-0 opacity-10">
-                        <div className="absolute top-0 left-0 w-64 h-64 bg-white rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
-                        <div className="absolute bottom-0 right-0 w-64 h-64 bg-traditional-accent rounded-full blur-3xl translate-x-1/2 translate-y-1/2"></div>
-                    </div>
+            <main className={`flex-1 w-full mx-auto ${props.isEmbedded ? "flex flex-col overflow-hidden p-0" : "max-w-5xl px-4 pb-20 pt-6"}`}>
+                {/* Hero Banner - Rich UI (사용자 요청 복구) */}
+                {!props.isEmbedded && (
+                    <div className="relative rounded-3xl overflow-hidden mb-8 h-[300px] md:h-[380px] shadow-2xl group">
+                        <div className="absolute inset-0 bg-[url('/images/herbal-bg.png')] bg-cover bg-center transition-transform duration-700 group-hover:scale-105 opacity-90 grayscale-[20%] sepia-[10%]"></div>
+                        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent"></div>
+                        <div className="absolute inset-0 bg-traditional-primary/20 mix-blend-multiply"></div>
 
-                    <div className="relative z-10 max-w-4xl mx-auto">
-                        <h1 className="text-3xl font-bold text-white mb-2 font-serif tracking-wide animate-in fade-in slide-in-from-bottom-4 duration-700">
-                            {modules.find(m => m.id === topic)?.label || "AI 건강 가이드"}
-                        </h1>
-                        <p className="text-white/80 text-sm mb-8 font-light animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100">
-                            {modules.find(m => m.id === topic)?.desc || "오늘의 건강 고민을 이야기해주세요"}
-                        </p>
+                        <div className="relative z-10 h-full flex flex-col justify-center p-8 md:p-12">
+                            <div className="inline-block px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-white text-xs font-medium mb-4 w-fit">
+                                AI Health Analysis
+                            </div>
+                            <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 drop-shadow-lg font-serif leading-tight">
+                                AI 헬스케어로<br />알아보는 나의 건강
+                            </h2>
+                            <p className="text-white/90 text-sm md:text-base font-light mb-4 max-w-lg leading-relaxed">
+                                100년 전통의 한의학 지혜와 최첨단 AI 기술이 만나<br />당신만의 건강 리듬을 찾아드립니다.
+                            </p>
 
-                        {/* Module Menu */}
-                        <div className="flex flex-wrap justify-center gap-2 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200">
-                            {modules.map((m) => (
-                                <Link
-                                    key={m.id}
-                                    href={`/healthcare/chat?topic=${m.id}`}
-                                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${topic === m.id
-                                        ? "bg-white text-traditional-primary shadow-lg scale-105 ring-2 ring-white/50"
-                                        : "bg-white/10 text-white hover:bg-white/20 hover:scale-105 backdrop-blur-sm"
-                                        }`}
-                                >
-                                    {m.label}
-                                </Link>
-                            ))}
+                            {/* Module List (Overlay on Hero) */}
+                            <div className="flex gap-3 overflow-x-auto pb-4 p-1 no-scrollbar mask-linear-fade">
+                                {modules.map((mod) => (
+                                    <Link
+                                        key={mod.id}
+                                        href={`/healthcare/chat?topic=${mod.id}`}
+                                        className={`flex-shrink-0 flex flex-col items-center justify-center px-5 py-3 rounded-xl border backdrop-blur-md transition-all duration-300 ${topic === mod.id
+                                            ? "bg-white text-traditional-primary border-white shadow-lg scale-105 font-bold"
+                                            : "bg-white/10 text-white border-white/20 hover:bg-white/20 hover:border-white/40"
+                                            }`}
+                                    >
+                                        <span className="text-sm whitespace-nowrap">{mod.label}</span>
+                                    </Link>
+                                ))}
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
+                )}
 
-            <main className={`flex-1 w-full mx-auto ${props.isEmbedded ? "flex flex-col overflow-hidden p-0" : "max-w-3xl px-4 pb-20 pt-6"}`}>
                 {/* Chat Area */}
-                <div className={`bg-white/60 backdrop-blur-xl border border-white/50 rounded-3xl p-6 space-y-6 shadow-xl ${props.isEmbedded ? "flex-1 overflow-y-auto rounded-none border-x-0 border-t-0 bg-transparent shadow-none" : "min-h-[500px]"}`}>
+                <div className={`bg-white/60 backdrop-blur-xl border border-white/50 rounded-3xl p-6 space-y-8 shadow-xl ${props.isEmbedded ? "flex-1 overflow-y-auto rounded-none border-x-0 border-t-0 bg-transparent shadow-none" : "min-h-[500px]"}`}>
                     {/* Turn Counter (로그인 전만 표시) */}
                     {!props.isLoggedIn && (
                         <div className="flex justify-center">
@@ -254,16 +293,23 @@ export default function ChatInterface(props: ChatInterfaceProps) {
 
             {/* Input Area */}
             <div className={`${props.isEmbedded ? "relative bg-white border-t border-gray-100" : "fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-t border-traditional-muted/50"} p-4 z-40`}>
-                <div className={`${props.isEmbedded ? "w-full" : "max-w-3xl mx-auto"} relative`}>
+                <div className={`${props.isEmbedded ? "w-full" : "max-w-4xl mx-auto"} relative`}>
                     <form onSubmit={handleSubmit} className="relative bg-white rounded-full shadow-xl border border-traditional-muted/50 flex items-center p-2 pl-6 transition-shadow hover:shadow-2xl">
                         <input
                             type="text"
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
-                            placeholder="건강 고민을 편하게 말씀해주세요..."
+                            placeholder="증상이나 궁금한 점을 입력해주세요..."
                             className="flex-1 bg-transparent border-none focus:ring-0 text-traditional-text placeholder:text-traditional-subtext/50 text-base"
                             disabled={!props.isLoggedIn && turnCount >= 5}
                         />
+                        <button
+                            type="button"
+                            onClick={handleImageClick}
+                            className="p-3 text-traditional-subtext hover:text-traditional-primary transition-colors hover:bg-traditional-bg rounded-full"
+                        >
+                            <Paperclip size={20} />
+                        </button>
                         <button
                             type="submit"
                             disabled={isLoading || !input.trim() || (!props.isLoggedIn && turnCount >= 5)}
@@ -285,7 +331,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                 <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-300">
                     <div className="bg-white rounded-3xl shadow-2xl w-full max-w-sm p-8 text-center transform transition-all scale-100 border border-white/20">
                         <div className="w-16 h-16 bg-traditional-bg rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
-                            <span className="text-3xl">🌿</span>
+                            <User className="w-8 h-8 text-traditional-primary" />
                         </div>
                         <h3 className="text-xl font-bold text-traditional-text mb-3 font-serif">
                             {loginModalContent.title}
