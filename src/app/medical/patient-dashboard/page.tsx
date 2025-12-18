@@ -6,8 +6,10 @@ import ChatInterface from "@/components/chat/ChatInterface";
 import PatientHeader from "@/components/medical/PatientHeader";
 import ReservationModal from "@/components/medical/ReservationModal";
 import { createClient } from "@/lib/supabase/client";
+import { useSession } from "next-auth/react";
 
 export default function PatientDashboard() {
+    const { data: nextAuthSession } = useSession();
     const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
     const [appointment, setAppointment] = useState({
         date: "예약 없음",
@@ -20,17 +22,48 @@ export default function PatientDashboard() {
 
     useEffect(() => {
         fetchLatestAppointment();
-    }, [isReservationModalOpen]); // Refresh when modal closes (potentially after a new reservation)
+    }, [isReservationModalOpen, nextAuthSession]); // Refresh when modal closes or session changes
 
     const fetchLatestAppointment = async () => {
         try {
-            // Fetch the most recent reservation (pending or cancelled)
-            const { data, error } = await supabase
-                .from('patients')
-                .select('*')
-                .order('created_at', { ascending: false })
-                .limit(1)
-                .maybeSingle();
+            // 1. Check Supabase Auth user
+            const { data: { user } } = await supabase.auth.getUser();
+
+            let data = null;
+
+            if (user) {
+                // Supabase Auth user: query by user_id from patients table
+                const { data: patientData } = await supabase
+                    .from('patients')
+                    .select('*')
+                    .eq('user_id', user.id)
+                    .eq('status', 'pending')
+                    .order('created_at', { ascending: false })
+                    .limit(1)
+                    .maybeSingle();
+                data = patientData;
+            } else if (nextAuthSession?.user?.id) {
+                // NextAuth user (Naver login): query by naver_user_id from appointments table
+                // Then get related patient info
+                const { data: appointmentData } = await supabase
+                    .from('appointments')
+                    .select('*')
+                    .eq('naver_user_id', nextAuthSession.user.id)
+                    .gte('scheduled_at', new Date().toISOString())
+                    .order('scheduled_at', { ascending: true })
+                    .limit(1)
+                    .maybeSingle();
+
+                if (appointmentData) {
+                    // Convert appointments format to patients format for display
+                    const scheduledDate = new Date(appointmentData.scheduled_at);
+                    data = {
+                        time: `${scheduledDate.toISOString().split('T')[0]} ${scheduledDate.toTimeString().slice(0, 5)}`,
+                        status: appointmentData.status === 'scheduled' ? 'pending' : appointmentData.status,
+                        complaint: appointmentData.notes || '위담한방병원 진료'
+                    };
+                }
+            }
 
             if (data) {
                 // Parse the time string "YYYY-MM-DD HH:MM"
