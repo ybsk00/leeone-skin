@@ -122,3 +122,75 @@ export async function signInWithKakao() {
 
     return { url: data.url }
 }
+
+export async function signInWithNaver() {
+    const supabase = await createClient()
+
+    const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'naver' as any,
+        options: {
+            redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://jukjeon-haniwon-ai-healthcare.vercel.app'}/auth/callback?next=/patient`,
+        },
+    })
+
+    if (error) {
+        return { error: '네이버 로그인에 실패했습니다.' }
+    }
+
+    return { url: data.url }
+}
+
+export async function completeSocialSignup(formData: FormData) {
+    const supabase = await createClient()
+
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+        return { error: '로그인이 필요합니다.' }
+    }
+
+    const name = formData.get('name') as string
+    const phone = formData.get('phone') as string
+    const email = user.email
+
+    if (!name || !phone) {
+        return { error: '이름과 전화번호를 입력해주세요.' }
+    }
+
+    // Update user metadata
+    await supabase.auth.updateUser({
+        data: {
+            name: name,
+            phone: phone,
+            role: 'patient',
+        }
+    })
+
+    const { data: existingPatient } = await supabase
+        .from('patients')
+        .select('id')
+        .eq('user_id', user.id)
+        .single()
+
+    if (existingPatient) {
+        await supabase
+            .from('patients')
+            .update({
+                name: name,
+                phone: phone,
+                email: email,
+            })
+            .eq('id', existingPatient.id)
+    } else {
+        await supabase
+            .from('patients')
+            .insert({
+                user_id: user.id,
+                name: name,
+                phone: phone,
+                email: email,
+                status: 'pending',
+            })
+    }
+
+    return { success: true }
+}

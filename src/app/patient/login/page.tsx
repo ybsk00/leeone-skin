@@ -240,6 +240,32 @@ function LoginContent() {
                         </button>
                     </div>
 
+                    <div className="space-y-3 mt-3">
+                        <button
+                            type="button"
+                            onClick={async () => {
+                                setIsLoading(true)
+                                setError(null)
+                                const { signInWithNaver } = await import('./actions')
+                                const result = await signInWithNaver()
+                                if (result.error) {
+                                    setError(result.error)
+                                    setIsLoading(false)
+                                } else if (result.url) {
+                                    window.location.href = result.url
+                                }
+                            }}
+                            disabled={isLoading}
+                            className="w-full flex items-center justify-center gap-3 py-3 rounded-xl font-medium transition-all hover:opacity-90 disabled:opacity-50"
+                            style={{ backgroundColor: '#03C75A', color: '#FFFFFF' }}
+                        >
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M16.2733 16.1111L7.72665 4H2V20H7.72665V7.88889L16.2733 20H22V4H16.2733V16.1111Z" fill="white" />
+                            </svg>
+                            {isLoading ? '로딩 중...' : '네이버로 계속하기'}
+                        </button>
+                    </div>
+
                     {activeTab === 'login' && (
                         <p className="text-center text-sm text-gray-500 mt-4">
                             계정이 없으신가요?{' '}

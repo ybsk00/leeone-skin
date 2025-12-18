@@ -11,11 +11,6 @@ export async function GET(request: Request) {
         const { error, data } = await supabase.auth.exchangeCodeForSession(code)
 
         if (!error && data.user) {
-            // If explicit next is provided, use it (CRM uses ?next=/patient)
-            if (next) {
-                return NextResponse.redirect(`${origin}${next}`)
-            }
-
             // 헬스케어 로그인: 역할에 따라 분기
             const { data: staffUser } = await supabase
                 .from('staff_users')
@@ -23,9 +18,26 @@ export async function GET(request: Request) {
                 .eq('user_id', data.user.id)
                 .single()
 
-            // admin/doctor/staff는 /admin으로, 일반 사용자는 /medical/dashboard로
+            // admin/doctor/staff는 /admin으로
             if (staffUser?.role === 'admin' || staffUser?.role === 'doctor' || staffUser?.role === 'staff') {
                 return NextResponse.redirect(`${origin}/admin`)
+            }
+
+            // 환자 정보 확인
+            const { data: patient } = await supabase
+                .from('patients')
+                .select('id')
+                .eq('user_id', data.user.id)
+                .single()
+
+            // 환자 정보가 없으면 추가 정보 입력 페이지로 이동
+            if (!patient) {
+                return NextResponse.redirect(`${origin}/patient/signup/social`)
+            }
+
+            // If explicit next is provided, use it (CRM uses ?next=/patient)
+            if (next) {
+                return NextResponse.redirect(`${origin}${next}`)
             }
 
             return NextResponse.redirect(`${origin}/medical/dashboard`)
