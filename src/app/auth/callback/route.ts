@@ -40,7 +40,7 @@ export async function GET(request: Request) {
                 return NextResponse.redirect(`${origin}${next}`)
             }
 
-            return NextResponse.redirect(`${origin}/medical/dashboard`)
+            return NextResponse.redirect(`${origin}/patient`)
         }
     }
 
