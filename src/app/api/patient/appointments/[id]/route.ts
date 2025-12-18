@@ -21,6 +21,8 @@ export async function PATCH(
         const body = await request.json()
         const { status, cancel_reason } = body
 
+        console.log('[PATCH] Request:', { id, status, cancel_reason, naverUserId: nextAuthSession?.user?.id })
+
         // 먼저 예약이 해당 사용자의 것인지 확인
         let appointment = null
 
@@ -40,16 +42,18 @@ export async function PATCH(
                 .eq('naver_user_id', nextAuthSession.user.id)
                 .single()
             appointment = data
+            console.log('[PATCH] NextAuth appointment lookup:', { appointment, naverUserId: nextAuthSession.user.id })
         }
 
         if (!appointment) {
+            console.log('[PATCH] Appointment not found for user')
             return NextResponse.json({ error: '예약을 찾을 수 없습니다.' }, { status: 404 })
         }
 
-        // 예약 상태 업데이트
+        // 예약 상태 업데이트 (cancel_reason은 notes에 저장)
         const updateData: any = { status }
         if (cancel_reason) {
-            updateData.cancel_reason = cancel_reason
+            updateData.notes = cancel_reason  // cancel_reason 컬럼이 없으면 notes에 저장
         }
 
         const { data, error } = await supabase
@@ -61,13 +65,14 @@ export async function PATCH(
 
         if (error) {
             console.error('Appointment update error:', error)
-            return NextResponse.json({ error: '예약 업데이트에 실패했습니다.' }, { status: 500 })
+            return NextResponse.json({ error: '예약 업데이트에 실패했습니다.', details: error.message }, { status: 500 })
         }
 
+        console.log('[PATCH] Update successful:', data)
         return NextResponse.json({ success: true, appointment: data })
     } catch (error) {
         console.error('Appointment API error:', error)
-        return NextResponse.json({ error: '서버 오류가 발생했습니다.' }, { status: 500 })
+        return NextResponse.json({ error: '서버 오류가 발생했습니다.', details: String(error) }, { status: 500 })
     }
 }
 
