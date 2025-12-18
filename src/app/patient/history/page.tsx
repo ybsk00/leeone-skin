@@ -13,22 +13,35 @@ export default async function ReservationHistoryPage() {
 
     let appointments: any[] = []
 
+    // Debug log
+    console.log('[History] Auth check:', {
+        supabaseUserId: user?.id || null,
+        nextAuthUserId: nextAuthSession?.user?.id || null,
+        nextAuthUserName: nextAuthSession?.user?.name || null
+    })
+
     if (user) {
         // Supabase Auth 사용자: user.id로 예약 조회
+        console.log('[History] Querying appointments for Supabase user:', user.id)
         const { data } = await supabase
             .from('appointments')
             .select('*')
             .eq('user_id', user.id)
             .order('scheduled_at', { ascending: false })
         if (data) appointments = data
+        console.log('[History] Supabase user appointments:', data?.length || 0)
     } else if (nextAuthSession?.user?.id) {
         // NextAuth 사용자 (네이버 로그인): naver_user_id로 예약 조회
+        console.log('[History] Querying appointments for NextAuth user:', nextAuthSession.user.id)
         const { data } = await supabase
             .from('appointments')
             .select('*')
             .eq('naver_user_id', nextAuthSession.user.id)
             .order('scheduled_at', { ascending: false })
         if (data) appointments = data
+        console.log('[History] NextAuth user appointments:', data?.length || 0)
+    } else {
+        console.log('[History] No authenticated user found, returning empty appointments')
     }
 
     const getStatusBadge = (status: string, scheduledAt: string) => {
