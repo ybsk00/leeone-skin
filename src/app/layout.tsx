@@ -5,6 +5,7 @@ import "@mantine/core/styles.css";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import { ColorSchemeScript } from "@mantine/core";
 import MantineWrapper from "@/components/MantineWrapper";
+import NextAuthProvider from "@/components/NextAuthProvider";
 
 const notoSansKr = Noto_Sans_KR({
   subsets: ["latin"],
@@ -44,12 +45,14 @@ export default function RootLayout({
         <ColorSchemeScript />
       </head>
       <body className={`${notoSansKr.variable} ${notoSerifKr.variable} font-sans antialiased`}>
-        <MantineWrapper>
-          {process.env.NEXT_PUBLIC_GA_ID && (
-            <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
-          )}
-          {children}
-        </MantineWrapper>
+        <NextAuthProvider>
+          <MantineWrapper>
+            {process.env.NEXT_PUBLIC_GA_ID && (
+              <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
+            )}
+            {children}
+          </MantineWrapper>
+        </NextAuthProvider>
       </body>
     </html>
   );
