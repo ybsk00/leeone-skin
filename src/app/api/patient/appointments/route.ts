@@ -29,11 +29,14 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: '예약 날짜/시간이 필요합니다.' }, { status: 400 })
         }
 
-        // 1. 사용자가 이미 환자 테이블에 있는지 확인 (user_id 또는 email로)
-        let existingPatient = null
+        let patientId = null
 
-        // user_id로 먼저 확인 (Supabase Auth 사용자만)
+        // Supabase Auth 사용자만 patients 테이블 처리
+        // NextAuth 사용자(네이버 로그인)는 patients 테이블 처리 생략
         if (userId) {
+            // 1. 사용자가 이미 환자 테이블에 있는지 확인
+            let existingPatient = null
+
             const { data: patientByUserId } = await supabase
                 .from('patients')
                 .select('id')
@@ -43,56 +46,53 @@ export async function POST(request: NextRequest) {
             if (patientByUserId) {
                 existingPatient = patientByUserId
             }
-        }
 
-        // user_id로 없으면 email로 확인
-        if (!existingPatient && userEmail) {
-            const { data: patientByEmail } = await supabase
-                .from('patients')
-                .select('id')
-                .eq('email', userEmail)
-                .single()
+            // user_id로 없으면 email로 확인
+            if (!existingPatient && userEmail) {
+                const { data: patientByEmail } = await supabase
+                    .from('patients')
+                    .select('id')
+                    .eq('email', userEmail)
+                    .single()
 
-            if (patientByEmail) {
-                existingPatient = patientByEmail
+                if (patientByEmail) {
+                    existingPatient = patientByEmail
 
-                // 기존 환자에 user_id 연결 (Supabase Auth 사용자인 경우만)
-                if (userId) {
+                    // 기존 환자에 user_id 연결
                     await supabase
                         .from('patients')
                         .update({ user_id: userId })
                         .eq('id', patientByEmail.id)
                 }
             }
-        }
 
-        let patientId = existingPatient?.id
+            patientId = existingPatient?.id
 
-        // 2. 환자 레코드가 없으면 자동 생성 (사용자 → 환자 전환)
-        if (!patientId) {
-            const scheduledDate = new Date(scheduled_at)
-            const timeStr = scheduledDate.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })
+            // 2. 환자 레코드가 없으면 자동 생성
+            if (!patientId) {
+                const scheduledDate = new Date(scheduled_at)
+                const timeStr = scheduledDate.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })
 
-            const { data: newPatient, error: patientError } = await supabase
-                .from('patients')
-                .insert({
-                    user_id: userId,  // null if NextAuth only
-                    name: userName,
-                    email: userEmail,
-                    phone: user?.user_metadata?.phone || null,
-                    time: timeStr,
-                    type: '신규 환자',
-                    complaint: notes || 'AI한의원 진료 예약',
-                    status: 'pending'
-                })
-                .select('id')
-                .single()
+                const { data: newPatient, error: patientError } = await supabase
+                    .from('patients')
+                    .insert({
+                        user_id: userId,
+                        name: userName,
+                        email: userEmail,
+                        phone: user?.user_metadata?.phone || null,
+                        time: timeStr,
+                        type: '신규 환자',
+                        complaint: notes || 'AI한의원 진료 예약',
+                        status: 'pending'
+                    })
+                    .select('id')
+                    .single()
 
-            if (patientError) {
-                console.error('Patient creation error:', patientError)
-                // 환자 생성 실패해도 예약은 진행
-            } else {
-                patientId = newPatient?.id
+                if (patientError) {
+                    console.error('Patient creation error:', patientError)
+                } else {
+                    patientId = newPatient?.id
+                }
             }
         }
 
@@ -132,7 +132,6 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({
             success: true,
             appointment: data,
-            patientCreated: !existingPatient,
             patientId: patientId
         })
     } catch (error) {
@@ -140,5 +139,3 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: '서버 오류가 발생했습니다.' }, { status: 500 })
     }
 }
-
-
