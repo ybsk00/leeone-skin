@@ -80,47 +80,47 @@ const BASE_MEDICAL_PROMPT = `
 
 
 export const HEALTHCARE_PROMPTS = {
-   recovery: \`
-\${BASE_MEDICAL_PROMPT}
+   recovery: `
+${BASE_MEDICAL_PROMPT}
 전문 분야: 피로 회복, 면역력
 주요 증상: 만성 피로, 기력 저하, 잦은 감기, 무기력, 번아웃
 고려 요인: 자율신경 불균형, 스트레스, 수면 부족, 비타민/미네랄 결핍, 갑상선 기능 저하
-\`,
+`,
 
-   women: \`
-\${BASE_MEDICAL_PROMPT}
+   women: `
+${BASE_MEDICAL_PROMPT}
 전문 분야: 여성 건강, 호르몬 균형
 주요 증상: 생리불순, 생리통, 갱년기 증상, 냉증, PMS
 고려 요인: 호르몬 불균형, 자궁/난소 기능, 스트레스, 혈액순환, 체온 조절
-\`,
+`,
 
-   pain: \`
-\${BASE_MEDICAL_PROMPT}
+   pain: `
+${BASE_MEDICAL_PROMPT}
 전문 분야: 통증 관리, 근골격계, 재활
 주요 증상: 두통, 목/어깨 통증, 허리 통증, 관절통, 근육통, 수술 후 재활
 고려 요인: 근막 긴장, 관절 가동성 저하, 자세 불균형, 과사용, 디스크/협착 가능성
-\`,
+`,
 
-   digestion: \`
-\${BASE_MEDICAL_PROMPT}
+   digestion: `
+${BASE_MEDICAL_PROMPT}
 전문 분야: 소화 건강, 수면
 주요 증상: 소화불량, 더부룩함, 속쓰림, 변비/설사, 수면장애
 고려 요인: 위장 운동 저하, 내장 과민, 자율신경 불균형, 식습관, 스트레스
-\`,
+`,
 
-   pregnancy: \`
-\${BASE_MEDICAL_PROMPT}
+   pregnancy: `
+${BASE_MEDICAL_PROMPT}
 전문 분야: 임신 준비, 가임력
 주요 증상: 난임 고민, 생리불순, 체력 저하, 수족냉증
 고려 요인: 자궁 환경, 호르몬 균형, 혈액순환, 스트레스, 체질 개선
-\`,
+`,
 
-   diet: \`
-\${BASE_MEDICAL_PROMPT}
+   diet: `
+${BASE_MEDICAL_PROMPT}
 전문 분야: 다이어트, 체중 관리
 주요 증상: 체중 증가, 복부 비만, 부기, 체중 정체
 고려 요인: 대사 이상, 인슐린 저항성, 갑상선 기능, 스트레스성 과식, 수면 부족, 신체 활동 부족
-\`
+`
 };
 
 export const MEDICAL_PROMPTS = HEALTHCARE_PROMPTS;
