@@ -95,7 +95,7 @@ export async function signInWithGoogle() {
     const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-            redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://jukjeon-haniwon-ai-healthcare.vercel.app'}/auth/callback?next=/patient`,
+            redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.widamcare.co.kr'}/auth/callback?next=/patient`,
         },
     })
 
@@ -112,7 +112,7 @@ export async function signInWithKakao() {
     const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'kakao',
         options: {
-            redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://jukjeon-haniwon-ai-healthcare.vercel.app'}/auth/callback?next=/patient`,
+            redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.widamcare.co.kr'}/auth/callback?next=/patient`,
         },
     })
 
@@ -130,7 +130,7 @@ export async function signInWithNaver() {
     const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'naver' as any,
         options: {
-            redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://jukjeon-haniwon-ai-healthcare.vercel.app'}/auth/callback?next=/patient`,
+            redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.widamcare.co.kr'}/auth/callback?next=/patient`,
         },
     })
 
