@@ -167,6 +167,13 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
                     return;
                 }
 
+                // 의사 선택 필수
+                if (doctor === '전체') {
+                    alert("담당 의료진을 선택해주세요.");
+                    setIsSubmitting(false);
+                    return;
+                }
+
                 // Prevent duplicate booking
                 if (activeTab === 'book') {
                     // Check if there is ALREADY a pending reservation
@@ -244,7 +251,8 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
                                 scheduled_at: scheduledAt,
-                                notes: doctor === '전체' ? '위담한방병원 진료' : `위담한방병원 진료 (${doctor})`
+                                notes: `위담한방병원 진료 (${doctor})`,
+                                doctor_name: doctor  // 의사 이름 추가
                             })
                         });
 
