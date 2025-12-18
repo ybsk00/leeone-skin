@@ -5,14 +5,25 @@ import { User } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSession, signOut as nextAuthSignOut } from "next-auth/react";
 
 export default function PatientHeader() {
     const [userName, setUserName] = useState("환자님");
     const supabase = createClient();
     const router = useRouter();
 
+    // NextAuth 세션 (네이버 로그인용)
+    const { data: nextAuthSession } = useSession();
+
     useEffect(() => {
         const getUser = async () => {
+            // 1. 먼저 NextAuth 세션 확인 (네이버 로그인)
+            if (nextAuthSession?.user?.name) {
+                setUserName(nextAuthSession.user.name);
+                return;
+            }
+
+            // 2. Supabase Auth 확인 (구글/카카오/이메일 로그인)
             const { data: { user } } = await supabase.auth.getUser();
             if (user?.user_metadata?.full_name) {
                 setUserName(user.user_metadata.full_name);
@@ -21,10 +32,17 @@ export default function PatientHeader() {
             }
         };
         getUser();
-    }, [supabase]);
+    }, [supabase, nextAuthSession]);
 
     const handleLogout = async () => {
+        // 1. Supabase 로그아웃
         await supabase.auth.signOut();
+
+        // 2. NextAuth 로그아웃 (네이버)
+        if (nextAuthSession) {
+            await nextAuthSignOut({ redirect: false });
+        }
+
         router.push("/");
         router.refresh();
     };
