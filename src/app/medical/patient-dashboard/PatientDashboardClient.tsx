@@ -216,48 +216,48 @@ export default function PatientDashboardClient() {
                         <source src="/5.mp4" type="video/mp4" />
                     </video>
 
-                    {/* Glassmorphism Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                    {/* Light Gradient Overlay - More transparent */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
 
-                    {/* Quick Actions Card */}
+                    {/* Quick Actions Card - More transparent glassmorphism */}
                     <div className="absolute bottom-4 left-4 right-4">
-                        <div className="bg-white/20 backdrop-blur-xl rounded-2xl border border-white/30 p-4 shadow-xl">
-                            <div className="grid grid-cols-4 gap-3">
+                        <div className="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-3 shadow-lg">
+                            <div className="grid grid-cols-4 gap-2">
                                 <button
                                     onClick={() => setIsReservationModalOpen(true)}
-                                    className="flex flex-col items-center gap-2 p-3 bg-white/10 hover:bg-white/30 rounded-xl transition-all duration-300 group"
+                                    className="flex flex-col items-center gap-1.5 p-2 bg-white/5 hover:bg-white/20 rounded-xl transition-all duration-300 group"
                                 >
-                                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-blue-500/90 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                                    <div className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-blue-500/80 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
                                         <Calendar className="w-4 h-4 md:w-5 md:h-5 text-white" />
                                     </div>
-                                    <span className="text-[10px] md:text-xs font-medium text-white whitespace-nowrap">예약하기</span>
+                                    <span className="text-[10px] md:text-xs font-medium text-white/90 whitespace-nowrap">예약하기</span>
                                 </button>
                                 <button
                                     onClick={() => setShowSymptomModal(true)}
-                                    className="flex flex-col items-center gap-2 p-3 bg-white/10 hover:bg-white/30 rounded-xl transition-all duration-300 group"
+                                    className="flex flex-col items-center gap-1.5 p-2 bg-white/5 hover:bg-white/20 rounded-xl transition-all duration-300 group"
                                 >
-                                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-emerald-500/90 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                                    <div className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-emerald-500/80 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
                                         <ClipboardList className="w-4 h-4 md:w-5 md:h-5 text-white" />
                                     </div>
-                                    <span className="text-[10px] md:text-xs font-medium text-white whitespace-nowrap">증상정리</span>
+                                    <span className="text-[10px] md:text-xs font-medium text-white/90 whitespace-nowrap">증상정리</span>
                                 </button>
                                 <button
                                     onClick={() => setShowMedicationModal(true)}
-                                    className="flex flex-col items-center gap-2 p-3 bg-white/10 hover:bg-white/30 rounded-xl transition-all duration-300 group"
+                                    className="flex flex-col items-center gap-1.5 p-2 bg-white/5 hover:bg-white/20 rounded-xl transition-all duration-300 group"
                                 >
-                                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-purple-500/90 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                                    <div className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-purple-500/80 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
                                         <Pill className="w-4 h-4 md:w-5 md:h-5 text-white" />
                                     </div>
-                                    <span className="text-[10px] md:text-xs font-medium text-white whitespace-nowrap">복약도우미</span>
+                                    <span className="text-[10px] md:text-xs font-medium text-white/90 whitespace-nowrap">복약도우미</span>
                                 </button>
                                 <button
                                     onClick={() => setShowUploadModal(true)}
-                                    className="flex flex-col items-center gap-2 p-3 bg-white/10 hover:bg-white/30 rounded-xl transition-all duration-300 group"
+                                    className="flex flex-col items-center gap-1.5 p-2 bg-white/5 hover:bg-white/20 rounded-xl transition-all duration-300 group"
                                 >
-                                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-orange-500/90 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                                    <div className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-orange-500/80 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
                                         <Upload className="w-4 h-4 md:w-5 md:h-5 text-white" />
                                     </div>
-                                    <span className="text-[10px] md:text-xs font-medium text-white whitespace-nowrap">문서업로드</span>
+                                    <span className="text-[10px] md:text-xs font-medium text-white/90 whitespace-nowrap">문서업로드</span>
                                 </button>
                             </div>
                         </div>
