@@ -1,16 +1,22 @@
 "use client";
 
 import { useState, Suspense, useEffect } from "react";
-import { Calendar, Clock, MoreHorizontal, Send } from "lucide-react";
+import { Calendar, Clock, MoreHorizontal, Send, ClipboardList, Pill, Upload } from "lucide-react";
 import ChatInterface from "@/components/chat/ChatInterface";
 import PatientHeader from "@/components/medical/PatientHeader";
 import ReservationModal from "@/components/medical/ReservationModal";
+import SymptomCheckModal from "@/components/medical/SymptomCheckModal";
+import MedicationModal from "@/components/medical/MedicationModal";
+import FileUploadModal from "@/components/medical/FileUploadModal";
 import { createClient } from "@/lib/supabase/client";
 import { useSession } from "next-auth/react";
 
 export default function PatientDashboardClient() {
     const { data: nextAuthSession } = useSession();
     const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
+    const [showSymptomModal, setShowSymptomModal] = useState(false);
+    const [showMedicationModal, setShowMedicationModal] = useState(false);
+    const [showUploadModal, setShowUploadModal] = useState(false);
     const [appointment, setAppointment] = useState({
         date: "예약 없음",
         time: "",
@@ -175,17 +181,82 @@ export default function PatientDashboardClient() {
                     }}
                 />
 
-                {/* Video Section */}
-                <div className="w-full rounded-2xl overflow-hidden shadow-lg border border-white/50">
+                {/* Symptom Check Modal */}
+                <SymptomCheckModal
+                    isOpen={showSymptomModal}
+                    onClose={() => setShowSymptomModal(false)}
+                />
+
+                {/* Medication Modal */}
+                <MedicationModal
+                    isOpen={showMedicationModal}
+                    onClose={() => setShowMedicationModal(false)}
+                />
+
+                {/* File Upload Modal */}
+                <FileUploadModal
+                    isOpen={showUploadModal}
+                    onClose={() => setShowUploadModal(false)}
+                />
+
+                {/* Video Section with Glassmorphism Quick Actions */}
+                <div className="w-full rounded-2xl overflow-hidden shadow-lg border border-white/50 relative">
                     <video
                         autoPlay
                         loop
                         muted
                         playsInline
-                        className="w-full h-48 md:h-64 object-cover"
+                        className="w-full h-56 md:h-72 object-cover"
                     >
                         <source src="/5.mp4" type="video/mp4" />
                     </video>
+
+                    {/* Glassmorphism Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+
+                    {/* Quick Actions Card */}
+                    <div className="absolute bottom-4 left-4 right-4">
+                        <div className="bg-white/20 backdrop-blur-xl rounded-2xl border border-white/30 p-4 shadow-xl">
+                            <div className="grid grid-cols-4 gap-3">
+                                <button
+                                    onClick={() => setIsReservationModalOpen(true)}
+                                    className="flex flex-col items-center gap-2 p-3 bg-white/10 hover:bg-white/30 rounded-xl transition-all duration-300 group"
+                                >
+                                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-blue-500/90 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                                        <Calendar className="w-4 h-4 md:w-5 md:h-5 text-white" />
+                                    </div>
+                                    <span className="text-[10px] md:text-xs font-medium text-white whitespace-nowrap">예약하기</span>
+                                </button>
+                                <button
+                                    onClick={() => setShowSymptomModal(true)}
+                                    className="flex flex-col items-center gap-2 p-3 bg-white/10 hover:bg-white/30 rounded-xl transition-all duration-300 group"
+                                >
+                                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-emerald-500/90 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                                        <ClipboardList className="w-4 h-4 md:w-5 md:h-5 text-white" />
+                                    </div>
+                                    <span className="text-[10px] md:text-xs font-medium text-white whitespace-nowrap">증상정리</span>
+                                </button>
+                                <button
+                                    onClick={() => setShowMedicationModal(true)}
+                                    className="flex flex-col items-center gap-2 p-3 bg-white/10 hover:bg-white/30 rounded-xl transition-all duration-300 group"
+                                >
+                                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-purple-500/90 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                                        <Pill className="w-4 h-4 md:w-5 md:h-5 text-white" />
+                                    </div>
+                                    <span className="text-[10px] md:text-xs font-medium text-white whitespace-nowrap">복약도우미</span>
+                                </button>
+                                <button
+                                    onClick={() => setShowUploadModal(true)}
+                                    className="flex flex-col items-center gap-2 p-3 bg-white/10 hover:bg-white/30 rounded-xl transition-all duration-300 group"
+                                >
+                                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-orange-500/90 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                                        <Upload className="w-4 h-4 md:w-5 md:h-5 text-white" />
+                                    </div>
+                                    <span className="text-[10px] md:text-xs font-medium text-white whitespace-nowrap">문서업로드</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Main Chat Interface Area */}
