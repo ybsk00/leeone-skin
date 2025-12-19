@@ -17,6 +17,7 @@ export default function PatientDashboardClient() {
     const [showSymptomModal, setShowSymptomModal] = useState(false);
     const [showMedicationModal, setShowMedicationModal] = useState(false);
     const [showUploadModal, setShowUploadModal] = useState(false);
+    const [symptomSummary, setSymptomSummary] = useState<string | undefined>(undefined);  // 증상정리 요약
     const [appointment, setAppointment] = useState({
         date: "예약 없음",
         time: "",
@@ -185,6 +186,10 @@ export default function PatientDashboardClient() {
                 <SymptomCheckModal
                     isOpen={showSymptomModal}
                     onClose={() => setShowSymptomModal(false)}
+                    onComplete={(summary) => {
+                        setSymptomSummary(summary);
+                        setShowSymptomModal(false);
+                    }}
                 />
 
                 {/* Medication Modal */}
@@ -276,7 +281,13 @@ export default function PatientDashboardClient() {
 
                     <div className="flex-1 overflow-hidden">
                         <Suspense fallback={<div className="flex items-center justify-center h-full text-traditional-subtext">Loading...</div>}>
-                            <ChatInterface isEmbedded={true} isLoggedIn={true} mode="medical" />
+                            <ChatInterface
+                                isEmbedded={true}
+                                isLoggedIn={true}
+                                mode="medical"
+                                externalMessage={symptomSummary}
+                                onExternalMessageSent={() => setSymptomSummary(undefined)}
+                            />
                         </Suspense>
                     </div>
                 </div>

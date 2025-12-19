@@ -21,6 +21,8 @@ type ChatInterfaceProps = {
     isEmbedded?: boolean;
     isLoggedIn?: boolean;
     mode?: 'healthcare' | 'medical';
+    externalMessage?: string;  // 외부에서 주입하는 메시지 (증상정리 요약 등)
+    onExternalMessageSent?: () => void;  // 외부 메시지 발송 완료 콜백
 };
 
 export default function ChatInterface(props: ChatInterfaceProps) {
@@ -134,6 +136,50 @@ export default function ChatInterface(props: ChatInterfaceProps) {
     useEffect(() => {
         scrollToBottom();
     }, [messages]);
+
+    // 외부 메시지 자동 발송 (증상정리 요약 등)
+    useEffect(() => {
+        if (props.externalMessage && !isLoading) {
+            sendExternalMessage(props.externalMessage);
+        }
+    }, [props.externalMessage]);
+
+    const sendExternalMessage = async (message: string) => {
+        // 사용자 메시지로 추가
+        setMessages(prev => [...prev, { role: "user", content: message }]);
+        setIsLoading(true);
+
+        try {
+            const response = await fetch(props.isLoggedIn ? "/api/medical/chat" : "/api/healthcare/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    message: message,
+                    history: messages,
+                    turnCount: turnCount,
+                    topic: topic,
+                }),
+            });
+
+            if (!response.ok) throw new Error("Failed to send message");
+
+            const data = await response.json();
+            let aiContent = data.content;
+
+            if (aiContent.includes("[RESERVATION_TRIGGER]")) {
+                aiContent = aiContent.replace("[RESERVATION_TRIGGER]", "").trim();
+                setShowReservationModal(true);
+            }
+
+            setMessages(prev => [...prev, { role: "ai", content: aiContent }]);
+            props.onExternalMessageSent?.();
+        } catch (error) {
+            console.error("Error:", error);
+            setMessages(prev => [...prev, { role: "ai", content: "죄송합니다. 잠시 문제가 발생했습니다." }]);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     const handleImageClick = () => {
         if (props.isLoggedIn) return;
