@@ -5,6 +5,11 @@ import { User, ArrowUp, Paperclip } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import ReservationModal from "@/components/medical/ReservationModal";
+import MedicalInfoPanel from "@/components/medical/MedicalInfoPanel";
+import SymptomCheckModal from "@/components/medical/SymptomCheckModal";
+import FileUploadModal from "@/components/medical/FileUploadModal";
+import MedicationModal from "@/components/medical/MedicationModal";
+import SafetyBadge from "@/components/medical/SafetyBadge";
 import { useMarketingTracker } from "@/hooks/useMarketingTracker";
 
 type Message = {
@@ -39,6 +44,11 @@ export default function ChatInterface(props: ChatInterfaceProps) {
     });
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const [showReservationModal, setShowReservationModal] = useState(false);
+
+    // Modal states for quick actions
+    const [showSymptomCheckModal, setShowSymptomCheckModal] = useState(false);
+    const [showMedicationModal, setShowMedicationModal] = useState(false);
+    const [showFileUploadModal, setShowFileUploadModal] = useState(false);
 
     // Modules Definition (Rich UI용)
     const modules = [
@@ -230,45 +240,56 @@ export default function ChatInterface(props: ChatInterfaceProps) {
             )}
 
             <main className={`flex-1 w-full mx-auto ${props.isEmbedded ? "flex flex-col overflow-hidden p-0" : "max-w-5xl px-4 pb-20 pt-6"}`}>
-                {/* Hero Banner - Rich UI (사용자 요청 복구) */}
+                {/* Logged In: Info Panel | Logged Out: Hero Banner */}
                 {!props.isEmbedded && (
-                    <div className="relative rounded-3xl overflow-hidden mb-8 h-[300px] md:h-[380px] shadow-2xl group">
-                        <div className="absolute inset-0 bg-[url('/images/herbal-bg.png')] bg-cover bg-center transition-transform duration-700 group-hover:scale-105 opacity-90 grayscale-[20%] sepia-[10%]"></div>
-                        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent"></div>
-                        <div className="absolute inset-0 bg-traditional-primary/20 mix-blend-multiply"></div>
+                    props.isLoggedIn ? (
+                        <MedicalInfoPanel
+                            onOpenSymptomCheck={() => setShowSymptomCheckModal(true)}
+                            onOpenMedicationHelper={() => setShowMedicationModal(true)}
+                            onOpenFileUpload={() => setShowFileUploadModal(true)}
+                        />
+                    ) : (
+                        <div className="relative rounded-3xl overflow-hidden mb-8 h-[300px] md:h-[380px] shadow-2xl group">
+                            <div className="absolute inset-0 bg-[url('/images/herbal-bg.png')] bg-cover bg-center transition-transform duration-700 group-hover:scale-105 opacity-90 grayscale-[20%] sepia-[10%]"></div>
+                            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent"></div>
+                            <div className="absolute inset-0 bg-traditional-primary/20 mix-blend-multiply"></div>
 
-                        <div className="relative z-10 h-full flex flex-col justify-center p-8 md:p-12">
-                            <div className="inline-block px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-white text-xs font-medium mb-4 w-fit">
-                                AI Health Analysis
-                            </div>
-                            <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 drop-shadow-lg font-serif leading-tight">
-                                AI 헬스케어로<br />알아보는 나의 건강
-                            </h2>
-                            <p className="text-white/90 text-sm md:text-base font-light mb-4 max-w-lg leading-relaxed">
-                                100년 전통의 한의학 지혜와 최첨단 AI 기술이 만나<br />당신만의 건강 리듬을 찾아드립니다.
-                            </p>
+                            <div className="relative z-10 h-full flex flex-col justify-center p-8 md:p-12">
+                                <div className="inline-block px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-white text-xs font-medium mb-4 w-fit">
+                                    AI Health Analysis
+                                </div>
+                                <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 drop-shadow-lg font-serif leading-tight">
+                                    AI 헬스케어로<br />알아보는 나의 건강
+                                </h2>
+                                <p className="text-white/90 text-sm md:text-base font-light mb-4 max-w-lg leading-relaxed">
+                                    100년 전통의 한의학 지혜와 최첨단 AI 기술이 만나<br />당신만의 건강 리듬을 찾아드립니다.
+                                </p>
 
-                            {/* Module List (Overlay on Hero) */}
-                            <div className="flex gap-3 overflow-x-auto pb-4 p-1 no-scrollbar mask-linear-fade">
-                                {modules.map((mod) => (
-                                    <Link
-                                        key={mod.id}
-                                        href={`/healthcare/chat?topic=${mod.id}`}
-                                        className={`flex-shrink-0 flex flex-col items-center justify-center px-5 py-3 rounded-xl border backdrop-blur-md transition-all duration-300 ${topic === mod.id
-                                            ? "bg-white text-traditional-primary border-white shadow-lg scale-105 font-bold"
-                                            : "bg-white/10 text-white border-white/20 hover:bg-white/20 hover:border-white/40"
-                                            }`}
-                                    >
-                                        <span className="text-sm whitespace-nowrap">{mod.label}</span>
-                                    </Link>
-                                ))}
+                                {/* Module List (Overlay on Hero) */}
+                                <div className="flex gap-3 overflow-x-auto pb-4 p-1 no-scrollbar mask-linear-fade">
+                                    {modules.map((mod) => (
+                                        <Link
+                                            key={mod.id}
+                                            href={`/healthcare/chat?topic=${mod.id}`}
+                                            className={`flex-shrink-0 flex flex-col items-center justify-center px-5 py-3 rounded-xl border backdrop-blur-md transition-all duration-300 ${topic === mod.id
+                                                ? "bg-white text-traditional-primary border-white shadow-lg scale-105 font-bold"
+                                                : "bg-white/10 text-white border-white/20 hover:bg-white/20 hover:border-white/40"
+                                                }`}
+                                        >
+                                            <span className="text-sm whitespace-nowrap">{mod.label}</span>
+                                        </Link>
+                                    ))}
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    )
                 )}
 
                 {/* Chat Area */}
                 <div className={`bg-white/60 backdrop-blur-xl border border-white/50 rounded-3xl p-6 space-y-8 shadow-xl ${props.isEmbedded ? "flex-1 overflow-y-auto rounded-none border-x-0 border-t-0 bg-transparent shadow-none" : "min-h-[500px]"}`}>
+                    {/* Safety Badge (logged in only) */}
+                    {props.isLoggedIn && <SafetyBadge />}
+
                     {/* Turn Counter (로그인 전만 표시) */}
                     {!props.isLoggedIn && (
                         <div className="flex justify-center">
@@ -419,6 +440,24 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                 isOpen={showReservationModal}
                 onClose={() => setShowReservationModal(false)}
                 initialTab="book"
+            />
+
+            {/* Symptom Check Modal */}
+            <SymptomCheckModal
+                isOpen={showSymptomCheckModal}
+                onClose={() => setShowSymptomCheckModal(false)}
+            />
+
+            {/* File Upload Modal */}
+            <FileUploadModal
+                isOpen={showFileUploadModal}
+                onClose={() => setShowFileUploadModal(false)}
+            />
+
+            {/* Medication Modal */}
+            <MedicationModal
+                isOpen={showMedicationModal}
+                onClose={() => setShowMedicationModal(false)}
             />
         </div>
     );
