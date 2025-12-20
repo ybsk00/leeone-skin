@@ -86,87 +86,64 @@ export default function LandingPage() {
           </div>
         </header>
 
-        {/* Features Section - Glassmorphism Cards */}
+        {/* Features Section - Deep Green Mono Cards */}
         <section className="relative py-24 px-6 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-traditional-bg to-white z-0"></div>
 
           <div className="relative z-10 max-w-7xl mx-auto">
-            <div className="text-center mb-20 space-y-6">
+            <div className="text-center mb-16 space-y-4">
               <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 font-sans tracking-tight">
-                AI 건강가이드(참고용)
+                2분 컨디션 패턴 체크
               </h2>
-              <p className="text-gray-700 max-w-2xl mx-auto text-lg font-medium leading-relaxed">
-                간단한 질문으로 생활 습관을 점검하고,<br />
-                상담에 도움이 되는 요약을 제공합니다. (진단/처방 아님)
+              <p className="text-gray-600 max-w-xl mx-auto text-base font-medium leading-relaxed">
+                간단한 질문으로 생활 습관을 점검하고, 요약을 받아보세요.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
                 {
-                  icon: <BarChart2 className="w-8 h-8" />,
+                  icon: <BarChart2 className="w-7 h-7" />,
                   title: "패턴 1장 요약",
                   desc: "식사·수면·스트레스 흐름을 5문답으로 정리합니다.",
-                  label: "약 2분",
-                  gradient: "from-emerald-500 to-teal-500",
-                  iconBg: "bg-gradient-to-br from-emerald-100 to-teal-100",
-                  iconColor: "text-emerald-600"
+                  label: "약 2분"
                 },
                 {
-                  icon: <CheckCircle className="w-8 h-8" />,
+                  icon: <CheckCircle className="w-7 h-7" />,
                   title: "오늘부터 할 1가지",
                   desc: "현실적으로 가능한 '한 가지 조정'만 제안합니다.",
-                  label: "실천 중심",
-                  gradient: "from-amber-500 to-orange-500",
-                  iconBg: "bg-gradient-to-br from-amber-100 to-orange-100",
-                  iconColor: "text-amber-600"
+                  label: "실천 중심"
                 },
                 {
-                  icon: <Calendar className="w-8 h-8" />,
+                  icon: <Calendar className="w-7 h-7" />,
                   title: "요약 저장 & 변화 비교",
                   desc: "기록을 저장해 다음에 더 빠르게 이어서 확인합니다.",
-                  label: "로그인 후",
-                  gradient: "from-violet-500 to-purple-500",
-                  iconBg: "bg-gradient-to-br from-violet-100 to-purple-100",
-                  iconColor: "text-violet-600"
+                  label: "로그인 후"
                 }
               ].map((feature, idx) => (
                 <div
                   key={idx}
-                  className="group relative"
+                  className="group relative bg-[#1a3a2f] hover:bg-[#234a3d] rounded-2xl p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl cursor-default"
                 >
-                  {/* Gradient Border Effect */}
-                  <div className={`absolute -inset-0.5 bg-gradient-to-r ${feature.gradient} rounded-3xl blur opacity-30 group-hover:opacity-60 transition-opacity duration-500`}></div>
-
-                  {/* Card Content */}
-                  <div className="relative h-full p-8 rounded-3xl bg-white/80 backdrop-blur-xl border border-white/60 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 overflow-hidden flex flex-col">
-                    {/* Hover Gradient Overlay */}
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-white/90 via-transparent to-transparent pointer-events-none"></div>
-
-                    <div className="relative z-10 flex-1">
-                      {/* Icon */}
-                      <div className={`w-16 h-16 ${feature.iconBg} rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500`}>
-                        <div className={feature.iconColor}>{feature.icon}</div>
-                      </div>
-
-                      {/* Title */}
-                      <h3 className="text-xl font-extrabold text-gray-900 mb-3 font-sans tracking-tight group-hover:text-gray-800 transition-colors">
-                        {feature.title}
-                      </h3>
-
-                      {/* Description */}
-                      <p className="text-gray-600 text-sm font-medium leading-relaxed mb-6">
-                        {feature.desc}
-                      </p>
-                    </div>
-
-                    {/* Bottom Label */}
-                    <div className="relative z-10 mt-auto">
-                      <span className={`inline-flex items-center px-4 py-1.5 rounded-full text-xs font-bold bg-gradient-to-r ${feature.gradient} text-white shadow-md`}>
-                        {feature.label}
-                      </span>
-                    </div>
+                  {/* Icon */}
+                  <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mb-5 group-hover:bg-white/15 transition-colors">
+                    <div className="text-emerald-400">{feature.icon}</div>
                   </div>
+
+                  {/* Title */}
+                  <h3 className="text-lg font-bold text-white mb-2 tracking-tight">
+                    {feature.title}
+                  </h3>
+
+                  {/* Description */}
+                  <p className="text-white/70 text-sm leading-relaxed mb-5">
+                    {feature.desc}
+                  </p>
+
+                  {/* Bottom Label */}
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-semibold bg-white/10 text-emerald-300 border border-emerald-400/30">
+                    {feature.label}
+                  </span>
                 </div>
               ))}
             </div>
