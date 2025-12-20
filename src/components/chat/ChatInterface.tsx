@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { User, ArrowUp, Paperclip } from "lucide-react";
+import { User, ArrowUp, Paperclip, Leaf, Brain, Moon, Heart, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import ReservationModal from "@/components/medical/ReservationModal";
@@ -65,31 +65,36 @@ export default function ChatInterface(props: ChatInterfaceProps) {
             id: "digestion",
             label: "소화 리듬",
             desc: "소화불량, 배변 체크",
-            theme: "from-emerald-400/20 to-teal-600/20"
+            icon: Leaf,
+            color: "emerald"
         },
         {
             id: "cognitive",
             label: "인지 건강",
             desc: "기억력, 주의력 테스트",
-            theme: "from-purple-400/20 to-violet-600/20"
+            icon: Brain,
+            color: "purple"
         },
         {
             id: "stress-sleep",
             label: "스트레스·수면",
             desc: "수면, 피로 패턴 체크",
-            theme: "from-blue-400/20 to-slate-600/20"
+            icon: Moon,
+            color: "blue"
         },
         {
             id: "vascular",
             label: "혈관·생활습관",
             desc: "운동, 식습관 체크",
-            theme: "from-amber-500/20 to-orange-600/20"
+            icon: Heart,
+            color: "orange"
         },
         {
             id: "women",
             label: "여성 컨디션",
             desc: "주기, PMS 체크",
-            theme: "from-rose-400/20 to-pink-600/20"
+            icon: Sparkles,
+            color: "rose"
         },
     ];
 
@@ -328,7 +333,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                             onOpenFileUpload={() => setShowFileUploadModal(true)}
                         />
                     ) : (
-                        <div className="relative rounded-3xl overflow-hidden mb-8 h-[300px] md:h-[380px] shadow-2xl group">
+                        <div className="relative rounded-3xl overflow-hidden mb-8 h-[420px] md:h-[480px] shadow-2xl group">
                             <div className="absolute inset-0 bg-[url('/images/herbal-bg.png')] bg-cover bg-center transition-transform duration-700 group-hover:scale-105 opacity-90 grayscale-[20%] sepia-[10%]"></div>
                             <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent"></div>
                             <div className="absolute inset-0 bg-traditional-primary/20 mix-blend-multiply"></div>
@@ -344,20 +349,57 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                                     100년 전통의 한의학 지혜와 최첨단 AI 기술이 만나<br />당신만의 건강 리듬을 찾아드립니다.
                                 </p>
 
-                                {/* Module List (Overlay on Hero) */}
-                                <div className="flex gap-3 overflow-x-auto pb-4 p-1 no-scrollbar mask-linear-fade">
-                                    {modules.map((mod) => (
-                                        <Link
-                                            key={mod.id}
-                                            href={`/healthcare/chat?topic=${mod.id}`}
-                                            className={`flex-shrink-0 flex flex-col items-center justify-center px-5 py-3 rounded-xl border backdrop-blur-md transition-all duration-300 ${topic === mod.id
-                                                ? "bg-white text-traditional-primary border-white shadow-lg scale-105 font-bold"
-                                                : "bg-white/10 text-white border-white/20 hover:bg-white/20 hover:border-white/40"
-                                                }`}
-                                        >
-                                            <span className="text-sm whitespace-nowrap">{mod.label}</span>
-                                        </Link>
-                                    ))}
+                                {/* Module List - Glassmorphism Cards */}
+                                <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mt-2">
+                                    {modules.map((mod) => {
+                                        const IconComponent = mod.icon;
+                                        const isActive = topic === mod.id;
+                                        const colorClasses: Record<string, { bg: string; ring: string; icon: string }> = {
+                                            emerald: { bg: 'bg-emerald-500/20', ring: 'ring-emerald-400', icon: 'text-emerald-400' },
+                                            purple: { bg: 'bg-purple-500/20', ring: 'ring-purple-400', icon: 'text-purple-400' },
+                                            blue: { bg: 'bg-blue-500/20', ring: 'ring-blue-400', icon: 'text-blue-400' },
+                                            orange: { bg: 'bg-orange-500/20', ring: 'ring-orange-400', icon: 'text-orange-400' },
+                                            rose: { bg: 'bg-rose-500/20', ring: 'ring-rose-400', icon: 'text-rose-400' }
+                                        };
+                                        const colors = colorClasses[mod.color] || colorClasses.emerald;
+
+                                        return (
+                                            <Link
+                                                key={mod.id}
+                                                href={`/healthcare/chat?topic=${mod.id}`}
+                                                className={`group relative flex flex-col items-center justify-center p-4 md:p-5 rounded-2xl backdrop-blur-xl border transition-all duration-300 hover:scale-105 hover:-translate-y-1 ${isActive
+                                                    ? `bg-white/95 border-white shadow-2xl ring-2 ${colors.ring}`
+                                                    : 'bg-white/15 border-white/30 hover:bg-white/25 hover:border-white/50 hover:shadow-lg'
+                                                    }`}
+                                            >
+                                                {/* Icon Circle */}
+                                                <div className={`w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center mb-2 transition-all duration-300 ${isActive
+                                                    ? `${colors.bg} shadow-md`
+                                                    : 'bg-white/20 group-hover:bg-white/30'
+                                                    }`}>
+                                                    <IconComponent className={`w-6 h-6 md:w-7 md:h-7 transition-colors ${isActive ? colors.icon : 'text-white group-hover:text-white'
+                                                        }`} />
+                                                </div>
+
+                                                {/* Label */}
+                                                <span className={`text-sm md:text-base font-bold whitespace-nowrap mb-0.5 ${isActive ? 'text-gray-900' : 'text-white'
+                                                    }`}>
+                                                    {mod.label}
+                                                </span>
+
+                                                {/* Description */}
+                                                <span className={`text-[10px] md:text-xs whitespace-nowrap ${isActive ? 'text-gray-500' : 'text-white/70'
+                                                    }`}>
+                                                    {mod.desc}
+                                                </span>
+
+                                                {/* Active indicator */}
+                                                {isActive && (
+                                                    <div className={`absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-8 h-1 rounded-full ${colors.bg.replace('/20', '')}`} />
+                                                )}
+                                            </Link>
+                                        );
+                                    })}
                                 </div>
                             </div>
                         </div>
