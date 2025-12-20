@@ -1,13 +1,15 @@
 "use client";
 
 import { useState, Suspense, useEffect } from "react";
-import { Calendar, Clock, MoreHorizontal, Send, ClipboardList, Pill, Upload } from "lucide-react";
+import { Calendar, Clock, MoreHorizontal, Send, ClipboardList, Pill, Upload, MessageSquare, MapPin } from "lucide-react";
 import ChatInterface from "@/components/chat/ChatInterface";
 import PatientHeader from "@/components/medical/PatientHeader";
 import ReservationModal from "@/components/medical/ReservationModal";
 import SymptomCheckModal from "@/components/medical/SymptomCheckModal";
 import MedicationModal from "@/components/medical/MedicationModal";
 import FileUploadModal from "@/components/medical/FileUploadModal";
+import MapModal from "@/components/medical/MapModal";
+import ReviewModal from "@/components/medical/ReviewModal";
 import { createClient } from "@/lib/supabase/client";
 import { useSession } from "next-auth/react";
 
@@ -17,6 +19,8 @@ export default function PatientDashboardClient() {
     const [showSymptomModal, setShowSymptomModal] = useState(false);
     const [showMedicationModal, setShowMedicationModal] = useState(false);
     const [showUploadModal, setShowUploadModal] = useState(false);
+    const [showMapModal, setShowMapModal] = useState(false);
+    const [showReviewModal, setShowReviewModal] = useState(false);
     const [symptomSummary, setSymptomSummary] = useState<string | undefined>(undefined);  // 증상정리 요약
     const [appointment, setAppointment] = useState({
         date: "예약 없음",
@@ -212,6 +216,18 @@ export default function PatientDashboardClient() {
                     }}
                 />
 
+                {/* Map Modal (위치 보기) */}
+                <MapModal
+                    isOpen={showMapModal}
+                    onClose={() => setShowMapModal(false)}
+                />
+
+                {/* Review Modal (후기 보기) */}
+                <ReviewModal
+                    isOpen={showReviewModal}
+                    onClose={() => setShowReviewModal(false)}
+                />
+
                 {/* Video Section with Glassmorphism Quick Actions */}
                 <div className="w-full rounded-2xl overflow-hidden shadow-lg border border-white/50 relative">
                     <video
@@ -227,10 +243,10 @@ export default function PatientDashboardClient() {
                     {/* Light Gradient Overlay - More transparent */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
 
-                    {/* Quick Actions Card - More transparent glassmorphism */}
+                    {/* Quick Actions Card - 6 buttons */}
                     <div className="absolute bottom-4 left-4 right-4">
                         <div className="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-3 shadow-lg">
-                            <div className="grid grid-cols-4 gap-2">
+                            <div className="grid grid-cols-6 gap-2">
                                 <button
                                     onClick={() => setIsReservationModalOpen(true)}
                                     className="flex flex-col items-center gap-1.5 p-2 bg-white/5 hover:bg-white/20 rounded-xl transition-all duration-300 group"
@@ -267,6 +283,24 @@ export default function PatientDashboardClient() {
                                     </div>
                                     <span className="text-[10px] md:text-xs font-medium text-white/90 whitespace-nowrap">검사결과지</span>
                                 </button>
+                                <button
+                                    onClick={() => setShowReviewModal(true)}
+                                    className="flex flex-col items-center gap-1.5 p-2 bg-white/5 hover:bg-white/20 rounded-xl transition-all duration-300 group"
+                                >
+                                    <div className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-amber-500/80 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+                                        <MessageSquare className="w-4 h-4 md:w-5 md:h-5 text-white" />
+                                    </div>
+                                    <span className="text-[10px] md:text-xs font-medium text-white/90 whitespace-nowrap">후기보기</span>
+                                </button>
+                                <button
+                                    onClick={() => setShowMapModal(true)}
+                                    className="flex flex-col items-center gap-1.5 p-2 bg-white/5 hover:bg-white/20 rounded-xl transition-all duration-300 group"
+                                >
+                                    <div className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-rose-500/80 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+                                        <MapPin className="w-4 h-4 md:w-5 md:h-5 text-white" />
+                                    </div>
+                                    <span className="text-[10px] md:text-xs font-medium text-white/90 whitespace-nowrap">위치보기</span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -287,6 +321,13 @@ export default function PatientDashboardClient() {
                         </button>
                     </div>
 
+                    {/* 안전 가드 배지 */}
+                    <div className="px-5 py-2 bg-amber-50 border-b border-amber-100">
+                        <p className="text-xs text-amber-700 text-center">
+                            ⚠️ 본 서비스는 진단/처방이 아닌 생활 정리 도움입니다. 응급 시 119/응급실 이용
+                        </p>
+                    </div>
+
                     <div className="flex-1 overflow-hidden">
                         <Suspense fallback={<div className="flex items-center justify-center h-full text-traditional-subtext">Loading...</div>}>
                             <ChatInterface
@@ -304,3 +345,4 @@ export default function PatientDashboardClient() {
         </div>
     );
 }
+
