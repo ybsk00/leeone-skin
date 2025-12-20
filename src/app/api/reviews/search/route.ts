@@ -138,7 +138,7 @@ function formatDate(dateStr?: string): string {
 function getDummyItems(source: string) {
     const items = [
         {
-            title: '위담한방병원 방문 후기 - 친절한 진료',
+            title: '강남 위담한방병원 방문 후기 - 친절한 진료',
             link: 'https://blog.naver.com/example1',
             description: '지인 추천으로 방문했는데 정말 만족스러웠습니다...',
             author: '건강맘',
@@ -146,10 +146,10 @@ function getDummyItems(source: string) {
             origin: 'naver'
         },
         {
-            title: '죽전 한의원 추천 - 위담한방병원',
+            title: '삼성역 한의원 추천 - 위담한방병원',
             link: 'https://blog.naver.com/example2',
             description: '소화가 안되서 방문했는데 꼼꼼하게 봐주셨어요...',
-            author: '용인사람',
+            author: '강남직장인',
             postdate: '2024.12.10',
             origin: 'naver'
         },
@@ -162,7 +162,7 @@ function getDummyItems(source: string) {
             origin: 'naver'
         },
         {
-            title: '수지구 한의원 비교 후기',
+            title: '강남구 한의원 비교 후기',
             link: 'https://blog.naver.com/example4',
             description: '여러 곳 다녀보고 여기로 정착했어요...',
             author: '비교왕',
