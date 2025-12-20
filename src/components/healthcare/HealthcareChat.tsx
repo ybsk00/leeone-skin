@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Send, User, Bot, Sparkles, LogIn } from "lucide-react";
+import { Send, User, Bot, Sparkles, LogIn, AlertCircle } from "lucide-react";
 import ReactMarkdown from "react-markdown";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
     Paper,
     Stack,
@@ -33,12 +33,18 @@ interface HealthcareChatProps {
     initialMessage: string;
 }
 
+// 로그인 모달 트리거 타입
+type LoginModalTrigger = "5turn" | "medical" | null;
+
 export default function HealthcareChat({
     serviceType,
     serviceName,
     initialMessage,
 }: HealthcareChatProps) {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const entryIntent = searchParams.get("entry_intent") || undefined;
+
     const [messages, setMessages] = useState<Message[]>([
         { role: "ai", content: initialMessage },
     ]);
@@ -46,6 +52,7 @@ export default function HealthcareChat({
     const [isLoading, setIsLoading] = useState(false);
     const [turnCount, setTurnCount] = useState(0);
     const [loginModalOpened, { open: openLoginModal, close: closeLoginModal }] = useDisclosure(false);
+    const [loginModalTrigger, setLoginModalTrigger] = useState<LoginModalTrigger>(null);
     const viewport = useRef<HTMLDivElement>(null);
 
     const scrollToBottom = () => {
@@ -75,7 +82,9 @@ export default function HealthcareChat({
                 body: JSON.stringify({
                     message: userMessage,
                     history: messages,
-                    serviceType: serviceType,
+                    topic: serviceType,
+                    turnCount: turnCount,
+                    entryIntent: entryIntent,
                 }),
             });
 
@@ -86,10 +95,20 @@ export default function HealthcareChat({
             const data = await response.json();
             setMessages((prev) => [...prev, { role: "ai", content: data.content }]);
 
-            // Increment turn count and show login modal after 5 turns
+            // 의료 키워드 감지 시 즉시 로그인 모달 표시
+            if (data.isSymptomTrigger) {
+                setLoginModalTrigger("medical");
+                setTimeout(() => openLoginModal(), 500);
+                return; // 턴 카운트 증가 안함
+            }
+
+            // 턴 카운트 증가
             const newTurnCount = turnCount + 1;
             setTurnCount(newTurnCount);
-            if (newTurnCount >= 5) {
+
+            // 5턴 완료 또는 하드스탑 시 로그인 모달
+            if (data.isHardStop || newTurnCount >= 5) {
+                setLoginModalTrigger("5turn");
                 setTimeout(() => openLoginModal(), 1000);
             }
         } catch (error) {
@@ -113,6 +132,28 @@ export default function HealthcareChat({
         }
     };
 
+    // 로그인 모달 내용 (트리거에 따라 다름)
+    const getModalContent = () => {
+        if (loginModalTrigger === "medical") {
+            return {
+                icon: <AlertCircle size={18} />,
+                iconColor: "orange",
+                title: "전문 상담이 필요합니다",
+                description: "말씀하신 내용은 의료 상담 영역입니다. 로그인 후 더 정확한 확인을 진행하실 수 있습니다.",
+                cta: "로그인하고 상담 이어가기"
+            };
+        }
+        return {
+            icon: <LogIn size={18} />,
+            iconColor: "sage-green",
+            title: "요약을 저장하세요",
+            description: "지금까지의 컨디션 체크 결과를 저장하고, 다음에 1분 만에 이어서 볼 수 있습니다.",
+            cta: "로그인하고 저장하기"
+        };
+    };
+
+    const modalContent = getModalContent();
+
     return (
         <>
             <Paper
@@ -135,7 +176,7 @@ export default function HealthcareChat({
                                 {serviceName}
                             </Text>
                             <Text size="xs" c="dimmed">
-                                위담 건강가이드
+                                컨디션 리듬 체크 (참고용)
                             </Text>
                         </div>
                     </Group>
@@ -224,21 +265,21 @@ export default function HealthcareChat({
                         </ActionIcon>
                     </Group>
                     <Text size="xs" c="dimmed" ta="center" mt="xs">
-                        AI 답변은 참고용이며 의학적 진단을 대체하지 않습니다.
+                        참고용 정보이며 의학적 진단을 대체하지 않습니다.
                     </Text>
                 </Box>
             </Paper>
 
-            {/* Login Modal */}
+            {/* Login Modal - 동적 내용 */}
             <Modal
                 opened={loginModalOpened}
                 onClose={closeLoginModal}
                 title={
                     <Group gap="xs">
-                        <ThemeIcon color="sage-green" variant="light" radius="xl">
-                            <LogIn size={18} />
+                        <ThemeIcon color={modalContent.iconColor} variant="light" radius="xl">
+                            {modalContent.icon}
                         </ThemeIcon>
-                        <Text fw={700}>더 자세한 헬스체크를 받아보세요!</Text>
+                        <Text fw={700}>{modalContent.title}</Text>
                     </Group>
                 }
                 centered
@@ -246,34 +287,33 @@ export default function HealthcareChat({
             >
                 <Stack gap="md" py="md">
                     <Text size="sm" c="dimmed">
-                        지금까지의 헬스체크 결과를 저장하고,
-                        로그인하시면 <Text span fw={700} c="sage-green">더 자세한 맞춤형 건강 정보</Text>를
-                        받으실 수 있습니다.
+                        {modalContent.description}
                     </Text>
                     <Stack gap="xs">
                         <Button
                             fullWidth
                             color="sage-green"
                             size="md"
-                            onClick={() => router.push('/login')}
+                            onClick={() => router.push('/patient/login')}
                         >
-                            로그인하기
+                            {modalContent.cta}
                         </Button>
                         <Button
                             fullWidth
                             variant="light"
                             color="sage-green"
                             size="md"
-                            onClick={() => router.push('/signup')}
+                            onClick={() => router.push('/patient/signup')}
                         >
                             회원가입하기
                         </Button>
                     </Stack>
                     <Text size="xs" c="dimmed" ta="center">
-                        회원가입 시 맞춤형 건강 관리 리포트를 받으실 수 있습니다.
+                        로그인하면 결과를 저장하고 비교할 수 있습니다.
                     </Text>
                 </Stack>
             </Modal>
         </>
     );
 }
+

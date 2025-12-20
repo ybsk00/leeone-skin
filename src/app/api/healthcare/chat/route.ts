@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateText } from "@/lib/ai/client";
-import { getHealthcareSystemPrompt, getHealthcareFinalAnalysisPrompt, MEDICAL_KEYWORDS } from "@/lib/ai/prompts";
+import { getHealthcareSystemPrompt, getHealthcareFinalAnalysisPrompt, MEDICAL_KEYWORDS, EntryIntent } from "@/lib/ai/prompts";
 
 export async function POST(req: NextRequest) {
     try {
-        const { message, history, turnCount, topic } = await req.json();
+        const { message, history, turnCount, topic, entryIntent } = await req.json();
 
         // 1. 의료 키워드/증상 감지 - 즉시 로그인 유도 (AI 답변 생성 없이 즉시 리턴)
         const hasMedicalQuestion = MEDICAL_KEYWORDS.some(keyword =>
@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
         if (hasMedicalQuestion) {
             return NextResponse.json({
                 role: "ai",
-                content: "말씀하신 증상이나 내용은 **전문적인 의료 상담**이 필요할 수 있습니다.\n\n현행 의료법상 구체적인 증상, 질환, 치료에 대한 상담은 **로그인 후 의료진의 검토를 거친 AI 상담**을 통해서만 제공 가능합니다.\n\n로그인하시겠습니까?",
+                content: "말씀하신 내용은 **의료 상담 영역**이라 이 단계에서는 답변드리기 어렵습니다.\n\n지금까지 정리한 내용을 저장하고, 로그인 후 더 정확한 확인을 진행하시는 게 안전합니다.\n\n로그인하시겠습니까?",
                 requireLogin: true,
                 isSymptomTrigger: true
             });
@@ -22,7 +22,10 @@ export async function POST(req: NextRequest) {
 
         // 2. 5턴째 (마지막 턴) - 종합 분석 및 결과 제공
         if (turnCount === 4) {
-            const finalAnalysisPrompt = getHealthcareFinalAnalysisPrompt(topic || "default");
+            const finalAnalysisPrompt = getHealthcareFinalAnalysisPrompt(
+                topic || "default",
+                entryIntent as EntryIntent
+            );
 
             const fullPrompt = `
 ${finalAnalysisPrompt}
@@ -46,14 +49,18 @@ AI(분석 결과):
         if (turnCount >= 5) {
             return NextResponse.json({
                 role: "ai",
-                content: "상담이 이미 종료되었습니다. 더 자세한 분석을 위해 로그인을 부탁드립니다.",
+                content: "상담이 이미 종료되었습니다. 지금까지 정리한 내용을 저장하려면 로그인해 주세요.",
                 requireLogin: true,
                 isHardStop: true
             });
         }
 
-        // 3. 시스템 프롬프트 from prompts.ts
-        const systemPrompt = getHealthcareSystemPrompt(topic || "default", turnCount);
+        // 3. 시스템 프롬프트 from prompts.ts (entryIntent 전달)
+        const systemPrompt = getHealthcareSystemPrompt(
+            topic || "default",
+            turnCount,
+            entryIntent as EntryIntent
+        );
 
         const fullPrompt = `
 ${systemPrompt}
@@ -84,3 +91,4 @@ AI:
         );
     }
 }
+
