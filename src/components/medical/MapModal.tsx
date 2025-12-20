@@ -10,7 +10,7 @@ interface MapModalProps {
 
 // 환경변수 또는 하드코딩 (추후 환경변수로 이동)
 const HOSPITAL_NAME = '위담한방병원';
-const HOSPITAL_ADDRESS = '경기도 용인시 수지구 죽전동';
+const HOSPITAL_ADDRESS = '서울 강남구 삼성로 402';
 const MAP_QUERY = encodeURIComponent(`${HOSPITAL_NAME} ${HOSPITAL_ADDRESS}`);
 
 export default function MapModal({ isOpen, onClose }: MapModalProps) {
