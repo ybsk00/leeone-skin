@@ -12,7 +12,7 @@ type Message = {
     timestamp?: Date
 }
 
-const quickReplies = ['두통이 있어요', '소화가 안돼요', '잠을 못 자요', '피로해요']
+const quickReplies = ['치통이 있어요', '잇몫 에서 피가 나요', '차가운 게 시려요', '충치 치료 문의']
 
 export default function ChatPage() {
     const router = useRouter()
@@ -20,7 +20,7 @@ export default function ChatPage() {
         {
             id: 'init',
             role: 'assistant',
-            content: '안녕하세요, 위담한방병원 AI 상담입니다. 🌿\n\n오늘 어디가 불편하신가요? 증상을 자세히 말씀해주시면 도움을 드릴게요.',
+            content: '안녕하세요, 평촌이생각치과 AI 예진 상담입니다. 🦷\n\n치아가 어디 불편하신가요? 불편한 부분을 말씀해주시면 예진 정리를 도와드리겠습니다. (진단/치료 아님)',
             timestamp: new Date()
         }
     ])
@@ -169,7 +169,7 @@ export default function ChatPage() {
                         </button>
                     </Link>
                     <div className="text-center">
-                        <h1 className="text-lg font-bold text-white">위담한방병원 AI 상담</h1>
+                        <h1 className="text-lg font-bold text-white">평촌이생각치과 AI 예진</h1>
                         <div className="flex items-center justify-center gap-1.5 mt-0.5">
                             <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
                             <span className="text-xs text-gray-400">상담 중 ({turnCount}턴)</span>
@@ -198,11 +198,11 @@ export default function ChatPage() {
                         <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                             {msg.role === 'assistant' && (
                                 <div className="flex gap-3">
-                                    <div className="flex-shrink-0 w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center">
-                                        <span className="text-white text-lg">🌿</span>
+                                    <div className="flex-shrink-0 w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center">
+                                        <span className="text-white text-lg">🦷</span>
                                     </div>
                                     <div className="flex flex-col gap-1 max-w-[75%]">
-                                        <span className="text-xs text-gray-500">위담한방병원</span>
+                                        <span className="text-xs text-gray-500">평촌이생각치과</span>
                                         <div
                                             className="px-4 py-3 text-sm text-white leading-relaxed whitespace-pre-line"
                                             style={{
@@ -241,8 +241,8 @@ export default function ChatPage() {
                     {/* Typing Indicator */}
                     {isLoading && (
                         <div className="flex gap-3">
-                            <div className="flex-shrink-0 w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center">
-                                <span className="text-white text-lg">🌿</span>
+                            <div className="flex-shrink-0 w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center">
+                                <span className="text-white text-lg">🦷</span>
                             </div>
                             <div
                                 className="px-4 py-3 flex gap-1.5"
@@ -373,73 +373,74 @@ export default function ChatPage() {
             </div>
 
             {/* Appointment Modal */}
-            {showAppointmentModal && (
-                <div className="fixed inset-0 flex items-center justify-center z-50 px-4">
-                    <div
-                        className="absolute inset-0 bg-black/60"
-                        onClick={() => setShowAppointmentModal(false)}
-                    ></div>
-                    <div
-                        className="relative w-full max-w-sm rounded-2xl overflow-hidden"
-                        style={{ backgroundColor: '#1a2332' }}
-                    >
-                        {/* Modal Header */}
+            {
+                showAppointmentModal && (
+                    <div className="fixed inset-0 flex items-center justify-center z-50 px-4">
                         <div
-                            className="p-5"
-                            style={{ background: 'linear-gradient(135deg, #059669, #10b981)' }}
+                            className="absolute inset-0 bg-black/60"
+                            onClick={() => setShowAppointmentModal(false)}
+                        ></div>
+                        <div
+                            className="relative w-full max-w-sm rounded-2xl overflow-hidden"
+                            style={{ backgroundColor: '#1a2332' }}
                         >
-                            <button
-                                onClick={() => setShowAppointmentModal(false)}
-                                className="absolute top-4 right-4 text-white/70 hover:text-white"
+                            {/* Modal Header */}
+                            <div
+                                className="p-5"
+                                style={{ background: 'linear-gradient(135deg, #059669, #10b981)' }}
                             >
-                                <X size={20} />
-                            </button>
-                            <div className="flex items-center gap-3">
-                                <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
-                                    <Stethoscope size={24} className="text-white" />
-                                </div>
-                                <div>
-                                    <h3 className="text-lg font-bold text-white">위담한방병원 예약</h3>
-                                    <p className="text-sm text-green-100">상담 분석 완료</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Modal Body */}
-                        <div className="p-5">
-                            {/* Warning */}
-                            <div className="mb-4 p-3 rounded-xl flex items-start gap-2" style={{ backgroundColor: '#fef3c7' }}>
-                                <AlertTriangle size={16} className="text-yellow-600 flex-shrink-0 mt-0.5" />
-                                <p className="text-xs text-yellow-800">
-                                    AI 상담은 참고용입니다. 정확한 진단을 위해 반드시 전문 한의사의 진료를 받으세요.
-                                </p>
-                            </div>
-
-                            <p className="text-sm text-gray-300 mb-5 leading-relaxed">
-                                전문 한의사 선생님의 상담을 받아보시겠어요? 지금 바로 예약하시면 빠른 시일 내에 진료받으실 수 있습니다.
-                            </p>
-
-                            <div className="flex gap-3">
                                 <button
                                     onClick={() => setShowAppointmentModal(false)}
-                                    className="flex-1 py-3 rounded-xl text-gray-400 font-medium border transition-colors hover:bg-white/5"
-                                    style={{ borderColor: '#374151' }}
+                                    className="absolute top-4 right-4 text-white/70 hover:text-white"
                                 >
-                                    나중에
+                                    <X size={20} />
                                 </button>
-                                <button
-                                    onClick={handleBookAppointment}
-                                    className="flex-1 py-3 rounded-xl text-white font-bold flex items-center justify-center gap-2"
-                                    style={{ backgroundColor: '#10b981' }}
-                                >
-                                    <Calendar size={18} />
-                                    예약하기
-                                </button>
+                                <div className="flex items-center gap-3">
+                                    <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+                                        <Stethoscope size={24} className="text-white" />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-lg font-bold text-white">평촌이생각치과 예약</h3>
+                                        <p className="text-sm text-blue-100">상담 분석 완료</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Modal Body */}
+                            <div className="p-5">
+                                {/* Warning */}
+                                <div className="mb-4 p-3 rounded-xl flex items-start gap-2" style={{ backgroundColor: '#dbeafe' }}>
+                                    <AlertTriangle size={16} className="text-blue-600 flex-shrink-0 mt-0.5" />
+                                    <p className="text-xs text-blue-800">
+                                        AI 예진은 참고용입니다. 정확한 진단을 위해 반드시 전문 치과 의료진의 진료를 받으세요.
+                                    </p>
+                                </div>
+
+                                <p className="text-sm text-gray-300 mb-5 leading-relaxed">
+                                    전문 치과 의료진의 상담을 받아보시겠어요? 지금 바로 예약하시면 빠른 시일 내에 진료받으실 수 있습니다.
+                                </p>
+
+                                <div className="flex gap-3">
+                                    <button
+                                        onClick={() => setShowAppointmentModal(false)}
+                                        className="flex-1 py-3 rounded-xl text-gray-400 font-medium border transition-colors hover:bg-white/5"
+                                        style={{ borderColor: '#374151' }}
+                                    >
+                                        나중에
+                                    </button>
+                                    <button
+                                        onClick={handleBookAppointment}
+                                        className="flex-1 py-3 rounded-xl text-white font-bold flex items-center justify-center gap-2"
+                                        style={{ backgroundColor: '#10b981' }}
+                                    >
+                                        <Calendar size={18} />
+                                        예약하기
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            )}
+                )}
         </div>
     )
 }

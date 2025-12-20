@@ -32,6 +32,19 @@ const config: Config = {
           accent: "#3B82F6", // Blue
           muted: "#F3F4F6",
         },
+        // Dental Theme (Deep Navy Dark Mode)
+        dental: {
+          bg: "#0A1628",           // 딥네이비 배경
+          bgSecondary: "#0F2040",  // 보조 배경
+          surface: "#142640",      // 표면 색상
+          text: "#F1F5F9",         // 기본 텍스트
+          subtext: "#94A3B8",      // 보조 텍스트
+          primary: "#3B82F6",      // 프라이머리 블루
+          secondary: "#06B6D4",    // 시안 악센트
+          accent: "#60A5FA",       // 밝은 블루
+          glow: "#3B82F6",         // 글로우 효과
+          muted: "#1E3A5F",        // 뮤트 컬러
+        },
       },
 
       backgroundImage: {

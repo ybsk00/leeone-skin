@@ -2,15 +2,12 @@
 @config "../../tailwind.config.ts";
 
 :root {
-  --background: #F9F7F2;
-  --foreground: #1A1A1A;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #0A1628;
+  --foreground: #F1F5F9;
+  --dental-bg: #0A1628;
+  --dental-surface: #142640;
+  --dental-primary: #3B82F6;
+  --dental-glow: rgba(59, 130, 246, 0.3);
 }
 
 body {

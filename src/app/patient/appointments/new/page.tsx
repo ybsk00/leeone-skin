@@ -22,7 +22,7 @@ export default function NewAppointmentPage() {
     const [bookedSlots, setBookedSlots] = useState<string[]>([])
     const [isLoadingSlots, setIsLoadingSlots] = useState(false)
 
-    const doctors = ['전체', '최서형 이사장', '노기환 원장', '나병조 원장', '최규호 원장']
+    const doctors = ['전체', '김기영 대표원장', '전민제 원장', '이혜정 교정원장', '김유진 원장']
 
     // Generate week days
     const weekDays = Array.from({ length: 7 }, (_, i) => {
@@ -102,7 +102,7 @@ export default function NewAppointmentPage() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     scheduled_at: scheduledAt.toISOString(),
-                    notes: selectedDoctor === '전체' ? '위담한방병원 진료' : `위담한방병원 진료 (${selectedDoctor})`,
+                    notes: selectedDoctor === '전체' ? '평촌이생각치과 진료' : `평촌이생각치과 진료 (${selectedDoctor})`,
                     doctor_name: selectedDoctor  // 의사 이름 추가
                 })
             })
@@ -347,8 +347,8 @@ export default function NewAppointmentPage() {
                     onClick={handleConfirm}
                     disabled={!selectedTime || isLoading || selectedDoctor === '전체'}
                     className={`w-full py-4 rounded-full font-bold text-lg transition-all ${selectedTime && !isLoading && selectedDoctor !== '전체'
-                            ? 'bg-blue-500 text-white hover:bg-blue-600'
-                            : 'bg-gray-700 text-gray-500 cursor-not-allowed'
+                        ? 'bg-blue-500 text-white hover:bg-blue-600'
+                        : 'bg-gray-700 text-gray-500 cursor-not-allowed'
                         }`}
                 >
                     {isLoading ? '예약 중...' : selectedDoctor === '전체' ? '의사를 선택해주세요' : '예약 확정'}

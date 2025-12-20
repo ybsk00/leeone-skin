@@ -324,87 +324,87 @@ ${intentHint}
 // 메디컬 AI 시스템 프롬프트 (회원, 설명/문진 모드, 8트랙)
 // =============================================
 
-// 의료진 데이터 (DB 연동 시 교체)
+// 의료진 데이터 (평촌이생각치과)
 export const DOCTORS = [
    {
-      name: '최서형',
-      title: '이사장',
-      education: '경희대 한의학 대학원 박사, 경희대한의학과 외래교수',
-      specialty: ['담적병', '간장병', '만성 위장질환', '만성 대장', '소장 질환', '당뇨', '역류성식도염', '과민성대장증후군', '어지럼증', '두통'],
-      tracks: ['digestive', 'digestive_stress', 'cardiovascular']
+      name: '김기영',
+      title: '대표원장',
+      education: '보건복지부 인증 통합치의학과 전문의, 임플란트/치주 관련 코스 수료',
+      specialty: ['임플란트', '치주/잇몸', '보철/교합', '턱관절', '일반진료'],
+      tracks: ['implant', 'gum', 'tmj', 'general']
    },
    {
-      name: '노기환',
+      name: '전민제',
       title: '원장',
-      education: '경희대 한의학 대학원 박사, 한방내과 전문의',
-      specialty: ['담적병', '위장 및 대장 소화기 질환', '두통', '어지럼증', '화병', '이명증', '부종', '통풍', '구강잇몸', '수족냉증', '변비', '건망증', '피부질환', '중풍', '갱년기증후군'],
-      tracks: ['digestive', 'digestive_stress', 'pain', 'women']
+      education: '통합치의학과 전문의, 원광대학교 치과대학 치의학학사, Periodontal surgery & Implantation course 수료',
+      specialty: ['임플란트', '치주/잇몸', '신경치료(근관)', '일반진료'],
+      tracks: ['implant', 'gum', 'endo', 'general']
    },
    {
-      name: '나병조',
-      title: '원장',
-      education: '경희대 한의학 대학원 박사, 경희대 한의학과 임상교수',
-      specialty: ['두통', '어지럼증', '담적병', '위장병', '수험생클리닉', '당뇨', '고형암', '갱년기 증후군', '중풍', '만성피로', '비만', '피부질환'],
-      tracks: ['cognitive', 'immune', 'diet', 'women']
+      name: '이혜정',
+      title: '교정원장',
+      education: '보건복지부 인증 치과교정과 전문의, 대한치과교정학회(KAO) 정회원, Invisalign 투명교정 교육이수, SCIE 논문 제1저자',
+      specialty: ['치아교정', '투명교정', '재교정/유지관리'],
+      tracks: ['ortho']
    },
    {
-      name: '최규호',
+      name: '김유진',
       title: '원장',
-      education: '대구한의대 한의학박사, 대구한의대 외래교수',
-      specialty: ['담적증후군', '위장대장 만성 소화기질환', '소화불량', '속쓰림', '변비', '위식도역류', '과민성대장', '불면', '우울', '두통'],
-      tracks: ['digestive', 'digestive_stress', 'cognitive']
+      education: '보건복지부 인증 보존과 전문의, 치과보존(충치/레진/인레이/크라운) 중심 진료',
+      specialty: ['충치/수복', '크라운/보철(일반)', '신경치료(근관)', '심미 수복'],
+      tracks: ['restorative', 'endo', 'aesthetic', 'general']
    }
 ];
 
-// 트랙별 의료진 추천 매핑
+// 트랙별 의료진 추천 매핑 (치과 8트랙)
 export const DOCTOR_TRACK_MAPPING: Record<string, string[]> = {
-   diet: ['나병조', '최서형'],
-   pain: ['노기환'],
-   digestive_stress: ['최서형', '노기환', '최규호'],
-   cognitive: ['나병조', '최규호'],
-   digestive: ['최서형', '노기환', '최규호'],
-   cardiovascular: ['최서형'],
-   immune: ['나병조'],
-   women: ['노기환', '나병조'],
-   medication: ['최서형', '노기환'],
-   document: ['최서형', '노기환']
+   implant: ['김기영', '전민제'],
+   ortho: ['이혜정'],
+   aesthetic: ['김유진'],
+   gum: ['김기영', '전민제'],
+   endo: ['김유진', '전민제'],
+   restorative: ['김유진'],
+   tmj: ['김기영'],
+   general: ['김기영', '전민제', '김유진'],
+   medication: ['김기영', '전민제'],
+   document: ['김기영', '전민제']
 };
 
-// SCI 논문 정보 (Evidence Modal용)
+// SCI 논문 정보 (Evidence Modal용 - 이혜정 교정원장)
 export const SCI_EVIDENCE = {
-   journal: 'Healthcare (MDPI)',
-   title: 'A Pilot Analysis of Bioparameters in Patients with Dyspepsia Accompanied by Abdominal Hardness: An Exploration of Damjeok Syndrome Rooted in Traditional Medicine',
-   date: '2025-09-15',
-   authors: '임윤서, 노기환, 최규호, 최서형',
-   link: 'https://www.mdpi.com/journal/healthcare'
+   journal: 'SCIE',
+   title: 'A CBCT Evaluation of Nasal Septal Deviation and Related Nasofacial Structures after Maxillary Skeletal Expansion',
+   date: '',
+   authors: '이혜정(제1저자) 외',
+   link: ''
 };
 
-// 8트랙 + 복약/검사결과지 추가
+// 치과 8트랙 + 복약/검사결과지 추가
 export const MEDICAL_TRACKS = {
-   diet: "다이어트/체중관리",
-   pain: "통증/재활",
-   digestive_stress: "소화-스트레스 연동", // 담적 완화 표현
-   cognitive: "인지 기능 리듬", // 치매 완화 표현
-   digestive: "소화기 불편",
-   cardiovascular: "심장·뇌혈관 (고위험)",
-   immune: "면역/회복 리듬",
-   women: "여성 컨디션/주기",
-   medication: "복약 상담",  // 복약도우미 연동
-   document: "검사결과 상담"  // 검사결과지 분석 연동
+   implant: "임플란트/상실치아",
+   ortho: "치아교정/투명교정",
+   aesthetic: "심미(라미네이트/미백/심미수복)",
+   gum: "잇몸/치주/출혈·구취",
+   endo: "신경치료(근관)/치통",
+   restorative: "충치/수복(레진·인레이·크라운)",
+   tmj: "턱관절/이갈이·이악물기",
+   general: "일반진료/검진·스케일링",
+   medication: "복약 상담",
+   document: "검사결과 상담"
 };
 
-// 트랙 감지 키워드
+// 트랙 감지 키워드 (치과)
 export const TRACK_KEYWORDS: { [key: string]: string[] } = {
-   diet: ["살", "다이어트", "체중", "뱃살", "감량", "비만", "체형", "부기"],
-   pain: ["아파", "통증", "재활", "허리", "목", "어깨", "무릎", "관절", "삐끗", "디스크"],
-   digestive_stress: ["스트레스 받으면 소화", "긴장하면 배", "신경쓰면 속", "화병", "울화"],
-   cognitive: ["기억력", "집중력", "건망증", "깜빡", "치매", "인지", "멍함"],
-   digestive: ["소화", "더부룩", "속쓰림", "역류", "변비", "설사", "가스", "체함"],
-   cardiovascular: ["가슴 답답", "두근거림", "어지러", "혈압", "콜레스테롤"],
-   immune: ["피로", "면역", "감기", "기력", "무기력", "잦은 감기"],
-   women: ["생리", "월경", "갱년기", "주기", "PMS", "냉증", "자궁"],
-   medication: ["복약도우미 분석", "약을 복용 중", "복용 목적", "복용량", "약봉지", "처방전"],
-   document: ["검사결과지 분석", "분석 결과를 바탕으로", "검사 결과", "PET/CT", "혈액검사"]
+   implant: ["임플란트", "상실", "치아 빠진", "발치", "뽑은", "이가 없", "틀니"],
+   ortho: ["교정", "삐뚤", "투명교정", "인비절라인", "덧니", "뻐드렁니", "앞니 배열"],
+   aesthetic: ["라미네이트", "미백", "착색", "변색", "누런", "심미", "앞니 모양"],
+   gum: ["잇몸", "피나", "출혈", "붓기", "구취", "입냄새", "치주"],
+   endo: ["신경치료", "근관", "치통", "이가 아파", "치아 통증", "욱신"],
+   restorative: ["충치", "레진", "인레이", "크라운", "씌움", "떼움", "구멍"],
+   tmj: ["턱관절", "이갈이", "이악물기", "입 벌릴때", "턱 소리", "턱 아파"],
+   general: ["스케일링", "검진", "정기검진", "일반", "치석"],
+   medication: ["복약도우미 분석", "약을 복용 중", "복용 목적", "복용량", "처방전"],
+   document: ["검사결과지 분석", "분석 결과를 바탕으로", "검사 결과", "엑스레이", "파노라마"]
 };
 
 // 트랙별 질문 풀
