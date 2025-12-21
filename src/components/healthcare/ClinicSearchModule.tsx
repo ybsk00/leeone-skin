@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Search, Sun, Moon, Calendar, Loader2, MapPin, Phone, Star, Clock, AlertCircle, RefreshCw } from "lucide-react";
+import { Search, Sun, Moon, Calendar, Loader2, MapPin, Phone, Star, Clock, AlertCircle, RefreshCw, ArrowRight } from "lucide-react";
+import Link from "next/link";
 import LoginRequiredModal from "./LoginRequiredModal";
 
 // 클리닉 타입
@@ -339,6 +340,21 @@ export default function ClinicSearchModule() {
                             )}
                         </div>
                     )}
+                </div>
+
+                {/* CSI 체크 CTA - 항상 하단에 표시 */}
+                <div className="mt-6 pt-6 border-t border-white/10">
+                    <p className="text-dental-subtext text-sm mb-3 font-medium text-center">
+                        🦷 구강 습관이 궁금하다면?
+                    </p>
+                    <Link
+                        href="/healthcare/chat?topic=stain-csi"
+                        className="group relative w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-white/10 backdrop-blur-sm text-dental-text border border-white/20 text-base font-medium rounded-full hover:bg-dental-primary hover:text-white hover:border-dental-primary transition-all duration-300 mx-auto block"
+                    >
+                        <span className="relative flex items-center gap-2">
+                            착색 CSI 체크 시작 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </span>
+                    </Link>
                 </div>
             </div>
 

@@ -48,49 +48,22 @@ export default function LandingPage() {
             <div className="absolute inset-0 bg-gradient-to-b from-dental-bg/10 via-dental-bg/30 to-dental-bg/60"></div>
           </div>
 
-          <div className="relative z-10 max-w-5xl mx-auto space-y-8 animate-fade-in">
-            <div className="inline-block px-4 py-1.5 rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-dental-subtext text-sm font-semibold mb-4 shadow-sm animate-slide-up">
-              평촌이생각치과 구강건강 체크(참고용)
-            </div>
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-dental-text drop-shadow-lg leading-tight font-serif">
-              <span className="block text-2xl md:text-3xl mb-6 font-sans font-light text-dental-subtext tracking-widest uppercase">
-                Oral Health Check
-              </span>
-              치아 불편·관리 고민,<br />
+          <div className="relative z-10 max-w-5xl mx-auto space-y-6 animate-fade-in">
+            {/* 새 타이틀 */}
+            <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-dental-text drop-shadow-lg leading-tight">
+              지금 진료 가능한 치과,<br />
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-dental-primary via-dental-secondary to-dental-accent">
-                생활 습관부터
-              </span> 점검해보세요
+                바로 조회
+              </span>하세요
             </h1>
-            <p className="text-lg md:text-xl text-dental-subtext max-w-2xl mx-auto leading-relaxed font-light">
-              짧은 채팅 체크로 구강 관리 패턴을 정리하고,<br className="hidden md:block" />
-              상담 준비용 요약을 제공합니다. (진단/치료 아님)
-            </p>
-            <div className="pt-8 flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Link
-                href="/healthcare/chat?topic=stain-csi"
-                className="group relative inline-flex items-center px-8 py-4 bg-dental-primary text-white text-lg font-medium rounded-full overflow-hidden shadow-xl shadow-dental-primary/30 hover:shadow-2xl hover:shadow-dental-primary/40 transition-all duration-300 hover:-translate-y-1"
-              >
-                <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"></span>
-                <span className="relative flex items-center gap-2">
-                  착색 CSI 체크 시작 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </span>
-              </Link>
-              <Link
-                href="/login"
-                className="px-8 py-4 bg-white/5 backdrop-blur-sm text-dental-text border border-white/20 text-lg font-medium rounded-full hover:bg-white/10 hover:border-dental-primary/30 hover:shadow-lg transition-all duration-300"
-              >
-                로그인
-              </Link>
-            </div>
-            <p className="text-xs text-dental-subtext/60 font-light mt-4 mb-8">
-              본 서비스는 건강 정보 제공 및 생활 습관 점검을 위한 참고용입니다. 증상이 지속되면 의료진 상담이 필요합니다.
+
+            <p className="text-base md:text-lg text-dental-subtext max-w-xl mx-auto leading-relaxed">
+              조회는 운영정보·위치 기반 안내이며,<br className="hidden md:block" />
+              체크 결과는 상담 준비용 참고 요약입니다. (진단/치료 아님)
             </p>
 
-            {/* 치과 조회 모듈 - 강력한 CTA */}
-            <div className="pt-4 border-t border-white/10">
-              <p className="text-dental-subtext text-sm mb-4 font-medium">
-                🏥 지금 바로 진료 가능한 치과 찾기
-              </p>
+            {/* 치과 조회 모듈 - 메인 CTA */}
+            <div className="pt-6">
               <ClinicSearchModule />
             </div>
           </div>
