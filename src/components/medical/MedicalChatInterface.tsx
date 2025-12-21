@@ -45,7 +45,7 @@ export default function MedicalChatInterface() {
         // Initial Medical Greeting - 평촌이생각치과 AI 상담
         setMessages([{
             role: "ai",
-            content: "안녕하세요, 이생각 구강 케어 AI 상담입니다.\n\n이 채팅은 **진단이나 처방이 아닌 생활 습관·웰니스 점검(참고용)** 입니다. 정확한 상태 판단과 치료 여부는 **의료진 상담을 통해 확인**이 필요합니다.\n\n지금 겪고 계신 불편한 증상을 말씀해 주세요. 언제부터 시작되었는지, 어디가 가장 불편하신지 편하게 이야기해 주세요."
+            content: "안녕하세요, 평촌이생각치과 AI 상담입니다.\n\n이 채팅은 **진단이나 처방이 아닌 생활 습관·웰니스 점검(참고용)** 입니다. 정확한 상태 판단과 치료 여부는 **의료진 상담을 통해 확인**이 필요합니다.\n\n지금 겪고 계신 불편한 증상을 말씀해 주세요. 언제부터 시작되었는지, 어디가 가장 불편하신지 편하게 이야기해 주세요."
         }]);
     }, []);
 
@@ -153,7 +153,7 @@ export default function MedicalChatInterface() {
                         <ArrowLeft size={24} />
                     </Link>
                     <div className="ml-2">
-                        <h1 className="text-lg font-bold text-white">예진 상담 (Medical Chat)</h1>
+                        <h1 className="text-lg font-bold text-white">평촌이생각치과 AI 상담</h1>
                         <p className="text-xs text-dental-primary flex items-center font-medium">
                             <span className="w-2 h-2 rounded-full bg-dental-primary mr-1"></span>
                             참고용 건강 점검 · 진단 대체 불가
@@ -191,7 +191,7 @@ export default function MedicalChatInterface() {
                         <div className="flex flex-col gap-1 max-w-[85%]">
                             {/* AI Label */}
                             {msg.role === "ai" && (
-                                <div className="text-xs text-dental-primary font-semibold">이생각 구강 케어</div>
+                                <div className="text-xs text-dental-primary font-semibold">평촌이생각치과</div>
                             )}
                             <div
                                 className={`px-4 py-3 rounded-2xl text-sm leading-relaxed ${msg.role === "ai"
