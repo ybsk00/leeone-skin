@@ -144,25 +144,25 @@ export default function ClinicSearchModule() {
                 {/* 토글 그룹 */}
                 <div className="flex flex-wrap justify-center gap-3">
                     <Toggle
-                        label="오늘 진료"
+                        label="오늘 운영"
                         icon={<Sun size={16} />}
                         active={todayOpen}
                         onChange={() => setTodayOpen(!todayOpen)}
-                        ariaLabel="오늘 진료 필터"
+                        ariaLabel="오늘 운영 필터"
                     />
                     <Toggle
-                        label="야간 진료"
+                        label="야간 운영"
                         icon={<Moon size={16} />}
                         active={nightOpen}
                         onChange={() => setNightOpen(!nightOpen)}
-                        ariaLabel="야간 진료 필터"
+                        ariaLabel="야간 운영 필터"
                     />
                     <Toggle
-                        label="공휴일 진료"
+                        label="공휴일 운영"
                         icon={<Calendar size={16} />}
                         active={holidayOpen}
                         onChange={() => setHolidayOpen(!holidayOpen)}
-                        ariaLabel="공휴일 진료 필터"
+                        ariaLabel="공휴일 운영 필터"
                     />
                 </div>
 
@@ -182,7 +182,7 @@ export default function ClinicSearchModule() {
                         ) : (
                             <>
                                 <Search className="w-5 h-5" />
-                                오늘 진료 치과 바로 확인
+                                오늘 운영 치과 확인
                             </>
                         )}
                     </span>
@@ -235,9 +235,9 @@ export default function ClinicSearchModule() {
                                 <div className="space-y-4">
                                     {/* 평촌이생각치과 추천 카드 (상단 고정) */}
                                     <div className="relative bg-gradient-to-r from-dental-primary/20 to-dental-accent/20 rounded-xl p-4 border border-dental-primary/30">
-                                        {/* 추천 라벨 */}
+                                        {/* 조건 일치 라벨 */}
                                         <span className="absolute -top-2 left-4 px-2 py-0.5 bg-dental-primary text-white text-xs font-bold rounded-full">
-                                            추천
+                                            조건 일치
                                         </span>
 
                                         <div className="pt-2">
@@ -254,6 +254,9 @@ export default function ClinicSearchModule() {
                                                             평일 매일 야간진료
                                                         </span>
                                                     </div>
+                                                    <p className="text-dental-subtext/70 text-xs mt-1">
+                                                        선택한 조건과 위치 기준으로 정렬됩니다.
+                                                    </p>
                                                     <p className="text-dental-subtext text-sm mt-2 flex items-center gap-1">
                                                         <MapPin size={14} />
                                                         경기 안양시 동안구 시민대로 312
@@ -266,7 +269,7 @@ export default function ClinicSearchModule() {
                                                     onClick={handleConnect}
                                                     className="flex-1 py-2.5 bg-dental-primary text-white rounded-lg font-medium hover:bg-dental-accent transition-colors text-sm"
                                                 >
-                                                    상담 연결
+                                                    운영정보 보기
                                                 </button>
                                                 <a
                                                     href="tel:031-123-4567"
@@ -281,7 +284,7 @@ export default function ClinicSearchModule() {
 
                                     {/* 변동 고지 문구 */}
                                     <p className="text-xs text-dental-subtext/70 text-center bg-white/5 rounded-lg py-2">
-                                        ⚠️ 진료시간은 상황에 따라 변동될 수 있어 내원 전 확인이 필요합니다.
+                                        ⚠️ 운영정보는 변동될 수 있어요. 방문 전 확인이 필요합니다.
                                     </p>
 
                                     {/* 검색 결과 목록 */}

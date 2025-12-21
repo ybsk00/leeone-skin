@@ -51,7 +51,7 @@ export default function LandingPage() {
           <div className="relative z-10 max-w-5xl mx-auto space-y-6 animate-fade-in">
             {/* 새 타이틀 */}
             <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-dental-text drop-shadow-lg leading-tight">
-              지금 진료 가능한 치과,<br />
+              지금 운영 중인 치과,<br />
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-dental-primary via-dental-secondary to-dental-accent">
                 바로 조회
               </span>하세요

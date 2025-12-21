@@ -175,7 +175,7 @@ export default function HospitalSearchPage() {
                     <div className="bg-gradient-to-r from-dental-primary/20 to-dental-accent/20 rounded-2xl p-4 border border-dental-primary/30">
                         <div className="flex items-center gap-2 mb-2">
                             <Heart className="w-5 h-5 text-dental-primary" fill="currentColor" />
-                            <span className="text-sm font-bold text-dental-primary">추천 치과</span>
+                            <span className="text-sm font-bold text-dental-primary">조건 일치</span>
                         </div>
                         <h3 className="text-lg font-bold text-white mb-1">{RECOMMENDED_CLINIC.name}</h3>
                         <p className="text-sm text-dental-subtext flex items-center gap-1 mb-1">
@@ -187,22 +187,26 @@ export default function HospitalSearchPage() {
                             {RECOMMENDED_CLINIC.tel}
                         </p>
                         <div className="flex gap-2">
-                            <span className="px-2 py-1 bg-dental-primary/20 text-dental-primary text-xs rounded-full">야간 진료</span>
-                            <span className="px-2 py-1 bg-dental-primary/20 text-dental-primary text-xs rounded-full">공휴일 진료</span>
+                            <span className="px-2 py-1 bg-dental-primary/20 text-dental-primary text-xs rounded-full">야간 운영</span>
+                            <span className="px-2 py-1 bg-dental-primary/20 text-dental-primary text-xs rounded-full">공휴일 운영</span>
                         </div>
+                        <p className="text-xs text-dental-subtext/70 mt-2 text-center">
+                            선택한 조건과 위치 기준으로 정렬됩니다.
+                        </p>
                         <div className="mt-3 flex gap-2">
-                            <a
-                                href={`tel:${RECOMMENDED_CLINIC.tel}`}
+                            <button
+                                onClick={() => window.location.href = '/login'}
                                 className="flex-1 py-2 bg-dental-primary text-white text-center text-sm font-medium rounded-lg hover:bg-dental-accent transition-colors"
                             >
-                                전화하기
-                            </a>
-                            <Link
-                                href="/patient/chat"
-                                className="flex-1 py-2 bg-white/10 text-white text-center text-sm font-medium rounded-lg hover:bg-white/20 transition-colors"
+                                운영정보 보기
+                            </button>
+                            <a
+                                href={`tel:${RECOMMENDED_CLINIC.tel}`}
+                                className="flex items-center justify-center gap-1 px-4 py-2 bg-white/10 text-white text-center text-sm font-medium rounded-lg hover:bg-white/20 transition-colors"
                             >
-                                상담하기
-                            </Link>
+                                <Phone size={16} />
+                                전화
+                            </a>
                         </div>
                     </div>
 
@@ -235,10 +239,15 @@ export default function HospitalSearchPage() {
                         <div className="space-y-4">
                             {/* 필터 토글 */}
                             <div className="flex flex-wrap gap-2">
-                                <Toggle isActive={todayOpen} onToggle={() => setTodayOpen(!todayOpen)} icon={Sun} label="오늘 진료" />
-                                <Toggle isActive={nightOpen} onToggle={() => setNightOpen(!nightOpen)} icon={Moon} label="야간 진료" />
-                                <Toggle isActive={holidayOpen} onToggle={() => setHolidayOpen(!holidayOpen)} icon={Calendar} label="공휴일 진료" />
+                                <Toggle isActive={todayOpen} onToggle={() => setTodayOpen(!todayOpen)} icon={Sun} label="오늘 운영" />
+                                <Toggle isActive={nightOpen} onToggle={() => setNightOpen(!nightOpen)} icon={Moon} label="야간 운영" />
+                                <Toggle isActive={holidayOpen} onToggle={() => setHolidayOpen(!holidayOpen)} icon={Calendar} label="공휴일 운영" />
                             </div>
+
+                            {/* 고지 문구 */}
+                            <p className="text-xs text-dental-subtext/70 text-center bg-white/5 rounded-lg py-2">
+                                ⚠️ 운영정보는 변동될 수 있어요. 방문 전 확인이 필요합니다.
+                            </p>
 
                             {/* 결과 */}
                             {clinicLoading ? (
@@ -272,7 +281,7 @@ export default function HospitalSearchPage() {
                                             )}
                                             {clinic.night && (
                                                 <span className="inline-block mt-2 px-2 py-1 bg-dental-primary/20 text-dental-primary text-xs rounded-full">
-                                                    야간 진료
+                                                    야간 운영
                                                 </span>
                                             )}
                                         </div>
