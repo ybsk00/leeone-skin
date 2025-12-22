@@ -59,42 +59,42 @@ export default function ChatInterface(props: ChatInterfaceProps) {
     const [showMedicationModal, setShowMedicationModal] = useState(false);
     const [showFileUploadModal, setShowFileUploadModal] = useState(false);
 
-    // Modules Definition (Rich UI용)
+    // Modules Definition (인덱스 페이지와 동일)
     const modules = [
         {
-            id: "general",
-            label: "일반 치과",
-            desc: "충치, 치료, 검진 안내",
+            id: "stain-csi",
+            label: "착색 CSI",
+            desc: "커피·담배 착색 패턴 점검",
             icon: Sparkles,
-            color: "emerald"
+            color: "amber"
         },
         {
-            id: "implant",
-            label: "임플란트",
-            desc: "식립, 뼈이식 상담",
+            id: "sensitivity",
+            label: "시림 탐정",
+            desc: "찬물·단것 트리거 체크",
             icon: Brain,
-            color: "purple"
+            color: "cyan"
         },
         {
-            id: "orthodontics",
-            label: "교정",
-            desc: "치아교정, 투명교정",
-            icon: Moon,
-            color: "blue"
-        },
-        {
-            id: "whitening",
-            label: "미백",
-            desc: "치아미백, 라미네이트",
-            icon: Heart,
-            color: "orange"
-        },
-        {
-            id: "gum",
-            label: "잇몸",
-            desc: "잇몸치료, 스케일링",
+            id: "gum-radar",
+            label: "잇몸 레이더",
+            desc: "출혈·붓기·구취 스캔",
             icon: Leaf,
             color: "rose"
+        },
+        {
+            id: "smile-balance",
+            label: "스마일 밸런스",
+            desc: "이갈이·입호흡 습관",
+            icon: Heart,
+            color: "violet"
+        },
+        {
+            id: "implant-ready",
+            label: "임플란트 준비도",
+            desc: "상실 이후 준비 체크",
+            icon: Moon,
+            color: "blue"
         },
     ];
 
@@ -114,23 +114,23 @@ export default function ChatInterface(props: ChatInterfaceProps) {
             // 모듈별 맞춤형 초기 질문 설정
             let initialQuestion = "";
             switch (topic) {
-                case "general":
-                    initialQuestion = "어떤 치과 진료를 원하시나요? (충치, 발치, 검진 등)";
+                case "stain-csi":
+                    initialQuestion = "커피나 차는 하루에 몇 잔 정도 드시나요?";
                     break;
-                case "implant":
-                    initialQuestion = "임플란트 식립에 관심이 있으신가요? 현재 상태를 알려주세요.";
+                case "sensitivity":
+                    initialQuestion = "찬 음식이나 음료에 시린 느낌이 있으신가요?";
                     break;
-                case "orthodontics":
-                    initialQuestion = "치아교정에 관심이 있으신가요? 어떤 부분이 불편하신가요?";
+                case "gum-radar":
+                    initialQuestion = "양치할 때 잇몸에서 피가 나는 경우가 있으신가요?";
                     break;
-                case "whitening":
-                    initialQuestion = "치아미백에 관심이 있으신가요? 현재 치아 상태를 알려주세요.";
+                case "smile-balance":
+                    initialQuestion = "자면서 이갈이를 하신다고 들으셨나요?";
                     break;
-                case "gum":
-                    initialQuestion = "잇몸이 붓거나 피가 나는 증상이 있으신가요?";
+                case "implant-ready":
+                    initialQuestion = "상실된 치아 부위는 어디인가요?";
                     break;
                 default:
-                    initialQuestion = "어떤 구강헬스케어 상담이 필요하신가요?";
+                    initialQuestion = "구강 관리에서 가장 신경 쓰이는 부분이 있으신가요?";
             }
 
             setMessages([{
@@ -360,13 +360,13 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                                         const IconComponent = mod.icon;
                                         const isActive = topic === mod.id;
                                         const colorClasses: Record<string, { bg: string; ring: string; icon: string }> = {
-                                            emerald: { bg: 'bg-emerald-500/20', ring: 'ring-emerald-400', icon: 'text-emerald-400' },
-                                            purple: { bg: 'bg-purple-500/20', ring: 'ring-purple-400', icon: 'text-purple-400' },
+                                            amber: { bg: 'bg-amber-500/20', ring: 'ring-amber-400', icon: 'text-amber-400' },
+                                            cyan: { bg: 'bg-cyan-500/20', ring: 'ring-cyan-400', icon: 'text-cyan-400' },
+                                            rose: { bg: 'bg-rose-500/20', ring: 'ring-rose-400', icon: 'text-rose-400' },
+                                            violet: { bg: 'bg-violet-500/20', ring: 'ring-violet-400', icon: 'text-violet-400' },
                                             blue: { bg: 'bg-blue-500/20', ring: 'ring-blue-400', icon: 'text-blue-400' },
-                                            orange: { bg: 'bg-orange-500/20', ring: 'ring-orange-400', icon: 'text-orange-400' },
-                                            rose: { bg: 'bg-rose-500/20', ring: 'ring-rose-400', icon: 'text-rose-400' }
                                         };
-                                        const colors = colorClasses[mod.color] || colorClasses.emerald;
+                                        const colors = colorClasses[mod.color] || colorClasses.amber;
 
                                         return (
                                             <Link

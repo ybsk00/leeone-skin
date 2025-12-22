@@ -197,6 +197,18 @@ export default function ClinicSearchModule() {
                     {/* 결과 컨테이너 */}
                     {searchState !== "idle" && (
                         <div className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-4 mt-4 max-h-[60vh] overflow-y-auto">
+                            {/* 초기화 버튼 */}
+                            <div className="flex justify-end mb-3">
+                                <button
+                                    onClick={() => {
+                                        setSearchState("idle");
+                                        setClinics([]);
+                                    }}
+                                    className="text-xs text-dental-subtext hover:text-white transition-colors flex items-center gap-1"
+                                >
+                                    ✕ 닫기
+                                </button>
+                            </div>
                             {/* 로딩 */}
                             {searchState === "loading" && (
                                 <div className="flex items-center justify-center py-12">
