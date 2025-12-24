@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { Sparkles, Droplet, Shield, ArrowUpRight, Heart, CheckCircle, BarChart2, Calendar } from "lucide-react";
+import { Sparkles, Droplet, Shield, ArrowUpRight, Heart, CheckCircle, BarChart2, Calendar, Search, ChevronRight } from "lucide-react";
 import { TrackF1View } from "@/components/marketing/MarketingTracker";
 import Footer from "@/components/common/Footer";
 import ClinicSearchModule from "@/components/healthcare/ClinicSearchModule";
@@ -52,27 +52,26 @@ export default function LandingPage() {
     <TrackF1View>
       <div className="min-h-screen bg-skin-bg text-skin-text font-sans selection:bg-skin-primary selection:text-white">
 
-        {/* Navigation */}
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-skin-bg/80 backdrop-blur-md border-b border-white/10 transition-all duration-300">
+        {/* Navigation - 반투명 바 (고정) */}
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-skin-bg/80 backdrop-blur-md border-b border-white/10">
           <div className="flex items-center justify-between px-6 py-3 max-w-7xl mx-auto">
             <Link href="/" className="flex items-center gap-3 group cursor-pointer">
               <span className="text-2xl">✨</span>
               <span className="text-xl font-bold text-skin-text">리원피부과</span>
             </Link>
-            <div className="hidden md:flex items-center gap-8 text-sm font-medium text-skin-subtext">
-              {/* Navigation links */}
-            </div>
             <Link
               href="/login"
-              className="px-6 py-2.5 bg-skin-primary text-white text-sm font-medium rounded-full hover:bg-skin-accent hover:shadow-lg hover:shadow-skin-primary/30 hover:-translate-y-0.5 transition-all duration-300"
+              className="px-6 py-2.5 bg-skin-primary text-white text-sm font-medium rounded-full hover:bg-skin-accent hover:shadow-lg hover:shadow-skin-primary/30 transition-all duration-300"
             >
               로그인
             </Link>
           </div>
         </nav>
 
-        {/* Hero Section */}
-        <header className="relative px-6 pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden min-h-[90vh] flex flex-col justify-center">
+        {/* ============================================ */}
+        {/* Hero Section - 목적: 헬스케어 시작 */}
+        {/* ============================================ */}
+        <header className="relative px-6 pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden min-h-[85vh] flex flex-col justify-center">
           {/* Rolling Images Background */}
           <div className="absolute inset-0 z-0">
             {HERO_IMAGES.map((src, idx) => (
@@ -90,33 +89,57 @@ export default function LandingPage() {
                 />
               </div>
             ))}
-            {/* Overlay for readability */}
-            <div className="absolute inset-0 bg-gradient-to-r from-skin-bg/90 via-skin-bg/60 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-b from-skin-bg/50 via-transparent to-skin-bg/80" />
-            {/* Color Tint for consistency */}
-            <div className="absolute inset-0 bg-skin-secondary/5 mix-blend-overlay" />
+            {/* 좌측 카피 영역 어두운 그라데이션 (45%) */}
+            <div className="absolute inset-0 bg-gradient-to-r from-skin-bg/90 via-skin-bg/50 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-b from-skin-bg/30 via-transparent to-skin-bg/70" />
           </div>
 
-          {/* Hero Content */}
-          <div className="relative z-10 max-w-5xl mx-auto space-y-6 animate-fade-in">
-            <p className="text-skin-secondary font-bold tracking-widest uppercase text-sm">
+          {/* Hero Content - 3단 계층 (Eyebrow / H1 / Body) */}
+          <div className="relative z-10 max-w-4xl mx-auto space-y-8 animate-fade-in">
+            {/* Eyebrow - 작게, 간격 확보 */}
+            <p className="text-skin-secondary font-semibold tracking-[0.2em] uppercase text-xs">
               Premium Skin Care
             </p>
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-tight font-serif">
+
+            {/* H1 - 2줄 이내 */}
+            <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-[1.1] font-serif">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-skin-primary via-pink-400 to-skin-accent">
                 리원피부과
               </span>에서<br />
               프리미엄 스킨케어를
             </h1>
 
-            <p className="text-base md:text-lg text-skin-subtext max-w-xl leading-relaxed">
-              지금 운영 중인 피부과를 조회하고,<br className="hidden md:block" />
-              나만의 피부 습관을 체크해보세요. (참고용)
+            {/* Body - 1~2줄, 부연 제거 */}
+            <p className="text-base md:text-lg text-skin-subtext max-w-lg leading-relaxed">
+              나만의 피부 습관을 체크하고, 맞춤 루틴을 설계해보세요.
             </p>
 
-            {/* Clinic Search Module */}
-            <div className="pt-6">
-              <ClinicSearchModule />
+            {/* CTA Row - Primary 1개 + Secondary 링크 1개 */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-4">
+              {/* Primary CTA - 핫핑크 + 글로우 허용 */}
+              <Link
+                href="/healthcare/chat?topic=glow-booster"
+                className="px-8 py-4 bg-skin-primary text-white text-base font-bold rounded-2xl shadow-lg shadow-skin-primary/40 hover:bg-skin-accent hover:shadow-xl hover:shadow-skin-primary/50 hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
+              >
+                <Sparkles className="w-5 h-5" />
+                D-7 광채 부스터 시작
+              </Link>
+
+              {/* Secondary - 텍스트 링크 */}
+              <a
+                href="#clinic-search"
+                className="text-skin-subtext hover:text-skin-primary text-sm font-medium flex items-center gap-1 transition-colors"
+              >
+                지금 운영 피부과 찾기
+                <ChevronRight className="w-4 h-4" />
+              </a>
+            </div>
+
+            {/* 참고용 배지 - 배지로 이동 */}
+            <div className="pt-2">
+              <span className="inline-flex items-center px-3 py-1 rounded-full bg-skin-muted/50 text-skin-subtext text-xs font-medium">
+                ℹ️ 참고용 안내 · 진단·처방 아님
+              </span>
             </div>
           </div>
 
@@ -132,6 +155,27 @@ export default function LandingPage() {
             ))}
           </div>
         </header>
+
+        {/* ============================================ */}
+        {/* Clinic Search Section - 히어로 아래 별도 섹션 */}
+        {/* ============================================ */}
+        <section id="clinic-search" className="relative py-16 px-6 bg-skin-bgSecondary">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl md:text-3xl font-bold text-skin-text mb-2">
+                지금 운영 중인 피부과 찾기
+              </h2>
+              <p className="text-skin-subtext text-sm">
+                지역과 운영 시간을 선택해 가까운 피부과를 검색하세요.
+              </p>
+            </div>
+
+            {/* Clinic Search Module Card */}
+            <div className="bg-skin-surface rounded-3xl p-6 md:p-8 border border-white/10 shadow-xl">
+              <ClinicSearchModule />
+            </div>
+          </div>
+        </section>
 
         {/* Features Section */}
         <section className="relative py-20 px-6 overflow-hidden z-10">
@@ -171,7 +215,7 @@ export default function LandingPage() {
               ].map((feature, idx) => (
                 <div
                   key={idx}
-                  className="group bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 hover:bg-white/10 hover:border-skin-primary/30 hover:shadow-[0_0_30px_rgba(233,30,140,0.15)] transition-all duration-300 hover:-translate-y-1"
+                  className="group bg-white/5 rounded-2xl p-6 border border-white/10 hover:bg-white/10 hover:border-skin-primary/30 transition-all duration-300 hover:-translate-y-1"
                 >
                   <div className="w-10 h-10 bg-skin-surface rounded-xl flex items-center justify-center mb-4 border border-white/10">
                     <div className="text-skin-primary">{feature.icon}</div>
@@ -182,7 +226,7 @@ export default function LandingPage() {
                   <p className="text-skin-subtext text-sm leading-relaxed mb-4">
                     {feature.desc}
                   </p>
-                  <span className={`inline-flex items-center px-3 py-1 rounded-md text-[11px] font-semibold ${feature.labelColor} text-white`}>
+                  <span className={`inline-flex items-center px-3 py-1 rounded-lg text-[11px] font-semibold ${feature.labelColor} text-white`}>
                     {feature.label}
                   </span>
                 </div>
@@ -198,13 +242,15 @@ export default function LandingPage() {
           <div className="relative z-10 max-w-7xl mx-auto px-6">
             <div className="text-center mb-16">
               <span className="text-skin-primary font-bold tracking-widest uppercase text-sm mb-2 block">Skin Health Check</span>
-              <h2 className="text-4xl md:text-5xl font-bold text-skin-text drop-shadow-lg font-serif">
-                내 피부 건강 체크<span className="text-skin-subtext text-2xl ml-2">(참고용)</span>
+              <h2 className="text-4xl md:text-5xl font-bold text-skin-text font-serif">
+                내 피부 건강 체크
               </h2>
               <p className="text-skin-subtext mt-4 max-w-2xl mx-auto">
-                모듈을 선택해 2~3분 문답으로 패턴을 정리해보세요.<br />
-                결과는 요약으로 저장할 수 있습니다.
+                모듈을 선택해 2~3분 문답으로 패턴을 정리해보세요.
               </p>
+              <span className="inline-flex items-center mt-4 px-3 py-1 rounded-full bg-skin-muted/50 text-skin-subtext text-xs font-medium">
+                ℹ️ 참고용 안내이며, 진단·처방을 대신하지 않습니다.
+              </span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
@@ -222,13 +268,13 @@ export default function LandingPage() {
 
                 return (
                   <Link key={topic} href={`/healthcare/chat?topic=${topic}`} className="group">
-                    <div className="h-full bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 hover:bg-white/10 hover:border-skin-primary/30 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(233,30,140,0.2)] flex flex-col items-center text-center">
-                      <div className={`w-14 h-14 bg-gradient-to-br ${config.gradient} rounded-full flex items-center justify-center mb-6 shadow-lg ${colors.shadow} transition-all duration-300 ${colors.border}`}>
+                    <div className="h-full bg-white/5 rounded-2xl p-6 border border-white/10 hover:bg-white/10 hover:border-skin-primary/30 transition-all duration-300 hover:scale-105 flex flex-col items-center text-center">
+                      <div className={`w-14 h-14 bg-gradient-to-br ${config.gradient} rounded-full flex items-center justify-center mb-6 ${colors.border}`}>
                         <IconComponent className={`w-7 h-7 ${colors.text} group-hover:scale-110 transition-transform`} />
                       </div>
                       <h3 className="text-lg font-bold text-skin-text mb-2 tracking-wide">{TOPIC_LABELS[topic]}</h3>
                       <p className="text-xs text-skin-subtext leading-relaxed font-light">
-                        {TOPIC_DESCRIPTIONS[topic]}<br />(참고용)
+                        {TOPIC_DESCRIPTIONS[topic]}
                       </p>
                     </div>
                   </Link>
@@ -242,8 +288,8 @@ export default function LandingPage() {
         <Footer />
 
         {/* Floating Chat Button */}
-        <div className="fixed bottom-8 right-8 z-50 animate-bounce-slow">
-          <Link href="/healthcare/chat?topic=glow-booster" className="w-16 h-16 bg-skin-primary rounded-full flex items-center justify-center text-white shadow-2xl shadow-skin-primary/40 hover:bg-skin-accent transition-all duration-300 hover:scale-110 border-2 border-white/20 backdrop-blur-sm">
+        <div className="fixed bottom-8 right-8 z-50">
+          <Link href="/healthcare/chat?topic=glow-booster" className="w-16 h-16 bg-skin-primary rounded-full flex items-center justify-center text-white shadow-xl shadow-skin-primary/40 hover:bg-skin-accent transition-all duration-300 hover:scale-110 border-2 border-white/20">
             <span className="text-3xl">✨</span>
           </Link>
         </div>

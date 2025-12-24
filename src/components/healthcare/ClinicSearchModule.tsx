@@ -141,8 +141,8 @@ export default function ClinicSearchModule() {
         setIsLoginModalOpen(true);
     };
 
-    // 토글 버튼 컴포넌트
-    const Toggle = ({
+    // 세그먼트 컨트롤 스타일 칩 컴포넌트 (글로우 금지, 테두리/채움만)
+    const SegmentChip = ({
         label,
         icon,
         active,
@@ -159,9 +159,9 @@ export default function ClinicSearchModule() {
             onClick={onChange}
             aria-pressed={active}
             aria-label={ariaLabel}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${active
-                ? "bg-skin-primary text-white shadow-lg shadow-skin-primary/30"
-                : "bg-white/10 text-skin-subtext hover:bg-white/20 border border-white/10"
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${active
+                ? "bg-skin-primary text-white"
+                : "bg-transparent text-skin-subtext border border-white/20 hover:border-white/40"
                 }`}
         >
             {icon}
@@ -171,15 +171,15 @@ export default function ClinicSearchModule() {
 
     return (
         <>
-            {/* 조회 모듈 */}
-            <div className="w-full max-w-2xl mx-auto space-y-6">
-                {/* 지역 선택 */}
+            {/* 조회 모듈 - Row 기반 레이아웃 */}
+            <div className="w-full space-y-6">
+                {/* Row 1: 지역 드롭다운 */}
                 <div className="flex justify-center gap-3">
                     <div className="relative">
                         <select
                             value={selectedCity}
                             onChange={(e) => setSelectedCity(e.target.value)}
-                            className="appearance-none bg-white/10 border border-white/20 rounded-full px-4 py-2.5 pr-10 text-skin-text text-sm font-medium focus:outline-none focus:border-skin-primary cursor-pointer"
+                            className="appearance-none bg-skin-bg border border-white/20 rounded-xl px-4 py-3 pr-10 text-skin-text text-sm font-medium focus:outline-none focus:border-skin-primary cursor-pointer"
                         >
                             <option value="서울">서울</option>
                             <option value="경기도">경기도</option>
@@ -190,7 +190,7 @@ export default function ClinicSearchModule() {
                         <select
                             value={selectedRegion}
                             onChange={(e) => setSelectedRegion(e.target.value)}
-                            className="appearance-none bg-white/10 border border-white/20 rounded-full px-4 py-2.5 pr-10 text-skin-text text-sm font-medium focus:outline-none focus:border-skin-primary cursor-pointer"
+                            className="appearance-none bg-skin-bg border border-white/20 rounded-xl px-4 py-3 pr-10 text-skin-text text-sm font-medium focus:outline-none focus:border-skin-primary cursor-pointer"
                         >
                             {SEOUL_REGIONS.map((region) => (
                                 <option key={region} value={region}>{region}</option>
@@ -200,23 +200,23 @@ export default function ClinicSearchModule() {
                     </div>
                 </div>
 
-                {/* 토글 그룹 */}
-                <div className="flex flex-wrap justify-center gap-3">
-                    <Toggle
+                {/* Row 2: 운영 필터 세그먼트 칩 */}
+                <div className="flex justify-center gap-2">
+                    <SegmentChip
                         label="오늘 운영"
                         icon={<Sun size={16} />}
                         active={todayOpen}
                         onChange={() => setTodayOpen(!todayOpen)}
                         ariaLabel="오늘 운영 필터"
                     />
-                    <Toggle
+                    <SegmentChip
                         label="야간 운영"
                         icon={<Moon size={16} />}
                         active={nightOpen}
                         onChange={() => setNightOpen(!nightOpen)}
                         ariaLabel="야간 운영 필터"
                     />
-                    <Toggle
+                    <SegmentChip
                         label="공휴일 운영"
                         icon={<Calendar size={16} />}
                         active={holidayOpen}
@@ -225,27 +225,26 @@ export default function ClinicSearchModule() {
                     />
                 </div>
 
-                {/* 검색 버튼 */}
-                <button
-                    onClick={() => handleSearch(false)}
-                    disabled={searchState === "loading"}
-                    className="group relative w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-skin-primary to-skin-accent text-white text-lg font-bold rounded-full overflow-hidden shadow-xl shadow-skin-primary/40 hover:shadow-2xl hover:shadow-skin-primary/50 transition-all duration-300 hover:-translate-y-1 disabled:opacity-70 disabled:cursor-not-allowed mx-auto block"
-                >
-                    <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
-                    <span className="relative flex items-center gap-2">
+                {/* Row 3: 검색 버튼 (Primary - 글로우 허용) */}
+                <div className="flex justify-center">
+                    <button
+                        onClick={() => handleSearch(false)}
+                        disabled={searchState === "loading"}
+                        className="inline-flex items-center justify-center px-8 py-4 bg-skin-primary text-white text-base font-bold rounded-2xl shadow-lg shadow-skin-primary/30 hover:bg-skin-accent hover:shadow-xl transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
+                    >
                         {searchState === "loading" ? (
                             <>
-                                <Loader2 className="w-5 h-5 animate-spin" />
-                                조회 중입니다...
+                                <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                                조회 중...
                             </>
                         ) : (
                             <>
-                                <Search className="w-5 h-5" />
+                                <Search className="w-5 h-5 mr-2" />
                                 오늘 운영 피부과 확인
                             </>
                         )}
-                    </span>
-                </button>
+                    </button>
+                </div>
 
                 {/* 검색 결과 영역 */}
                 <div
