@@ -82,6 +82,7 @@ export default function LandingPage() {
                     alt={`Routine Reset ${idx + 1}`}
                     fill
                     className={`object-cover ${isNeonRim ? "scale-125 -translate-y-[15%]" : ""}`}
+                    style={{ objectPosition: 'center 20%' }}
                     priority={idx === 0}
                     sizes="100vw"
                   />
@@ -94,14 +95,14 @@ export default function LandingPage() {
 
           {/* Hero Content */}
           <div className="absolute inset-0 z-10 flex items-center">
-            <div className="w-full pl-[clamp(180px,27vw,440px)] space-y-6 animate-fade-in text-left">
+            <div className="w-full px-6 md:pl-[clamp(180px,27vw,440px)] md:pr-0 space-y-6 animate-fade-in text-center md:text-left">
               {/* Eyebrow */}
               <p className="text-skin-secondary font-semibold tracking-[0.15em] uppercase text-xs">
                 ROUTINE · BASE · GLOW · RESET
               </p>
 
               {/* H1 */}
-              <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-[1.1] font-serif">
+              <h1 className="text-3xl md:text-6xl font-bold tracking-tight leading-[1.1] font-serif">
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-skin-primary via-pink-400 to-skin-accent">
                   베이스가 달라지는
                 </span><br />
@@ -114,7 +115,7 @@ export default function LandingPage() {
               </p>
 
               {/* CTA Row */}
-              <div className="flex flex-row items-center gap-4 pt-2">
+              <div className="flex flex-col md:flex-row items-center justify-center md:justify-start gap-4 pt-2">
                 {/* Primary CTA */}
                 <Link
                   href="/healthcare/chat?topic=glow-booster"
@@ -241,6 +242,7 @@ export default function LandingPage() {
               muted
               playsInline
               className="w-full h-full object-cover"
+              style={{ objectPosition: 'center 30%' }}
             >
               <source src="/1.mp4" type="video/mp4" />
             </video>
