@@ -96,7 +96,7 @@ export default function LandingPage() {
 
           {/* Hero Content - clamp 기반 패딩으로 반응형 위치 안정화 */}
           <div className="absolute inset-0 z-10 flex items-center">
-            <div className="w-full max-w-4xl pl-[clamp(24px,6vw,88px)] pr-[clamp(16px,10vw,220px)] space-y-8 animate-fade-in text-left">
+            <div className="w-full max-w-4xl pl-[clamp(48px,10vw,160px)] pr-[clamp(16px,8vw,180px)] space-y-8 animate-fade-in text-left">
               {/* Eyebrow - 작게, 간격 확보 */}
               <p className="text-skin-secondary font-semibold tracking-[0.2em] uppercase text-xs">
                 Premium Skin Care
@@ -161,7 +161,7 @@ export default function LandingPage() {
         {/* Clinic Search Section - 히어로 아래 별도 섹션 */}
         {/* ============================================ */}
         <section id="clinic-search" className="relative py-16 bg-skin-bgSecondary">
-          <div className="w-full max-w-4xl pl-[clamp(24px,6vw,88px)] pr-[clamp(16px,10vw,220px)] mx-auto">
+          <div className="w-full max-w-4xl pl-[clamp(48px,10vw,160px)] pr-[clamp(16px,8vw,180px)] mx-auto">
             <div className="text-center mb-8">
               <h2 className="text-2xl md:text-3xl font-bold text-skin-text mb-2">
                 지금 운영 중인 피부과 찾기
