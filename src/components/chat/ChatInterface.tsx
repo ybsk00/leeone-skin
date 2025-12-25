@@ -236,7 +236,16 @@ export default function ChatInterface(props: ChatInterfaceProps) {
             }
 
             if (!props.isLoggedIn && data.requireLogin) {
-                if (data.isSymptomTrigger || data.isHardStop) {
+                if (data.isSkinConcernRedirect) {
+                    // 피부 고민 자유발화 감지 시 특별 모달
+                    setTimeout(() => {
+                        setLoginModalContent({
+                            title: `${data.concernType} 상담을 원하시나요?`,
+                            desc: `${data.concernType} 관련 더 자세한 상담을 원하시면<br />로그인 후 전문 상담을 이용해주세요.`
+                        });
+                        setShowLoginModal(true);
+                    }, 500);
+                } else if (data.isSymptomTrigger || data.isHardStop) {
                     setTimeout(() => {
                         setLoginModalContent({
                             title: "현재는 참고용 안내 단계입니다",

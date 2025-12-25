@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateText } from "@/lib/ai/client";
-import { getHealthcareSystemPrompt, getHealthcareFinalAnalysisPrompt, MEDICAL_KEYWORDS, EntryIntent } from "@/lib/ai/prompts";
+import { getHealthcareSystemPrompt, getHealthcareFinalAnalysisPrompt, MEDICAL_KEYWORDS, EntryIntent, detectSkinConcern, getSkinConcernResponsePrompt } from "@/lib/ai/prompts";
 
 export async function POST(req: NextRequest) {
     try {
@@ -17,6 +17,22 @@ export async function POST(req: NextRequest) {
                 content: "말씀하신 내용은 **의료 상담 영역**이라 이 단계에서는 답변드리기 어렵습니다.\n\n지금까지 정리한 내용을 저장하고, 로그인 후 더 정확한 확인을 진행하시는 게 안전합니다.\n\n로그인하시겠습니까?",
                 requireLogin: true,
                 isSymptomTrigger: true
+            });
+        }
+
+        // 2. 피부 고민 자유발화 감지 (토픽과 무관한 피부 고민)
+        const skinConcern = detectSkinConcern(message, topic || 'glow-booster');
+        if (skinConcern.hasConcern) {
+            const skinConcernPrompt = getSkinConcernResponsePrompt(skinConcern.concernType);
+            const fullPrompt = `${skinConcernPrompt}\n사용자: ${message}\nAI:`;
+            const responseText = await generateText(fullPrompt, "healthcare");
+
+            return NextResponse.json({
+                role: "ai",
+                content: responseText.trim(),
+                isSkinConcernRedirect: true,
+                concernType: skinConcern.concernType,
+                requireLogin: true
             });
         }
 

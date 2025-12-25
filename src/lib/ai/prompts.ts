@@ -226,6 +226,83 @@ ${intentHint}
 }
 
 // =============================================
+// 피부과 고민 자유발화 감지 (헬스케어 모드용)
+// =============================================
+
+// 피부과 상담이 필요한 고민 키워드
+export const SKIN_CONCERN_KEYWORDS = [
+   // 노화/주름 관련
+   "주름", "눈밑", "처짐", "탄력", "팔자주름", "이마주름", "눈가주름", "목주름",
+   // 트러블/여드름 관련
+   "여드름", "뾰루지", "트러블", "피지", "블랙헤드", "화이트헤드",
+   // 색소/기미 관련
+   "기미", "색소", "잡티", "검은점", "주근깨", "거뭇", "칙칙",
+   // 모공/피지 관련
+   "모공", "넓은모공", "모공축소",
+   // 홍조/민감 관련
+   "홍조", "붉은기", "민감", "아토피", "알레르기", "따가움", "가려움",
+   // 흉터/자국 관련
+   "흉터", "여드름자국", "상처자국",
+   // 건조/각질 관련
+   "건조", "각질", "푸석", "당김",
+   // 시술 관련 (언급만 감지, 시술 추천은 금지)
+   "리프팅", "보톡스", "필러", "레이저", "울쎄라", "하이푸", "피코", "토닝"
+];
+
+// 토픽별 관련 키워드 (토픽 내 발화는 감지하지 않음)
+const TOPIC_RELATED_KEYWORDS: Record<Topic, string[]> = {
+   'glow-booster': ['광채', '수분', '영양', '비타민', '수면', '각질', '보습'],
+   'makeup-killer': ['메이크업', '화장', '무너짐', '유분', '지성', '모공', '프라이머'],
+   'barrier-reset': ['장벽', '세안', '보습', '자극', '민감', '당김', '건조'],
+   'lifting-check': ['탄력', '리프팅', '처짐', '윤곽', '턱선', '주름'],
+   'skin-concierge': ['루틴', '피부타입', '건성', '지성', '복합성', '민감성'],
+};
+
+// 피부 고민 감지 함수
+export function detectSkinConcern(message: string, topic: Topic): { hasConcern: boolean; concernType: string } {
+   const lowerMessage = message.toLowerCase();
+
+   // 현재 토픽과 관련된 키워드는 제외
+   const topicKeywords = TOPIC_RELATED_KEYWORDS[topic] || [];
+   const isTopicRelated = topicKeywords.some(keyword => lowerMessage.includes(keyword.toLowerCase()));
+
+   // 토픽 관련 발화면 감지하지 않음 (기존 플로우 유지)
+   if (isTopicRelated) {
+      return { hasConcern: false, concernType: '' };
+   }
+
+   // 피부 고민 키워드 감지
+   for (const keyword of SKIN_CONCERN_KEYWORDS) {
+      if (lowerMessage.includes(keyword.toLowerCase())) {
+         return { hasConcern: true, concernType: keyword };
+      }
+   }
+
+   return { hasConcern: false, concernType: '' };
+}
+
+// 피부 고민 감지 시 응답 프롬프트
+export function getSkinConcernResponsePrompt(concernType: string): string {
+   return `
+[역할] 피부 습관 체크 안내자
+[상황] 사용자가 "${concernType}" 관련 고민을 말씀하셨습니다.
+
+[응답 규칙]
+1) 공감 1문장: "~가 고민이시군요." (단정 금지)
+2) 상식적 정보 1~2문장: 일반적으로 알려진 생활 관리 팁 (의료 조언 금지)
+3) 로그인 유도: "${concernType} 관련 더 자세한 상담을 원하시면 로그인 후 전문 상담을 이용해주세요."
+
+[절대 금지]
+- 진단/치료/처방/시술 언급
+- 확정적 표현 ("~입니다", "~때문입니다")
+- 특정 제품/브랜드 추천
+
+[출력 규칙]
+- 150자 이내로 간결하게
+- 이모지 최소화
+- 과도한 친근 표현 금지
+`;
+}
 // 메디컬 AI 시스템 프롬프트 (회원, 예진 상담, 피부과 트랙)
 // =============================================
 
