@@ -87,6 +87,24 @@ CREATE TABLE IF NOT EXISTS public.patients (
 CREATE INDEX IF NOT EXISTS idx_patients_user_id ON public.patients(user_id);
 CREATE INDEX IF NOT EXISTS idx_patients_naver_user_id ON public.patients(naver_user_id);
 
+-- 3.4 의사 테이블
+CREATE TABLE IF NOT EXISTS public.doctors (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name TEXT NOT NULL,              -- 이름 (예: 김기영)
+  title TEXT NOT NULL,             -- 직함 (예: 대표원장)
+  display_name TEXT,               -- 표시명 (예: 김기영 대표원장)
+  specialty TEXT[],                -- 전문분야 배열
+  bio TEXT,                        -- 소개
+  image_url TEXT,                  -- 프로필 이미지
+  is_active BOOLEAN DEFAULT TRUE,  -- 활성 여부
+  display_order INT DEFAULT 0,     -- 표시 순서
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 의사 인덱스
+CREATE INDEX IF NOT EXISTS idx_doctors_display_order ON public.doctors(display_order);
+CREATE INDEX IF NOT EXISTS idx_doctors_is_active ON public.doctors(is_active);
+
 -- =====================================================
 -- SECTION 4: APPOINTMENT SYSTEM
 -- =====================================================
@@ -426,6 +444,7 @@ CREATE INDEX IF NOT EXISTS idx_marketing_conversions_user ON public.marketing_co
 ALTER TABLE public.patient_profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.staff_users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.patients ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.doctors ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.visits ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.chat_sessions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.chat_messages ENABLE ROW LEVEL SECURITY;
@@ -476,7 +495,13 @@ CREATE POLICY "Users can update own patient record" ON public.patients
 CREATE POLICY "Authenticated users can insert patients" ON public.patients 
   FOR INSERT WITH CHECK (auth.uid() IS NOT NULL);
 
--- 12.4 Visits
+-- 12.4 Doctors
+CREATE POLICY "Anyone can view doctors" ON public.doctors 
+  FOR SELECT USING (TRUE);
+CREATE POLICY "Staff can manage doctors" ON public.doctors 
+  FOR ALL USING (public.is_staff());
+
+-- 12.5 Visits
 CREATE POLICY "Users can view own visits" ON public.visits 
   FOR SELECT USING (auth.uid() = user_id);
 
