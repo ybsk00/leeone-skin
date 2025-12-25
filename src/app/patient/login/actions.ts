@@ -4,31 +4,31 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 
-export async function patientLogin(formData: FormData) {
+export async function patientLogin(formData: FormData): Promise<{ error?: string; success?: boolean }> {
     const supabase = await createClient()
 
     const email = formData.get('patient-email') as string
     const password = formData.get('patient-password') as string
 
     if (!email || !password) {
-        redirect('/patient/login?error=' + encodeURIComponent('이메일과 비밀번호를 입력해주세요.'))
+        return { error: '이메일과 비밀번호를 입력해주세요.' }
     }
 
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
     })
 
     if (error) {
         const errorMessage = getKoreanErrorMessage(error.message)
-        redirect('/patient/login?error=' + encodeURIComponent(errorMessage))
+        return { error: errorMessage }
     }
 
     revalidatePath('/', 'layout')
     redirect('/patient')
 }
 
-export async function patientSignup(formData: FormData) {
+export async function patientSignup(formData: FormData): Promise<{ error?: string; message?: string }> {
     const supabase = await createClient()
 
     const email = formData.get('patient-email') as string
@@ -37,11 +37,11 @@ export async function patientSignup(formData: FormData) {
     const phone = formData.get('phone') as string
 
     if (!email || !password) {
-        redirect('/patient/login?error=' + encodeURIComponent('이메일과 비밀번호를 입력해주세요.') + '&tab=signup')
+        return { error: '이메일과 비밀번호를 입력해주세요.' }
     }
 
     if (password.length < 6) {
-        redirect('/patient/login?error=' + encodeURIComponent('비밀번호는 6자 이상이어야 합니다.') + '&tab=signup')
+        return { error: '비밀번호는 6자 이상이어야 합니다.' }
     }
 
     const { data, error } = await supabase.auth.signUp({
@@ -59,15 +59,15 @@ export async function patientSignup(formData: FormData) {
 
     if (error) {
         const errorMessage = getKoreanErrorMessage(error.message)
-        redirect('/patient/login?error=' + encodeURIComponent(errorMessage) + '&tab=signup')
+        return { error: errorMessage }
     }
 
     // Check if email confirmation is required
     if (data.user?.identities?.length === 0) {
-        redirect('/patient/login?message=' + encodeURIComponent('이미 가입된 이메일입니다. 로그인해주세요.'))
+        return { message: '이미 가입된 이메일입니다. 로그인해주세요.' }
     }
 
-    redirect('/patient/login?message=' + encodeURIComponent('회원가입 완료! 이메일을 확인해주세요.'))
+    return { message: '회원가입 완료! 이메일을 확인해주세요.' }
 }
 
 function getKoreanErrorMessage(message: string): string {

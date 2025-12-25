@@ -29,6 +29,38 @@ function LoginContent() {
         setMessage(null)
     }
 
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        setIsLoading(true)
+        setError(null)
+        setMessage(null)
+
+        const formData = new FormData(e.currentTarget)
+
+        try {
+            if (activeTab === 'login') {
+                const result = await patientLogin(formData)
+                if (result?.error) {
+                    setError(result.error)
+                    setIsLoading(false)
+                }
+                // 성공 시 redirect가 발생하므로 여기서는 처리 불필요
+            } else {
+                const result = await patientSignup(formData)
+                if (result?.error) {
+                    setError(result.error)
+                    setIsLoading(false)
+                } else if (result?.message) {
+                    setMessage(result.message)
+                    setIsLoading(false)
+                }
+            }
+        } catch {
+            // redirect()가 throw하는 NEXT_REDIRECT는 무시
+            setIsLoading(false)
+        }
+    }
+
     const handleGoogleLogin = async () => {
         setIsLoading(true)
         setError(null)
@@ -123,7 +155,7 @@ function LoginContent() {
                     )}
 
                     {/* Form */}
-                    <form className="space-y-4" autoComplete="off">
+                    <form className="space-y-4" autoComplete="off" onSubmit={handleSubmit}>
                         {activeTab === 'signup' && (
                             <>
                                 <div>
@@ -193,11 +225,18 @@ function LoginContent() {
 
                         <button
                             type="submit"
-                            formAction={activeTab === 'login' ? patientLogin : patientSignup}
-                            className="w-full py-3 rounded-xl text-white font-bold transition-all hover:opacity-90"
+                            disabled={isLoading}
+                            className="w-full py-3 rounded-xl text-white font-bold transition-all hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2"
                             style={{ backgroundColor: '#3b82f6' }}
                         >
-                            {activeTab === 'login' ? '로그인' : '회원가입'}
+                            {isLoading ? (
+                                <>
+                                    <Loader2 size={18} className="animate-spin" />
+                                    처리 중...
+                                </>
+                            ) : (
+                                activeTab === 'login' ? '로그인' : '회원가입'
+                            )}
                         </button>
                     </form>
 
