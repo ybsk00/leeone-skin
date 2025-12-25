@@ -49,24 +49,39 @@ export async function POST(request: NextRequest) {
 
         let patientId = null
 
-        // Supabase Auth 사용자만 patients 테이블 처리
-        // NextAuth 사용자(네이버 로그인)는 patients 테이블 처리 생략
-        if (userId) {
+        // 모든 인증 사용자 patients 테이블 처리 (Supabase Auth + NextAuth)
+        if (userId || naverUserId) {
             // 1. 사용자가 이미 환자 테이블에 있는지 확인
             let existingPatient = null
 
-            const { data: patientByUserId } = await supabase
-                .from('patients')
-                .select('id')
-                .eq('user_id', userId)
-                .single()
+            // user_id로 확인 (Supabase Auth 사용자)
+            if (userId) {
+                const { data: patientByUserId } = await supabase
+                    .from('patients')
+                    .select('id')
+                    .eq('user_id', userId)
+                    .single()
 
-            if (patientByUserId) {
-                existingPatient = patientByUserId
+                if (patientByUserId) {
+                    existingPatient = patientByUserId
+                }
             }
 
-            // user_id로 없으면 email로 확인
-            if (!existingPatient && userEmail) {
+            // naver_user_id로 확인 (NextAuth 네이버 사용자)
+            if (!existingPatient && naverUserId) {
+                const { data: patientByNaverId } = await supabase
+                    .from('patients')
+                    .select('id')
+                    .eq('naver_user_id', naverUserId)
+                    .single()
+
+                if (patientByNaverId) {
+                    existingPatient = patientByNaverId
+                }
+            }
+
+            // user_id로 없으면 email로 확인 (Supabase Auth 사용자만)
+            if (!existingPatient && userEmail && userId) {
                 const { data: patientByEmail } = await supabase
                     .from('patients')
                     .select('id')
@@ -94,13 +109,14 @@ export async function POST(request: NextRequest) {
                 const { data: newPatient, error: patientError } = await supabase
                     .from('patients')
                     .insert({
-                        user_id: userId,
+                        user_id: userId || null,           // Supabase Auth 사용자
+                        naver_user_id: naverUserId || null, // NextAuth 네이버 사용자
                         name: userName,
-                        email: userEmail,
+                        email: userEmail || null,
                         phone: user?.user_metadata?.phone || null,
                         time: timeStr,
                         type: '신규 환자',
-                        complaint: notes || 'AI한의원 진료 예약',
+                        complaint: notes || '리원피부과 진료 예약',
                         status: 'pending'
                     })
                     .select('id')
