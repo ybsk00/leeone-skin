@@ -43,7 +43,7 @@ export default function PatientHeader() {
             await nextAuthSignOut({ redirect: false });
         }
 
-        router.push("/");
+        router.push("/patient/home");
         router.refresh();
     };
 

@@ -96,7 +96,7 @@ export default function ProfilePage() {
 
                 {/* Logout */}
                 <button
-                    onClick={() => signOut({ callbackUrl: '/' })}
+                    onClick={() => signOut({ callbackUrl: '/patient/home' })}
                     className="w-full mt-6 flex items-center justify-center gap-2 p-4 rounded-xl text-red-400 hover:bg-red-500/10 transition-colors"
                     style={{ backgroundColor: '#1a2332', border: '1px solid #1f2937' }}
                 >
